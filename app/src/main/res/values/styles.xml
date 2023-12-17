@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.AppTheme.LikeButton" parent="@style/Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="icon">@drawable/ic_like_selector</item>
+        <item name="iconTint">@color/color_like_tint</item>
+        <item name="android:minWidth">@dimen/icon_size</item>
+        <item name="android:minHeight">@dimen/icon_size</item>
+        <item name="android:textColor">@color/violet</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+
+    </style>
+
+    <style name="Widget.AppTheme.PeopleButton" parent="@style/Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="icon">@drawable/ic_people_selector</item>
+        <item name="iconTint">@color/color_like_tint</item>
+        <item name="android:minWidth">@dimen/icon_size</item>
+        <item name="android:minHeight">@dimen/icon_size</item>
+        <item name="android:textColor">@color/violet</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+
+    </style>
+
+    <style name="Widget.AppTheme.IconButton" parent="@style/Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="android:textColor">@color/violet</item>
+        <item name="iconTint">@color/violet</item>
+        <item name="android:minWidth">@dimen/icon_size</item>
+        <item name="android:minHeight">@dimen/icon_size</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.AppTheme.MenuButton" parent="@style/Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/color_menu</item>
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="paddingStart">0dp</item>
+        <item name="paddingEnd">0dp</item>
+        <item name="android:minWidth">@dimen/icon_size</item>
+        <item name="android:minHeight">@dimen/icon_size</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.NeWork.Button.20" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.NeWork.Button.50" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="android:background">@color/violet</item>
+    </style>
+
+    <style name="MyRadioButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/content</item>
+        <item name="colorControlActivated">@color/violet</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="CustomTextAppearanceTab" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+</resources>

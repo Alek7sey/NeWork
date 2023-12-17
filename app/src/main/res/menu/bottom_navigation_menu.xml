@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/pagePosts"
+        android:enabled="true"
+        android:icon="@drawable/ic_rss_feed"
+        android:title="Posts"/>
+    <item
+        android:id="@+id/pageEvents"
+        android:enabled="true"
+        android:icon="@drawable/ic_event"
+        android:title="Events"/>
+    <item
+        android:id="@+id/pageUsers"
+        android:enabled="true"
+        android:icon="@drawable/ic_people"
+        android:title="Users"/>
+</menu>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/photo"
+        android:enabled="true"
+        android:icon="@drawable/ic_photo_camera"
+        android:title="Photo"/>
+    <item
+        android:id="@+id/attachFile"
+        android:enabled="true"
+        android:icon="@drawable/ic_attach_file"
+        android:title="Attach file"/>
+    <item
+        android:id="@+id/people"
+        android:enabled="true"
+        android:icon="@drawable/ic_people"
+        android:title="People"/>
+    <item
+        android:id="@+id/location"
+        android:enabled="true"
+        android:icon="@drawable/ic_location_pin"
+        android:title="Location"/>
+
+</menu>

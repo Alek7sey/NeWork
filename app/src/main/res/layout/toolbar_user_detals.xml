@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbarUserProfile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top"
+    app:liftOnScroll="false"
+    android:background="@color/background_of_the_post"
+    app:navigationIcon="@drawable/ic_arrow_back"
+    app:title="Livia Dokidis / togilbyct"
+    app:layout_scrollFlags="noScroll">
+
+</androidx.appcompat.widget.Toolbar>
