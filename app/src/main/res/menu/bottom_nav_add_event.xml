@@ -9,7 +9,7 @@
         android:id="@+id/attachFile"
         android:enabled="true"
         android:icon="@drawable/ic_attach_file"
-        android:title="Attach file"/>
+        android:title="@string/attach_file"/>
     <item
         android:id="@+id/people"
         android:enabled="true"

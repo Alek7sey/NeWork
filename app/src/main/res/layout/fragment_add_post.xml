@@ -34,6 +34,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
+                android:autofillHints="name"
                 tools:text="@tools:sample/lorem[40]" />
 
             <FrameLayout
@@ -46,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/photo"
                     tools:srcCompat="@tools:sample/avatars[8]" />
 
                 <Button

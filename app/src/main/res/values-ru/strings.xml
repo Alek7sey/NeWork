@@ -73,4 +73,8 @@
     <string name="my_profile_image">фото моего профиля</string>
     <string name="image_attachment">Вложение картинка</string>
     <string name="mentioned_more">еще упомянутые</string>
+    <string name="attach_file">Прикрепить файл</string>
+    <string name="photo">Фото</string>
+    <string name="type">Тип</string>
+    <string name="play_event">Play</string>
 </resources>

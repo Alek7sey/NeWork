@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- gps -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--    &lt;!&ndash; mobile / wi-fi &ndash;&gt;-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:name=".application.NeWorkApp"

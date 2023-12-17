@@ -6,5 +6,6 @@
         android:contentDescription="@string/share"
         android:icon="@drawable/ic_share"
         android:iconTint="@color/color_header"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        android:title="@string/share" />
 </menu>

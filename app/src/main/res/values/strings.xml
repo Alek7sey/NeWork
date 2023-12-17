@@ -72,4 +72,8 @@
     <string name="my_profile_image">my profile image</string>
     <string name="image_attachment">image attachment</string>
     <string name="mentioned_more">mentioned more</string>
+    <string name="attach_file">Attach file</string>
+    <string name="photo">photo</string>
+    <string name="type">Type</string>
+    <string name="play_event">Play Event</string>
 </resources>
