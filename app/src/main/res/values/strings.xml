@@ -76,4 +76,11 @@
     <string name="photo">photo</string>
     <string name="type">Type</string>
     <string name="play_event">Play Event</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="share_post">Share post</string>
+    <string name="login_or_password_is_empty">Login or password is empty</string>
+    <string name="content_can_t_be_empty">Content can\\\'t be empty</string>
+    <string name="login_or_name_or_password_is_empty">Login or name or password is empty</string>
+    <string name="fab_click_message">To add you need to register or log in</string>
 </resources>

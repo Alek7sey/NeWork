@@ -1,9 +1,7 @@
 package ru.netology.nework.application
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class NeWorkApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+@HiltAndroidApp
+class NeWorkApp : Application()

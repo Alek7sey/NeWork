@@ -12,8 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        >
+        android:layout_marginTop="?actionBarSize">
 
         <TextView
             android:id="@+id/errorText"
@@ -41,8 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:constraint_referenced_ids="errorText, retry"
-            />
+            app:constraint_referenced_ids="errorText, retry" />
 
         <TextView
             android:id="@+id/empty"
@@ -69,8 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:constraint_referenced_ids="empty, retryBtnEmpty"
-            />
+            app:constraint_referenced_ids="empty, retryBtnEmpty" />
 
         <ProgressBar
             android:id="@+id/progress"
@@ -112,6 +109,5 @@
 
         app:srcCompat="@drawable/ic_plus_math" />
 
-    <include layout="@layout/bottom_nav" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

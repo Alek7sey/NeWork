@@ -77,4 +77,11 @@
     <string name="photo">Фото</string>
     <string name="type">Тип</string>
     <string name="play_event">Play</string>
+    <string name="edit">Изменить</string>
+    <string name="delete">Удалить</string>
+    <string name="share_post">Поделиться постом</string>
+    <string name="login_or_password_is_empty">Логин или пароль не введены</string>
+    <string name="content_can_t_be_empty">Контент не может быть пустым</string>
+    <string name="login_or_name_or_password_is_empty">Логин или имя или пароль не введены</string>
+    <string name="fab_click_message">Чтобы добавить необходимо войти или зарегистрироваться</string>
 </resources>

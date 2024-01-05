@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/postsFeedFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.netology.nework.activity.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login"/>
+    <fragment
+        android:id="@+id/postsFeedFragment"
+        android:name="ru.netology.nework.activity.PostsFeedFragment"
+        android:label="PostsFeedFragment"
+        tools:layout="@layout/fragment_feed_posts">
+        <action
+            android:id="@+id/action_postsFeedFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_postsFeedFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.netology.nework.activity.RegistrationFragment"
+        android:label="RegistrationFragment"
+        tools:layout="@layout/fragment_registration"/>
+    <fragment
+        android:id="@+id/eventsFeedFragment"
+        android:name="ru.netology.nework.activity.EventsFeedFragment"
+        android:label="EventsFeedFragment"
+        tools:layout="@layout/fragment_feed_event">
+        <action
+            android:id="@+id/action_eventsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="ru.netology.nework.activity.UsersFragment"
+        android:label="UsersFragment"
+        tools:layout="@layout/fragment_users"/>
+</navigation>
