@@ -16,10 +16,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_16"
-        android:paddingTop="?actionBarSize"
-        android:autofillHints="username"
-        android:paddingBottom="?actionBarSize">
+        android:padding="@dimen/margin_16">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +32,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                tools:text="@tools:sample/lorem[30]" />
+                tools:text="@tools:sample/lorem[50]" />
 
             <FrameLayout
                 android:id="@+id/photoContainer"
@@ -60,16 +57,7 @@
                     android:textAllCaps="false"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.50" />
 
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/groupAttachment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    app:constraint_referenced_ids="photo, removePhoto"
-                    tools:visibility="visible" />
-
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

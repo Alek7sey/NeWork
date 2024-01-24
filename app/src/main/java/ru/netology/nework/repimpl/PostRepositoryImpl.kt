@@ -5,7 +5,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -18,6 +20,7 @@ import ru.netology.nework.dto.Media
 import ru.netology.nework.dto.Post
 import ru.netology.nework.entity.AttachmentEmbeddable
 import ru.netology.nework.entity.PostEntity
+import ru.netology.nework.entity.toDto
 import ru.netology.nework.error.*
 import ru.netology.nework.mediator.PostRemoteMediator
 import ru.netology.nework.repository.PostRepository
@@ -44,9 +47,9 @@ class PostRepositoryImpl @Inject constructor(
             postRemoteKeyDao = keyDao,
             appDb = appDb
         )
-    ).flow.map {
-        it.map(PostEntity::toDto)
-    }
+    ).flow.map { it.map(PostEntity::toDto) }
+
+    override val postData: Flow<List<Post>> = postDao.getAllPosts().map(List<PostEntity>::toDto).flowOn(Dispatchers.Default)
 
     override suspend fun readAll() {
         try {

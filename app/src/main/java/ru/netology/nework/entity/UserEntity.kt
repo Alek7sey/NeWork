@@ -10,14 +10,14 @@ data class UserEntity(
     val id: Long,
     val login: String,
     val name: String,
-    val avatar: String,
+    val avatar: String? = null
 ) {
     fun toDto() =
         User(
             id,
             login,
             name,
-            avatar,
+            avatar
         )
 
     companion object {

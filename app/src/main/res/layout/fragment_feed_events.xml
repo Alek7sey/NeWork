@@ -5,12 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize">
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginBottom="?actionBarSize">
 
         <TextView
             android:id="@+id/errorText"
@@ -47,7 +46,6 @@
             android:layout_height="wrap_content"
             android:text="@string/empty"
             android:textAllCaps="false"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +61,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/empty" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="empty, retryBtnEmpty" />
 
         <ProgressBar
             android:id="@+id/progress"
@@ -103,7 +108,5 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.20"
 
         app:srcCompat="@drawable/ic_plus_math" />
-
-    <include layout="@layout/bottom_nav" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

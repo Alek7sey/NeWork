@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import ru.netology.nework.BuildConfig
+import ru.netology.nework.BuildConfig.API_KEY
 import ru.netology.nework.api.EventsApiService
 import ru.netology.nework.api.JobApiService
 import ru.netology.nework.api.MyWallApiService
@@ -44,12 +45,10 @@ class ApiModule {
             }
         })
         .addInterceptor { chain ->
-            val request = appAuth.authFlow.value?.token?.let { token ->
+            val request =
                 chain.request().newBuilder()
-                    .addHeader("Authorization", token)
+                    .addHeader("Api-Key", API_KEY)
                     .build()
-            } ?: chain.request()
-
             chain.proceed(request)
         }
         .build()

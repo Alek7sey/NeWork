@@ -1,5 +1,6 @@
 package ru.netology.nework.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.netology.nework.BuildConfig
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardPostBinding
+import ru.netology.nework.dto.AttachmentType
 import ru.netology.nework.dto.Post
 
 interface OnInteractionListener {
@@ -19,17 +20,23 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onDelete(post: Post) {}
     fun onShare(post: Post) {}
-//    fun onRunVideo(post: Post) {}
-//    fun onViewPost(post: Post) {}
-//    fun onSend(post: Post) {}
-//    fun onImage(post: Post) {}
+    fun onVideo(post: Post) {}
+    fun followTheLink(post: Post) {}
+    fun onImage(post: Post) {}
+    fun onAudio(post: Post) {}
+    fun onDetails(post: Post) {}
 }
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener
 ) : PagingDataAdapter<Post, PostsAdapter.PostViewHolder>(PostDiffCallBack()) {
 
+    private lateinit var context: Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+
+        context = parent.context
+
         return PostViewHolder(
             CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onInteractionListener
@@ -46,10 +53,13 @@ class PostsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(post: Post) {
+
             binding.apply {
                 postAuthor.text = post.author
                 content.text = post.content
                 published.text = post.published
+                link.text = post.link
+                link.isVisible = !post.link.isNullOrBlank()
                 likeBtn.isChecked = post.likedByMe
                 likeBtn.text = post.likeOwnerIds?.size.toString()
 
@@ -58,11 +68,20 @@ class PostsAdapter(
                     onInteractionListener.onLike(post)
                 }
 
-                imageAttachment.isVisible = !post.attachment?.url.isNullOrBlank()
+                postMenu.isVisible// = post.ownedByMe
 
-                postMenu.isVisible = post.ownedByMe
+                binding.iconPlay.isVisible = post.attachment?.type == AttachmentType.VIDEO
 
-                val urlAvatar = "${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}"
+                binding.imageAttachment.setOnClickListener {
+                    when (post.attachment?.type) {
+                        AttachmentType.IMAGE -> onInteractionListener.onImage(post)
+                        AttachmentType.AUDIO -> onInteractionListener.onAudio(post)
+                        AttachmentType.VIDEO -> onInteractionListener.onVideo(post)
+                        else -> {}
+                    }
+                }
+
+                val urlAvatar = "${post.authorAvatar}"
                 Glide.with(binding.avatar)
                     .load(urlAvatar)
                     .circleCrop()
@@ -70,8 +89,10 @@ class PostsAdapter(
                     .error(R.drawable.ic_error)
                     .into(binding.avatar)
 
-                if (post.attachment != null) {
-                    val url = "${BuildConfig.BASE_URL}/media/${post.attachment.url}"
+                val imageIsVisible =
+                    !post.attachment?.url.isNullOrBlank()//&& (post.attachment?.type?.name.toString() == AttachmentType.IMAGE.toString()
+                if (imageIsVisible) {
+                    val url = "${post.attachment?.url}"
                     Glide.with(binding.imageAttachment)
                         .load(url)
                         .centerInside()
@@ -103,21 +124,14 @@ class PostsAdapter(
                     }.show()
                 }
 
-            shareBtn.setOnClickListener { onInteractionListener.onShare(post) }
-//            viewsButton.setOnClickListener { onInteractionListener.onViews(post) }
-//            groupVideo.setAllOnClickListener { onInteractionListener.onRunVideo(post) }
-//            root.setOnClickListener { onInteractionListener.onViewPost(post) }
-//            send.setOnClickListener { onInteractionListener.onSend(post) }
-//            attachment.setOnClickListener { onInteractionListener.onImage(post) }
+                shareBtn.setOnClickListener { onInteractionListener.onShare(post) }
+                link.setOnClickListener { onInteractionListener.followTheLink(post) }
+                iconPlay.setOnClickListener { onInteractionListener.onVideo(post) }
+                root.setOnClickListener { onInteractionListener.onDetails(post) }
+                imageAttachment.setOnClickListener { onInteractionListener.onImage(post)}
             }
         }
     }
-
-//fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
-//    referencedIds.forEach { id ->
-//        rootView.findViewById<View>(id).setOnClickListener(listener)
-//    }
-//}
 
     class PostDiffCallBack : DiffUtil.ItemCallback<Post>() {
         override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {

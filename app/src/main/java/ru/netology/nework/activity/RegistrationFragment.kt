@@ -24,12 +24,19 @@ class RegistrationFragment : Fragment() {
         binding.loginBtn.setOnClickListener {
             val login = binding.loginTextField.editText?.text.toString()
             val userPassword = binding.passwordTextField.editText?.text.toString()
+            val userPasswordConfirm = binding.passwordConfirmTextField.editText?.text.toString()
             val userName = binding.nameTextField.editText?.text.toString()
+
+            if (userPassword != userPasswordConfirm) {
+                Snackbar.make(binding.root, getString(R.string.passwords_do_not_match), Snackbar.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
             if (userName.isBlank() || userPassword.isBlank() || login.isBlank()) {
                 Snackbar.make(binding.root, getString(R.string.login_or_name_or_password_is_empty), Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
+
             viewModel.image.observe(viewLifecycleOwner) { media ->
                 viewModel.saveRegisteredUser(login, userPassword, userName, media.file)
             }

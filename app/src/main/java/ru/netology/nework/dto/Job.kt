@@ -4,7 +4,7 @@ data class Job(
     val id: Long,
     val name: String,
     val position: String,
-    val startDate: String,
-    val finishDate: String?,
+    val start: String,
+    val finish: String?,
     val link: String?
 )

@@ -83,4 +83,11 @@
     <string name="content_can_t_be_empty">Content can\\\'t be empty</string>
     <string name="login_or_name_or_password_is_empty">Login or name or password is empty</string>
     <string name="fab_click_message">To add you need to register or log in</string>
+    <string name="passwords_do_not_match">The entered passwords do not match</string>
+    <string name="postimageattachment">postImageAttachment</string>
+    <string name="this_event_location">This event location</string>
+    <string name="hello_blank_fragment">Blank fragment</string>
+    <string name="picking_photo_error">Picking photo error</string>
+    <string name="check">check</string>
+    <string name="text_editing_field">Text editing field</string>
 </resources>

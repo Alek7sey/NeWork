@@ -59,17 +59,17 @@
             app:layout_constraintTop_toBottomOf="@+id/eventAuthor"
             tools:text="@sample/post.json/data/published" />
 
-        <ImageView
-            android:id="@+id/playBtn"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:layout_marginStart="@dimen/margin_16"
-            android:layout_marginTop="@dimen/margin_16"
-            android:contentDescription="@string/play_event"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/attachment"
-            app:layout_constraintEnd_toEndOf="@id/content"
-            tools:srcCompat="@drawable/ic_play_circle_filled" />
+<!--        <ImageView-->
+<!--            android:id="@+id/playBtn"-->
+<!--            android:layout_width="@dimen/icon_size"-->
+<!--            android:layout_height="@dimen/icon_size"-->
+<!--            android:layout_marginStart="@dimen/margin_16"-->
+<!--            android:layout_marginTop="@dimen/margin_16"-->
+<!--            android:contentDescription="@string/play_event"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/attachment"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/content"-->
+<!--            tools:srcCompat="@drawable/ic_play_circle_filled" />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/eventMenu"
@@ -90,7 +90,7 @@
             app:constraint_referenced_ids="avatar, eventPublished" />
 
         <ImageView
-            android:id="@+id/attachment"
+            android:id="@+id/imageAttachment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -112,7 +112,7 @@
             android:textColor="@color/color_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/attachment" />
+            app:layout_constraintTop_toBottomOf="@id/imageAttachment" />
 
         <TextView
             android:id="@+id/eventData"

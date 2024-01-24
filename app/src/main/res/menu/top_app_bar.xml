@@ -4,6 +4,7 @@
     <item
         android:id="@+id/loginBtn"
         android:icon="@drawable/ic_account_circle"
-        android:title="NeWork"
+        android:title="menuLogin"
         app:showAsAction="ifRoom" />
+
 </menu>

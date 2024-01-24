@@ -1,5 +1,6 @@
 package ru.netology.nework.dto
 
+import com.google.gson.annotations.SerializedName
 import ru.netology.nework.entity.AttachmentEventEmbeddable
 import ru.netology.nework.entity.CoordinatesEventEmbeddable
 import ru.netology.nework.entity.EventUserPreviewEmbeddable
@@ -8,23 +9,21 @@ data class Event(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String? = null,
     val authorJob: String,
+    val authorAvatar: String? = null,
     val content: String,
-    val type: String,
-    val dateEvent: String,
+    val datetime: String,
     val published: String,
-    //val likes: Int = 0,
-    val likedByMe: Boolean,
-    val likeOwnerIds: List<Long>?,
-    val participatedByMe: Boolean,
-    val participantsIds: List<Long>?,
-   // val participateCnt: Int = 0,
-    val speakersIds: List<Long>?,
-    val link: String? = null,
-    val ownedByMe: Boolean = false,
-    val attachment: AttachmentEventEmbeddable? = null,
+    @SerializedName("coords")
     val coordinates: CoordinatesEventEmbeddable? = null,
+    val type: String,
+    val likeOwnerIds: List<Int>?,
+    val likedByMe: Boolean,
+    val speakerIds: List<Int>?,
+    val participantsIds: List<Int>?,
+    val participatedByMe: Boolean,
+    val attachment: AttachmentEventEmbeddable? = null,
+    val link: String? = null,
     val users: Map<Long, EventUserPreviewEmbeddable>,
 )
 

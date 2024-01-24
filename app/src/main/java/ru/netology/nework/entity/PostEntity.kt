@@ -3,11 +3,13 @@ package ru.netology.nework.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import ru.netology.nework.dto.Attachment
 import ru.netology.nework.dto.AttachmentType
 import ru.netology.nework.dto.Coordinates
 import ru.netology.nework.dto.Post
 import ru.netology.nework.dto.UserPreview
+import ru.netology.nework.utils.TypeConverter
 
 @Entity
 data class PostEntity(
@@ -15,21 +17,20 @@ data class PostEntity(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String? = null,
     val authorJob: String?,
+    val authorAvatar: String? = null,
     val content: String,
     val published: String,
-    //val likes: Int = 0,
-    val likedByMe: Boolean,
-    val likeOwnerIds: List<Long>?,
-    val mentionedByMe: Boolean,
-    val mentionedIds: List<Long>?,
-    val link: String? = null,
-    val ownedByMe: Boolean = false,
-    @Embedded
-    val attachment: AttachmentEmbeddable? = null,
     @Embedded
     val coordinates: CoordinatesEmbeddable? = null,
+    val link: String? = null,
+    val mentionIds: List<Int>?,
+    val mentionedMe: Boolean,
+    val likeOwnerIds: List<Int>?,
+    val likedByMe: Boolean,
+    @Embedded
+    val attachment: AttachmentEmbeddable? = null,
+    val ownedByMe: Boolean = false,
     val users: Map<Long, UserPreviewEmbeddable>
 ) {
     fun toDto() =
@@ -37,19 +38,18 @@ data class PostEntity(
             id,
             authorId,
             author,
-            authorAvatar,
             authorJob,
+            authorAvatar,
             content,
             published,
-            //likes,
-            likedByMe,
-            likeOwnerIds,
-            mentionedByMe,
-            mentionedIds,
-            link,
-            ownedByMe,
-            attachment,
             coordinates,
+            link,
+            mentionIds,
+            mentionedMe,
+            likeOwnerIds,
+            likedByMe,
+            attachment,
+//            ownedByMe,
             users,
         )
 
@@ -59,19 +59,18 @@ data class PostEntity(
                 id = dto.id,
                 authorId = dto.authorId,
                 author = dto.author,
-                authorAvatar = dto.authorAvatar,
                 authorJob = dto.authorJob,
+                authorAvatar = dto.authorAvatar,
                 content = dto.content,
                 published = dto.published,
-               // likes = dto.likes,
-                likedByMe = dto.likedByMe,
-                likeOwnerIds = dto.likeOwnerIds,
-                mentionedByMe = dto.mentionedByMe,
-                mentionedIds = dto.mentionedIds,
-                link = dto.link,
-                ownedByMe = dto.ownedByMe,
-                attachment = dto.attachment,
                 coordinates = dto.coordinates,
+                link = dto.link,
+                mentionIds = dto.mentionIds,
+                mentionedMe = dto.mentionedMe,
+                likeOwnerIds = dto.likeOwnerIds,
+                likedByMe = dto.likedByMe,
+                attachment = dto.attachment,
+//                ownedByMe = dto.ownedByMe,
                 users = dto.users,
             )
     }

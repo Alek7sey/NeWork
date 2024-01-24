@@ -23,7 +23,7 @@ class DbModule {
     @Provides
     fun provideDb(
         @ApplicationContext
-        context:Context
+        context: Context
     ): AppDb = Room.databaseBuilder(context, AppDb::class.java, "app.db")
         .fallbackToDestructiveMigration()
         .build()

@@ -19,8 +19,9 @@ import kotlinx.coroutines.launch
 import ru.netology.nework.R
 import ru.netology.nework.adapter.EventsAdapter
 import ru.netology.nework.adapter.EventsOnInteractionListener
+import ru.netology.nework.adapter.PostLoadingStateAdapter
 import ru.netology.nework.auth.AppAuth
-import ru.netology.nework.databinding.FragmentFeedEventBinding
+import ru.netology.nework.databinding.FragmentFeedEventsBinding
 import ru.netology.nework.dto.Event
 import ru.netology.nework.viewmodel.AuthViewModel
 import ru.netology.nework.viewmodel.EventsViewModel
@@ -40,14 +41,14 @@ class EventsFeedFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentFeedEventBinding.inflate(layoutInflater, container, false)
+        val binding = FragmentFeedEventsBinding.inflate(layoutInflater, container, false)
         val adapter = EventsAdapter(object : EventsOnInteractionListener {
 
             override fun onLike(event: Event) {
                 if (authViewModel.authorized) {
                     viewModel.likeById(event)
                 } else {
-                    findNavController().navigate(R.id.action_eventsFragment_to_loginFragment)
+                    findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)
                 }
             }
 
@@ -90,9 +91,17 @@ class EventsFeedFragment: Fragment() {
                 adapter.loadStateFlow.collectLatest { state ->
                     binding.swipeRefreshLayout.isRefreshing =
                         state.refresh is LoadState.Loading
+
+//                    val isListEmpty = state.refresh is LoadState.NotLoading && adapter.itemCount == 0
+//                    binding.groupEmpty.isVisible = isListEmpty
                 }
             }
         }
+
+        binding.eventsList.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PostLoadingStateAdapter { adapter.retry() },
+            footer = PostLoadingStateAdapter { adapter.retry() },
+        )
 
         binding.retryBtnEmpty.setOnClickListener {
             viewModel.loadEvents()
@@ -112,7 +121,7 @@ class EventsFeedFragment: Fragment() {
                     .setTitle(resources.getString(R.string.fab_click_message))
                     .setNegativeButton(resources.getString(R.string.login)) { dialog, _ ->
                         dialog.dismiss()
-                        findNavController().navigate(R.id.action_eventsFragment_to_loginFragment)
+                        findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)
                     }
                     .setPositiveButton(resources.getString(R.string.registration)) { dialog, _ ->
                         dialog.dismiss()

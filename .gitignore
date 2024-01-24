@@ -23,6 +23,7 @@ fcm.json
 
 ### Android Studio ###
 local.properties
+secrets.properties
 maps.properties
 captures/
 .externalNativeBuild

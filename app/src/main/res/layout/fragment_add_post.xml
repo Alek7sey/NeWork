@@ -10,7 +10,7 @@
         layout="@layout/bottom_nav_add_post" />
 
     <include
-        android:id="@+id/toolbarAddPost"
+        android:id="@+id/toolbarPost"
         layout="@layout/toolbar_new_post" />
 
     <ScrollView
@@ -31,19 +31,19 @@
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="name"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/text_editing_field"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:autofillHints="name"
                 tools:text="@tools:sample/lorem[40]" />
 
             <FrameLayout
-                android:id="@+id/photoContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/photo"
+                    android:id="@+id/photoAttachment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
@@ -58,12 +58,15 @@
                     android:layout_marginBottom="25dp"
                     android:text="@string/remove"
                     android:textAllCaps="false"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.50"
-                    />
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.50" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/photoAttachAndRemove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="photoAttachment, removePhoto" />
             </FrameLayout>
-
         </LinearLayout>
-
     </ScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

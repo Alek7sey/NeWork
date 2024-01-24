@@ -96,7 +96,6 @@ class PostRemoteMediator(
                     }
                 }
                 postDao.insert(body.map(PostEntity::fromDto))
-
             }
 
             return MediatorResult.Success(endOfPaginationReached = body.isEmpty())

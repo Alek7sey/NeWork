@@ -1,10 +1,12 @@
 package ru.netology.nework.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import ru.netology.nework.entity.EventEntity
 import ru.netology.nework.entity.JobEntity
 
 @Dao
@@ -15,6 +17,9 @@ interface JobDao {
 
     @Query("SELECT * FROM JobEntity WHERE id = :id ORDER BY id DESC")
     fun getUsersJob(id: Long): Flow<List<JobEntity>>
+
+    @Query("SELECT * FROM JobEntity ORDER BY id DESC")
+    fun getPagingSource(): PagingSource<Int, JobEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(job: JobEntity)

@@ -84,4 +84,11 @@
     <string name="content_can_t_be_empty">Контент не может быть пустым</string>
     <string name="login_or_name_or_password_is_empty">Логин или имя или пароль не введены</string>
     <string name="fab_click_message">Чтобы добавить необходимо войти или зарегистрироваться</string>
+    <string name="passwords_do_not_match">Введенные пароли не совпадают</string>
+    <string name="postimageattachment">Вложение-картинка</string>
+    <string name="this_event_location">Место проведения мероприятия</string>
+    <string name="hello_blank_fragment">Пустой фрагмент</string>
+    <string name="picking_photo_error">Ошибка выбора фотографии</string>
+    <string name="check">принять</string>
+    <string name="text_editing_field">Поле для редактирования текста</string>
 </resources>

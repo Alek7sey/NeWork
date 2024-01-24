@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.Photo
+import ru.netology.nework.dto.Post
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
@@ -26,25 +28,25 @@ private val emptyEvent = Event(
     id = 0,
     authorId = 0,
     author = "",
-    authorAvatar = null,
     authorJob = "",
+    authorAvatar = null,
     content = "",
-    type = "",
-    dateEvent = "",
+    datetime = "",
     published = "",
-    likedByMe = false,
-    likeOwnerIds = null,
-    participatedByMe = false,
-    participantsIds = null,
-    speakersIds = null,
-    link = "",
-    ownedByMe = false,
-    attachment = null,
     coordinates = null,
+    type = "",
+    likeOwnerIds = null,
+    likedByMe = false,
+    speakerIds = null,
+    participantsIds = null,
+    participatedByMe = false,
+    attachment = null,
+    link = "",
     users = emptyMap()
 )
 
 @HiltViewModel
+@ExperimentalCoroutinesApi
 class EventsViewModel @Inject constructor(
     private val repository: EventsRepository,
     appAuth: AppAuth
@@ -56,8 +58,13 @@ class EventsViewModel @Inject constructor(
         .authFlow
         .flatMapLatest { token ->
             cached.map { events ->
-                events.map {
-                    it.copy(ownedByMe = it.authorId == token?.id)
+                events.map { event ->
+                    if (event is Event) {
+                        //       event.copy(ownedByMe = post.authorId == token?.id)
+                        event
+                    } else {
+                        event
+                    }
                 }
             }.flowOn(Dispatchers.Default)
         }

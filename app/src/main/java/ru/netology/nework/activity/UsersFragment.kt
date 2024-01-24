@@ -12,7 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.netology.nework.adapter.UsersAdapter
+import ru.netology.nework.adapter.UsersOnInteractionListener
 import ru.netology.nework.databinding.FragmentUsersBinding
+import ru.netology.nework.dto.User
 import ru.netology.nework.viewmodel.UsersViewModel
 
 @AndroidEntryPoint
@@ -25,17 +27,40 @@ class UsersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentUsersBinding.inflate(layoutInflater, container, false)
-        val adapter = UsersAdapter()
+        val binding = FragmentUsersBinding.inflate(inflater, container, false)
+        val adapter = UsersAdapter(object : UsersOnInteractionListener {
+            override fun onDetailsClick(user: User) {
+                //    findNavController().navigate(на детальный фрагмент юзера, Bundle().apply{userArg = user.id})
+            }
+        })
 
         binding.usersList.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.data.observe(viewLifecycleOwner) {}
-                viewModel.loadUsers()
+                viewModel.data.observe(viewLifecycleOwner) {
+                    adapter.submitList(it.users)
+                }
             }
         }
+
+//        viewModel.data.observe(viewLifecycleOwner) { state ->
+//            binding.errorGroup.isVisible = state.empty
+//            adapter.submitList(state.users)
+//        }
+
+        binding.retry.setOnClickListener {
+            viewModel.loadUsers()
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadUsers()
+        }
+
         return binding.root
     }
+
+//    companion object {
+//        var Bundle.userArg: Long by UserArg
+//    }
 }

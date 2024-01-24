@@ -89,15 +89,14 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUser(id: Long) {
+    override suspend fun getUser(id: Long): User? {
         try {
             val response = apiService.getUser(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
-            val user = response.body() ?: throw ApiError(response.message())
-//            userDao.removeAll()
-            userDao.insert(UserEntity.fromDto(user))
+            return response.body()
+
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

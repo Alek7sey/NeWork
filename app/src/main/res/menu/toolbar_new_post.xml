@@ -6,6 +6,6 @@
         android:contentDescription="Check"
         android:icon="@drawable/ic_check"
         android:iconTint="@color/color_header"
-        android:title="New post"
+        android:title="@string/check"
         app:showAsAction="ifRoom"/>
 </menu>

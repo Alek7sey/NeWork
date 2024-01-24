@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<com.google.android.material.appbar.MaterialToolbar
     android:id="@+id/toolbarNewPost"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -10,6 +14,6 @@
     app:liftOnScroll="true"
     app:menu="@menu/toolbar_new_post"
     app:navigationIcon="@drawable/ic_arrow_back"
-    app:title="@string/new_post">
+    app:title="@string/new_post" />
 
-</androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.AppBarLayout>

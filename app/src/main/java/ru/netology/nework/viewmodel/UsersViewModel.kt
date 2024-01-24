@@ -7,20 +7,35 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.model.UserModel
 import ru.netology.nework.repository.UsersRepository
 import ru.netology.nework.state.UserModelState
 import javax.inject.Inject
 
 @HiltViewModel
+@ExperimentalCoroutinesApi
 class UsersViewModel @Inject constructor(
-    private val repository: UsersRepository
-): ViewModel() {
+    private val repository: UsersRepository,
+//    appAuth: AppAuth,
+) : ViewModel() {
 
     val data: LiveData<UserModel> =
         repository.data.map(::UserModel).asLiveData(Dispatchers.Default)
+
+//    val data: LiveData<UserModel> = appAuth.authFlow.flatMapLatest { token ->
+//        repository.data
+//            .map { users ->
+//                UserModel(users.map {
+//                    //   it.copy(ownedByMe = it.authorId == token?.id)
+//                    it
+//                }, users.isEmpty())
+//            }
+//    }.asLiveData(Dispatchers.Default)
 
     private val _state = MutableLiveData<UserModelState>()
     val state: LiveData<UserModelState>

@@ -9,6 +9,6 @@ interface UsersRepository {
     suspend fun readAll()
     suspend fun setIdAndTokenAuth(id: String, token: String)
     suspend fun registerUser(login: String, name: String, password: String, file: File)
-    suspend fun getUser(id: Long)
+    suspend fun getUser(id: Long): User?
 
 }

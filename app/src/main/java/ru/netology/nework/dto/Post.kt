@@ -1,28 +1,30 @@
 package ru.netology.nework.dto
 
+import com.google.gson.annotations.SerializedName
 import ru.netology.nework.entity.AttachmentEmbeddable
 import ru.netology.nework.entity.CoordinatesEmbeddable
 import ru.netology.nework.entity.UserPreviewEmbeddable
+import java.io.Serializable
 
 data class Post(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String? = null,
     val authorJob: String?,
+    val authorAvatar: String? = null,
     val content: String,
     val published: String,
-   // val likes: Int = 0,
-    val likedByMe: Boolean,
-    val likeOwnerIds: List<Long>?,
-    val mentionedByMe: Boolean,
-    val mentionedIds: List<Long>?,
-    val link: String? = null,
-    val ownedByMe: Boolean = false,
-    val attachment: AttachmentEmbeddable? = null,
+    @SerializedName("coords")
     val coordinates: CoordinatesEmbeddable? = null,
+    val link: String? = null,
+    val mentionIds: List<Int>?,
+    val mentionedMe: Boolean,
+    val likeOwnerIds: List<Int>?,
+    val likedByMe: Boolean,
+    val attachment: AttachmentEmbeddable? = null,
+   // val ownedByMe: Boolean = false,
     val users: Map<Long, UserPreviewEmbeddable>,
-)
+) : Serializable
 
 data class Coordinates(
     val latitude: String,

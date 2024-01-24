@@ -9,9 +9,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.netology.nework.BuildConfig
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardEventBinding
+import ru.netology.nework.dto.AttachmentType
 import ru.netology.nework.dto.Event
 
 interface EventsOnInteractionListener {
@@ -50,7 +50,7 @@ class EventsAdapter(
                 content.text = event.content
                 eventLikeBtn.text = event.likeOwnerIds?.size.toString()
                 eventType.text = event.type
-                eventData.text = event.dateEvent
+                eventData.text = event.datetime
                 participantsBtn.text = event.participantsIds?.size.toString()
 
                 eventLikeBtn.setOnClickListener {
@@ -63,11 +63,11 @@ class EventsAdapter(
                     onInteractionListener.onParticipate(event)
                 }
 
-                attachment.isVisible = !event.attachment?.url.isNullOrBlank()
+              //  attachment.isVisible = !event.attachment?.url.isNullOrBlank()
 
-                eventMenu.isVisible = event.ownedByMe
+                eventMenu.isVisible// = event.ownedByMe
 
-                val urlAvatar = "${BuildConfig.BASE_URL}/avatars/${event.authorAvatar}"
+                val urlAvatar = "${event.authorAvatar}"
                 Glide.with(binding.avatar)
                     .load(urlAvatar)
                     .circleCrop()
@@ -75,16 +75,18 @@ class EventsAdapter(
                     .error(R.drawable.ic_error)
                     .into(binding.avatar)
 
-                if (event.attachment != null) {
-                    val url = "${BuildConfig.BASE_URL}/media/${event.attachment.url}"
-                    Glide.with(binding.attachment)
+                val imageIsVisible =
+                    !event.attachment?.url.isNullOrBlank() && (event.attachment?.type?.name.toString() == AttachmentType.IMAGE.toString())
+                if (imageIsVisible) {
+                    val url = "${event.attachment?.url}"
+                    Glide.with(binding.imageAttachment)
                         .load(url)
                         .centerInside()
                         .error(R.drawable.ic_error)
-                        .into(binding.attachment)
-                    attachment.visibility = View.VISIBLE
+                        .into(binding.imageAttachment)
+                    imageAttachment.visibility = View.VISIBLE
                 } else {
-                    attachment.visibility = View.GONE
+                    imageAttachment.visibility = View.GONE
                 }
 
                 eventMenu.setOnClickListener {
