@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.Photo
-import ru.netology.nework.dto.Post
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent

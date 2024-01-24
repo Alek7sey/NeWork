@@ -2,7 +2,6 @@ package ru.netology.nework.utils
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import ru.netology.nework.dto.AttachmentType
 import ru.netology.nework.entity.EventUserPreviewEmbeddable

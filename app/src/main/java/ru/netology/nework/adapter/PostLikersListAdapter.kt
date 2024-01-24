@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardUserBinding
-import ru.netology.nework.databinding.LikersImageBinding
 import ru.netology.nework.dto.User
 
 class PostLikersListAdapter : ListAdapter<User, PostLikersListAdapter.PostLikersViewHolder>(PostLikersDiffCallback()) {

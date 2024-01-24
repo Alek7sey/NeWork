@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.netology.nework.adapter.UsersAdapter
 import ru.netology.nework.adapter.UsersOnInteractionListener
@@ -17,6 +18,7 @@ import ru.netology.nework.databinding.FragmentUsersBinding
 import ru.netology.nework.dto.User
 import ru.netology.nework.viewmodel.UsersViewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
 
