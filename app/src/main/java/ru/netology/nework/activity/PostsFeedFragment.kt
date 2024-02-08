@@ -72,6 +72,7 @@ class PostsFeedFragment : Fragment() {
                     R.id.action_postsFeedFragment_to_postAddFragment,
                     Bundle().apply {
                         textArg = post.content
+                        putString("urlAttach", post.attachment?.url)
                     }
                 )
             }
@@ -136,6 +137,14 @@ class PostsFeedFragment : Fragment() {
 //                    .show()
 //            }
 //        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                appAuth.authFlow.collect() {
+                    adapter.refresh()
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -1,5 +1,5 @@
 package ru.netology.nework.dto
 
-enum class AttachmentType {
+enum class AttachmentTypeEvent {
     IMAGE, VIDEO, AUDIO
 }

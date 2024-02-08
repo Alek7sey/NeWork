@@ -5,7 +5,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -13,11 +15,12 @@ import ru.netology.nework.api.EventsApiService
 import ru.netology.nework.dao.EventDao
 import ru.netology.nework.dao.EventRemoteKeyDao
 import ru.netology.nework.db.AppDb
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.Media
 import ru.netology.nework.entity.AttachmentEventEmbeddable
 import ru.netology.nework.entity.EventEntity
+import ru.netology.nework.entity.toDto
 import ru.netology.nework.error.ApiError
 import ru.netology.nework.error.AppError
 import ru.netology.nework.error.NetworkError
@@ -47,9 +50,11 @@ class EventRepositoryImpl @Inject constructor(
             eventRemoteKeyDao = keyDao,
             appDb = appDb
         )
-    ).flow.map {
-        it.map(EventEntity::toDto)
-    }
+    ).flow.map { it.map(EventEntity::toDto) }
+
+    override val getData: Flow<List<Event>> =
+        eventDao.getAllEvents().map(List<EventEntity>::toDto)
+            .flowOn(Dispatchers.Default)
 
     override suspend fun readAll() {
         try {
@@ -71,13 +76,13 @@ class EventRepositoryImpl @Inject constructor(
         val event = eventDao.searchEvent(id)
         try {
             eventDao.removeById(id)
-            val response = apiService.deleteEvent(id)
-            if (!response.isSuccessful) {
-                throw ApiError(response.message())
-            }
-        } catch (e: IOException) {
-            eventDao.insert(event)
-            throw NetworkError
+//            val response = apiService.deleteEvent(id)
+//            if (!response.isSuccessful) {
+//                throw ApiError(response.message())
+//            }
+//        } catch (e: IOException) {
+//            eventDao.insert(event)
+//            throw NetworkError
         } catch (e: Exception) {
             eventDao.insert(event)
             throw UnknownError
@@ -128,7 +133,6 @@ class EventRepositoryImpl @Inject constructor(
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
-
             return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError
@@ -140,13 +144,15 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun saveWithAttachment(event: Event, file: File) {
         try {
             val media = upload(file)
-            val response = apiService.saveEvent(
-                event.copy(
-                    attachment = AttachmentEventEmbeddable(url = media.id, type = AttachmentType.IMAGE)
-                )
-            )
-            val body = response.body() ?: throw ApiError(response.message())
-            eventDao.insert(EventEntity.fromDto(body))
+//            val response = apiService.saveEvent(
+//                event.copy(
+//                    attachment = AttachmentEventEmbeddable(url = media.id, type = AttachmentTypeEvent.IMAGE)
+//                )
+//            )
+//            val body = response.body() ?: throw RuntimeException("body is null")
+//            eventDao.insert(EventEntity.fromDto(body))
+            val eventWithAttachment = event.copy(attachment = AttachmentEventEmbeddable(url = media.id, type = AttachmentTypeEvent.IMAGE))
+            save(eventWithAttachment)
         } catch (e: AppError) {
             throw e
         } catch (e: IOException) {

@@ -1,6 +1,5 @@
 package ru.netology.nework.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,47 +13,37 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import ru.netology.nework.adapter.PostLikersListAdapter
-import ru.netology.nework.databinding.FragmentLikersPostBinding
-import ru.netology.nework.dto.Post
+import ru.netology.nework.adapter.EventLikersListAdapter
+import ru.netology.nework.databinding.FragmentLikersEventBinding
+import ru.netology.nework.dto.Event
 import ru.netology.nework.viewmodel.UsersViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @AndroidEntryPoint
-class PostLikersFragment : Fragment() {
-
+class EventLikersFragment: Fragment() {
     private val usersViewModel: UsersViewModel by activityViewModels()
 
-    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentLikersPostBinding.inflate(layoutInflater, container, false)
-        val post = requireArguments().getSerializable("postKey") as Post
+        val binding = FragmentLikersEventBinding.inflate(inflater, container, false)
+        val event = requireArguments().getSerializable("eventKey") as Event
         val toolbar = binding.toolbarLikersFull.toolbarLikers
 
         toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-//        val intent = Intent(activity, PostLikersFragment::class.java)
-//         val post = getParcelableExtra(intent, "postKey", Post::class.java)
 
-//        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            intent.getParcelableExtra("postKey", Post::class.java)
-//        } else {
-//            intent.getParcelableExtra<Post>("postKey")
-//        }
-
-        val adapter = PostLikersListAdapter()
-        binding.likersList.adapter = adapter
+        val adapter = EventLikersListAdapter()
+        binding.likersListEvent.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 usersViewModel.data.observe(viewLifecycleOwner) {
-                    val likerOwnersIds = post.likeOwnerIds.orEmpty().toSet()
+                    val likerOwnersIds = event.likeOwnerIds.orEmpty().toSet()
                     if (likerOwnersIds.isNotEmpty()) {
                         likerOwnersIds.forEach { likerOwnerId ->
                             val filterUsers =
@@ -68,11 +57,5 @@ class PostLikersFragment : Fragment() {
 
         return binding.root
     }
-}
 
-//fun <T : Serializable?> getSerializable(key: String, m_class: Class<T>): T {
-//    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-//       getSerializableExtra(key, m_class)!!
-//    else
-//        getSerializableExtra(key) as T
-//}
+}

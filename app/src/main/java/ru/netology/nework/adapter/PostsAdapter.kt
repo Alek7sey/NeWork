@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardPostBinding
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.dto.Post
+import ru.netology.nework.utils.convertServerDateToLocalDate
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -56,13 +57,14 @@ class PostsAdapter(
 
             binding.apply {
                 postAuthor.text = post.author
+                published.text = convertServerDateToLocalDate(post.published)
                 content.text = post.content
-                published.text = post.published
+                jobPosition.text = post.authorJob
                 link.text = post.link
                 link.isVisible = !post.link.isNullOrBlank()
+
                 likeBtn.isChecked = post.likedByMe
                 likeBtn.text = post.likeOwnerIds?.size.toString()
-
                 likeBtn.setOnClickListener {
                     likeBtn.isChecked = !likeBtn.isChecked
                     onInteractionListener.onLike(post)
@@ -70,13 +72,11 @@ class PostsAdapter(
 
                 postMenu.isVisible// = post.ownedByMe
 
-                binding.iconPlay.isVisible = post.attachment?.type == AttachmentType.VIDEO
-
                 binding.imageAttachment.setOnClickListener {
                     when (post.attachment?.type) {
-                        AttachmentType.IMAGE -> onInteractionListener.onImage(post)
-                        AttachmentType.AUDIO -> onInteractionListener.onAudio(post)
-                        AttachmentType.VIDEO -> onInteractionListener.onVideo(post)
+                        AttachmentTypePost.IMAGE -> onInteractionListener.onImage(post)
+                        AttachmentTypePost.AUDIO -> onInteractionListener.onAudio(post)
+                        AttachmentTypePost.VIDEO -> onInteractionListener.onVideo(post)
                         else -> {}
                     }
                 }
@@ -89,19 +89,20 @@ class PostsAdapter(
                     .error(R.drawable.ic_error)
                     .into(binding.avatar)
 
-                val imageIsVisible =
-                    !post.attachment?.url.isNullOrBlank()//&& (post.attachment?.type?.name.toString() == AttachmentType.IMAGE.toString()
-                if (imageIsVisible) {
+                if (!post.attachment?.url.isNullOrBlank()) {
                     val url = "${post.attachment?.url}"
                     Glide.with(binding.imageAttachment)
                         .load(url)
                         .centerInside()
                         .error(R.drawable.ic_error)
                         .into(binding.imageAttachment)
-                    imageAttachment.visibility = View.VISIBLE
+//                }
+                    postAttachmentFrame.visibility = View.VISIBLE
+                    iconPlay.isVisible = post.attachment?.type == AttachmentTypePost.VIDEO
                 } else {
-                    imageAttachment.visibility = View.GONE
+                    postAttachmentFrame.visibility = View.GONE
                 }
+//                imageAttachment.isVisible = !post.attachment?.url.isNullOrBlank()
 
                 postMenu.setOnClickListener {
                     PopupMenu(it.context, it).apply {
@@ -128,7 +129,7 @@ class PostsAdapter(
                 link.setOnClickListener { onInteractionListener.followTheLink(post) }
                 iconPlay.setOnClickListener { onInteractionListener.onVideo(post) }
                 root.setOnClickListener { onInteractionListener.onDetails(post) }
-                imageAttachment.setOnClickListener { onInteractionListener.onImage(post)}
+                imageAttachment.setOnClickListener { onInteractionListener.onImage(post) }
             }
         }
     }

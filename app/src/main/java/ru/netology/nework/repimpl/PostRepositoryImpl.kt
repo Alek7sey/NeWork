@@ -15,7 +15,7 @@ import ru.netology.nework.api.PostApiService
 import ru.netology.nework.dao.PostDao
 import ru.netology.nework.dao.PostRemoteKeyDao
 import ru.netology.nework.db.AppDb
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.dto.Media
 import ru.netology.nework.dto.Post
 import ru.netology.nework.entity.AttachmentEmbeddable
@@ -49,7 +49,9 @@ class PostRepositoryImpl @Inject constructor(
         )
     ).flow.map { it.map(PostEntity::toDto) }
 
-    override val postData: Flow<List<Post>> = postDao.getAllPosts().map(List<PostEntity>::toDto).flowOn(Dispatchers.Default)
+    override val postData: Flow<List<Post>> =
+        postDao.getAllPosts().map(List<PostEntity>::toDto)
+            .flowOn(Dispatchers.Default)
 
     override suspend fun readAll() {
         try {
@@ -71,10 +73,10 @@ class PostRepositoryImpl @Inject constructor(
         val post = postDao.searchPost(id)
         try {
             postDao.removeById(id)
-            val response = apiService.deletePost(id)
-            if (!response.isSuccessful) {
-                throw ApiError(response.message())
-            }
+//            val response = apiService.deletePost(id)
+//            if (!response.isSuccessful) {
+//                throw ApiError(response.message())
+//            }
         } catch (e: IOException) {
             postDao.insert(post)
             throw NetworkError
@@ -94,7 +96,6 @@ class PostRepositoryImpl @Inject constructor(
             val body = response.body() ?: throw ApiError(response.message())
             postDao.removeById(post.id)
             postDao.insert(PostEntity.fromDto(body))
-
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -122,13 +123,15 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun saveWithAttachment(post: Post, file: File) {
         try {
             val media = upload(file)
-            val response = apiService.savePost(
-                post.copy(
-                    attachment = AttachmentEmbeddable(url = media.id, type = AttachmentType.IMAGE)
-                )
-            )
-            val body = response.body() ?: throw ApiError(response.message())
-            postDao.insert(PostEntity.fromDto(body))
+//            val response = apiService.savePost(
+//                post.copy(
+//                    attachment = AttachmentEmbeddable(url = media.id, type = AttachmentTypePost.IMAGE)
+//                )
+//            )
+//            val body = response.body() ?: throw RuntimeException("body is null")
+//            postDao.insert(PostEntity.fromDto(body))
+            val postWithAttachment = post.copy(attachment = AttachmentEmbeddable(url = media.id, type = AttachmentTypePost.IMAGE))
+            save(postWithAttachment)
         } catch (e: AppError) {
             throw e
         } catch (e: IOException) {

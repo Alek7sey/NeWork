@@ -40,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@+id/published"
             app:layout_constraintEnd_toStartOf="@id/postMenu"
             app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/avatar"
             tools:text="@sample/post.json/data/author" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/color_header"
-            app:layout_constraintBottom_toTopOf="@id/topBarrier"
+            app:layout_constraintBottom_toBottomOf="@id/avatar"
             app:layout_constraintEnd_toStartOf="@id/postMenu"
             app:layout_constraintStart_toEndOf="@id/avatar"
             app:layout_constraintTop_toBottomOf="@+id/postAuthor"
@@ -68,7 +68,6 @@
             android:maxLines="1"
             android:textColor="@color/color_header"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@id/topBarrier"
             app:layout_constraintEnd_toStartOf="@id/postMenu"
             app:layout_constraintStart_toEndOf="@id/avatar"
             app:layout_constraintTop_toBottomOf="@+id/postAuthor"
@@ -85,55 +84,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/topBarrier"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/postAttachmentFrame"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="avatar, published, jobPosition" />
-
-        <ImageView
-            android:id="@+id/imageAttachment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:clickable="true"
-            android:contentDescription="@string/imageAttachment"
-            android:focusable="true"
+            android:layout_marginTop="@dimen/margin_16"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/topBarrier"
-            app:srcCompat="@drawable/post_video"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@id/avatar">
 
-        <!--        <VideoView-->
-        <!--            android:id="@+id/videoAttachment"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:adjustViewBounds="true"-->
-        <!--            android:contentDescription="@string/videoAttachment"-->
-        <!--            android:visibility="gone"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/imageAttachment"-->
-        <!--            app:srcCompat="@drawable/post_video" />-->
+            <ImageView
+                android:id="@+id/imageAttachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/imageAttachment"
+                app:srcCompat="@drawable/post_video" />
 
-        <ImageButton
-            android:id="@+id/iconPlay"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:contentDescription="@string/icon_play"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageAttachment"
-            app:layout_constraintEnd_toEndOf="@+id/imageAttachment"
-            app:layout_constraintStart_toStartOf="@+id/imageAttachment"
-            app:layout_constraintTop_toTopOf="@+id/imageAttachment"
-            app:srcCompat="@drawable/ic_play_circle_filled" />
+            <ImageButton
+                android:id="@+id/iconPlay"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="center"
+                android:contentDescription="@string/icon_play"
+                app:srcCompat="@drawable/ic_play_circle_filled" />
 
-        <!--        <androidx.constraintlayout.widget.Group-->
-        <!--            android:id="@+id/groupVideo"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:visibility="gone"-->
-        <!--            app:constraint_referenced_ids="videoAttachment, iconPlay"-->
-        <!--           />-->
+        </FrameLayout>
 
         <TextView
             android:id="@+id/publishedDetails"
@@ -143,12 +120,12 @@
             android:textColor="@color/color_header"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/avatar"
-            app:layout_constraintTop_toBottomOf="@+id/imageAttachment"
+            app:layout_constraintTop_toBottomOf="@id/postAttachmentFrame"
             tools:text="@sample/post.json/data/published" />
 
         <TextView
             android:id="@+id/content"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_16"
             android:layout_marginTop="@dimen/common_spacing_10"
@@ -297,7 +274,7 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mentionedList" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
 

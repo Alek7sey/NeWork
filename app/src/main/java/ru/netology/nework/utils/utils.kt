@@ -4,6 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.floor
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -39,4 +42,23 @@ object EditTextArg : ReadWriteProperty<Bundle, String?> {
     override fun setValue(thisRef: Bundle, property: KProperty<*>, value: String?) {
         thisRef.putString(property.name, value)
     }
+}
+
+object EventIdArg : ReadWriteProperty<Bundle, Long> {
+    override fun getValue(thisRef: Bundle, property: KProperty<*>): Long =
+        thisRef.getLong(property.name)
+
+    override fun setValue(thisRef: Bundle, property: KProperty<*>, value: Long) {
+        thisRef.putLong(property.name, value)
+    }
+}
+
+fun convertServerDateToLocalDate (serverDate : String): String {
+    val serverDateFormat = DateTimeFormatter.ISO_INSTANT
+        .withLocale(Locale.getDefault())
+        .withZone(ZoneId.systemDefault());
+    val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    val localDateTime = serverDateFormat.parse(serverDate)
+
+    return localDateFormat.format(localDateTime)
 }

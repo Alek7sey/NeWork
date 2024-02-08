@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbarMenuProfileMy"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:layout_gravity="top"
-    android:background="@color/background_of_the_post"
-    app:layout_scrollFlags="scroll|enterAlways|snap"
-    app:liftOnScroll="true"
-    app:menu="@menu/menu_my_profile"
-    app:navigationIcon="@drawable/ic_arrow_back"
-    app:title="@string/you"
-    app:titleTextColor="@color/color_header">
+    android:layout_height="wrap_content">
 
-</androidx.appcompat.widget.Toolbar>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarMenuMyProfileMy"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@color/background_of_the_post"
+        app:menu="@menu/menu_my_profile"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/you"
+        app:titleTextColor="@color/color_header" />
+
+</com.google.android.material.appbar.AppBarLayout>

@@ -85,10 +85,22 @@
     <string name="login_or_name_or_password_is_empty">Логин или имя или пароль не введены</string>
     <string name="fab_click_message">Чтобы добавить необходимо войти или зарегистрироваться</string>
     <string name="passwords_do_not_match">Введенные пароли не совпадают</string>
-    <string name="postimageattachment">Вложение-картинка</string>
+    <string name="postimageattachment">Вложение поста - картинка</string>
     <string name="this_event_location">Место проведения мероприятия</string>
     <string name="hello_blank_fragment">Пустой фрагмент</string>
     <string name="picking_photo_error">Ошибка выбора фотографии</string>
-    <string name="check">принять</string>
+    <string name="save">Сохрнаить</string>
     <string name="text_editing_field">Поле для редактирования текста</string>
+    <string name="choose_where_open_your_video">Выберите для вашего видео</string>
+    <string name="choose_where_open_your_audio">Выберите для вашего аудио</string>
+    <string name="new_job">Новая работа</string>
+    <string name="users_not_loaded_try_again">Пользователи не загружены. Повторите загрузку</string>
+    <string name="try_loading_users">Повторная загрузка юзеров</string>
+    <string name="share_event">Поделиться событием</string>
+    <string name="eventimageattachment">Вложение события - картинка</string>
+    <string name="add_date">Добавить дату</string>
+    <string name="event_date">Дата события</string>
+    <string name="dd_mm_yyyy_hh_mm">дд.мм.гггг чч:мм</string>
+    <string name="date_type">Тип события</string>
+    <string name="body_is_null">Ответ пуст</string>
 </resources>

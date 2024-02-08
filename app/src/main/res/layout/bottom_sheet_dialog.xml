@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="12dp"
     app:strokeColor="@color/borders_card_post"
+    android:layout_gravity="bottom"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_bottom_sheet"
@@ -23,7 +23,7 @@
             android:hint="@string/date"
             app:endIconDrawable="@drawable/ic_event"
             app:endIconMode="custom"
-            app:helperText="MM/dd/yyyy HH:mm"
+            app:helperText="dd.mm.yyyy HH:mm"
             app:helperTextEnabled="true"
             app:helperTextTextColor="@color/color_menu"
             app:hintEnabled="true"

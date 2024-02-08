@@ -4,8 +4,8 @@
     android:layout_height="wrap_content">
 
     <include
-        android:id="@+id/toolbarPost"
-        layout="@layout/toolbar_post" />
+        android:id="@+id/toolbarEventDetails"
+        layout="@layout/toolbar_event" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
             android:background="@color/white">
 
             <include
-                android:id="@+id/cardPostDetails"
-                layout="@layout/card_post" />
+                android:id="@+id/cardEventDetails"
+                layout="@layout/card_event" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

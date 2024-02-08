@@ -87,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/card_post" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -104,9 +105,5 @@
         android:contentDescription="@string/add_post"
         app:borderWidth="0dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.20"
-
         app:srcCompat="@drawable/ic_plus_math" />
-
-<!--    <include layout="@layout/bottom_nav" />-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import java.io.File
 
 interface EventsRepository {
     val data: Flow<PagingData<Event>>
+    val getData: Flow<List<Event>>
     suspend fun readAll()
     suspend fun removeById(id: Long)
     suspend fun save(event: Event)

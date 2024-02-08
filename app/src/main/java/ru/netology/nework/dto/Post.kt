@@ -33,7 +33,7 @@ data class Coordinates(
 
 data class Attachment(
     val url: String,
-    val type: AttachmentType,
+    val type: AttachmentTypePost,
 )
 
 data class UserPreview(

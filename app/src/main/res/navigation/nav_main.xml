@@ -47,6 +47,16 @@
         <action
             android:id="@+id/action_eventsFeedFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_eventImageFragment"
+            app:destination="@id/eventImageFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_eventAddFragment"
+            app:destination="@id/eventAddFragment"
+            app:popUpTo="@id/eventsFeedFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -77,10 +87,40 @@
         android:id="@+id/postLikersFragment"
         android:name="ru.netology.nework.activity.PostLikersFragment"
         android:label="PostLikersFragment"
-        tools:layout="@layout/fragment_likers"/>
+        tools:layout="@layout/fragment_likers_post"/>
     <fragment
         android:id="@+id/postAddFragment"
         android:name="ru.netology.nework.activity.PostAddFragment"
         android:label="PostAddOrEditFragment"
         tools:layout="@layout/fragment_add_post" />
+    <fragment
+        android:id="@+id/eventImageFragment"
+        android:name="ru.netology.nework.activity.EventImageFragment"
+        android:label="EventImageFragment"
+        tools:layout="@layout/fragment_image_event"/>
+    <fragment
+        android:id="@+id/eventAddFragment"
+        android:name="ru.netology.nework.activity.EventAddFragment"
+        android:label="EventAddFragment"
+        tools:layout="@layout/fragment_add_event"/>
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="ru.netology.nework.activity.EventDetailsFragment"
+        android:label="EventDetailsFragment"
+        tools:layout="@layout/fragment_event_details">
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_eventImageFragment"
+            app:destination="@id/eventImageFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_eventLikersFragment"
+            app:destination="@id/eventLikersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventLikersFragment"
+        android:name="ru.netology.nework.activity.EventLikersFragment"
+        android:label="EventLikersFragment"
+        tools:layout="@layout/fragment_likers_event"/>
 </navigation>

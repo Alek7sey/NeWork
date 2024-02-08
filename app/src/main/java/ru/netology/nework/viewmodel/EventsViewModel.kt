@@ -3,6 +3,7 @@ package ru.netology.nework.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -17,10 +18,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dto.Event
-import ru.netology.nework.dto.Photo
+import ru.netology.nework.model.EventModel
+import ru.netology.nework.model.PhotoModel
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 private val emptyEvent = Event(
@@ -73,15 +78,38 @@ class EventsViewModel @Inject constructor(
     val eventState: LiveData<EventModelState>
         get() = _eventState
 
-    private val _photoState = MutableLiveData<Photo?>()
-    val photoState: LiveData<Photo?>
-        get() = _photoState
-
-    private val edited = MutableLiveData(emptyEvent)
-
     private val _eventCreated = SingleLiveEvent<Unit>()
     val eventCreated: SingleLiveEvent<Unit>
         get() = _eventCreated
+
+    private val _eventEdited = SingleLiveEvent<Unit>()
+    val eventEdited: SingleLiveEvent<Unit>
+        get() = _eventEdited
+
+    private val _photoState = MutableLiveData<PhotoModel?>()
+    val photoState: LiveData<PhotoModel?>
+        get() = _photoState
+
+    val edited = MutableLiveData(emptyEvent)
+
+    private val _eventTypesState = MutableLiveData<String>()
+    val eventTypesState: LiveData<String>
+        get() = _eventTypesState
+
+    private val _dateTimeState = MutableLiveData<String>()
+    val dateTimeState: LiveData<String>
+        get() = _dateTimeState
+
+    fun editType(type: String) {
+        _eventTypesState.value = type
+    }
+
+    fun editDateTime(dateTime: String) {
+        _dateTimeState.value = dateTime
+    }
+
+    val eventDetailsData: LiveData<EventModel> =
+        repository.getData.map(::EventModel).asLiveData(Dispatchers.Default)
 
 
     init {
@@ -100,8 +128,8 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-    fun setPhoto(photo: Photo) {
-        _photoState.value = photo
+    fun setPhoto(photoModel: PhotoModel) {
+        _photoState.value = photoModel
     }
 
     fun clearPhoto() {
@@ -134,35 +162,55 @@ class EventsViewModel @Inject constructor(
 
     fun save() {
         edited.value?.let { event ->
-            eventCreated.postValue(Unit)
             viewModelScope.launch {
                 try {
                     _photoState.value?.let {
                         repository.saveWithAttachment(event, it.file)
                     } ?: repository.save(event)
+                    eventCreated.postValue(Unit)
+                    clear()
                     _eventState.value = EventModelState()
                 } catch (e: Exception) {
                     _eventState.value = EventModelState(error = true)
                 }
             }
         }
-        edited.value = emptyEvent
     }
 
     fun edit(event: Event) {
         edited.value = event
     }
 
-    fun changeContent(content: String) {
-        val text = content.trim()
-        if (edited.value?.content != text) {
-            edited.value = edited.value?.copy(content = text)
+    private val serverDate = DateTimeFormatter.ISO_INSTANT
+    private val localDateFormat: DateTimeFormatter = DateTimeFormatter
+        .ofPattern("dd.MM.yyyy HH:mm:ss.SSS")
+        .withLocale(Locale.getDefault())
+        .withZone(ZoneId.systemDefault());
+
+    fun changeContent(content: String, datetime: String, eventType: String) {
+        if (edited.value?.content != content.trim()) {
+            val localDateTime = localDateFormat.parse(datetime.trim() + ":00.000")
+//            val ld = LocalDate.from(localDateTime)
+//            val lt = LocalTime.of(
+//                localDateTime.get(ChronoField.HOUR_OF_DAY),
+//                localDateTime.get(ChronoField.MINUTE_OF_HOUR),
+//                0,
+//                0
+//            )
+//            val dateTime = ZonedDateTime.of(ld, lt, ZoneId.systemDefault()).toInstant()
+            edited.value =
+                edited.value?.copy(
+                    content = content.trim(),
+//                    datetime = serverDate.format(dateTime),
+                    datetime = serverDate.format(localDateTime),
+                    type = eventType.trim()
+                )
         }
     }
 
     fun removeById(id: Long) {
         viewModelScope.launch {
-            _eventState.value = EventModelState(refreshing = true)
+            _eventState.value = EventModelState(loading = true)
             _eventState.value = try {
                 repository.removeById(id)
                 EventModelState()
@@ -177,5 +225,9 @@ class EventsViewModel @Inject constructor(
             _eventState.value = EventModelState(refreshing = true)
             //     repository.shareById(id)
         }
+    }
+
+    fun clear() {
+        edited.value = emptyEvent
     }
 }

@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import ru.netology.nework.R
 import ru.netology.nework.adapter.UsersAdapter
 import ru.netology.nework.adapter.UsersOnInteractionListener
 import ru.netology.nework.databinding.FragmentUsersBinding
@@ -46,16 +49,24 @@ class UsersFragment : Fragment() {
             }
         }
 
-//        viewModel.data.observe(viewLifecycleOwner) { state ->
-//            binding.errorGroup.isVisible = state.empty
-//            adapter.submitList(state.users)
-//        }
-
-        binding.retry.setOnClickListener {
-            viewModel.loadUsers()
+        viewModel.state.observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = it.refreshing
+            binding.progress.isVisible = it.refreshing || it.loading
+            binding.errorGroup.isVisible = it.error
+            if (it.error) {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.users_not_loaded_try_again),
+                    Snackbar.LENGTH_LONG
+                ).setAction(
+                    getString(R.string.try_loading_users)
+                ) {
+                    viewModel.loadUsers()
+                }.show()
+            }
         }
 
-        binding.swipeRefresh.setOnRefreshListener {
+        binding.retry.setOnClickListener {
             viewModel.loadUsers()
         }
 

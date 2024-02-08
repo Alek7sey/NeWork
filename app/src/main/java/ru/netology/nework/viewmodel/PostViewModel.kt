@@ -100,7 +100,8 @@ class PostViewModel @Inject constructor(
     val postCreated: SingleLiveEvent<Unit>
         get() = _postCreated
 
-    val postData: LiveData<PostModel> = repository.postData.map(::PostModel).asLiveData(Dispatchers.Default)
+    val postData: LiveData<PostModel> =
+        repository.postData.map(::PostModel).asLiveData(Dispatchers.Default)
 
     init {
         loadPosts()
@@ -159,19 +160,20 @@ class PostViewModel @Inject constructor(
 
     fun save() {
         edited.value?.let { post ->
-            postCreated.postValue(Unit)
+            //  postCreated.postValue(Unit)
             viewModelScope.launch {
                 try {
                     _photoState.value?.let {
                         repository.saveWithAttachment(post, it.file)
                     } ?: repository.save(post)
+                    _postCreated.value = Unit
+                    clear()
                     _feedState.value = FeedModelState()
                 } catch (e: Exception) {
                     _feedState.value = FeedModelState(error = true)
                 }
             }
         }
-        edited.value = empty
     }
 
     fun edit(post: Post) {
@@ -187,7 +189,7 @@ class PostViewModel @Inject constructor(
 
     fun removeById(id: Long) {
         viewModelScope.launch {
-            _feedState.value = FeedModelState(refreshing = true)
+            _feedState.value = FeedModelState(loading = true)
             _feedState.value = try {
                 repository.removeById(id)
                 FeedModelState()

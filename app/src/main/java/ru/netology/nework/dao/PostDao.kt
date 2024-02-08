@@ -13,6 +13,7 @@ interface PostDao {
 
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAllPosts(): Flow<List<PostEntity>>
+
     @Query("SELECT * FROM PostEntity WHERE id = :id")
     suspend fun searchPost(id: Long): PostEntity
 

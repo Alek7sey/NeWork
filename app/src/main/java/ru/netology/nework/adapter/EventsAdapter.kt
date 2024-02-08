@@ -1,5 +1,6 @@
 package ru.netology.nework.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,26 +12,33 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardEventBinding
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.dto.Event
+import ru.netology.nework.dto.TypeStatus
+import ru.netology.nework.utils.convertServerDateToLocalDate
 
 interface EventsOnInteractionListener {
     fun onLike(event: Event) {}
     fun onParticipate(event: Event) {}
     fun onEdit(event: Event) {}
     fun onDelete(event: Event) {}
+    fun onImage(event: Event) {}
+    fun onAudio(event: Event) {}
     fun onShare(event: Event) {}
+    fun followTheLink(event: Event) {}
+    fun onDetails(event: Event) {}
 
 }
 
 class EventsAdapter(
-    private val onInteractionListener: EventsOnInteractionListener
+    private val listener: EventsOnInteractionListener,
+    private val context: Context
 ) : PagingDataAdapter<Event, EventsAdapter.EventViewHolder>(EventDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         return EventViewHolder(
             CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onInteractionListener
+            listener, context
         )
     }
 
@@ -40,32 +48,36 @@ class EventsAdapter(
 
     class EventViewHolder(
         private val binding: CardEventBinding,
-        private val onInteractionListener: EventsOnInteractionListener
+        private val listener: EventsOnInteractionListener,
+        private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(event: Event) {
             binding.apply {
-                eventAuthor.text = event.author
-                eventPublished.text = event.published
-                content.text = event.content
-                eventLikeBtn.text = event.likeOwnerIds?.size.toString()
+                eventAuthorName.text = event.author
+                eventPublished.text = convertServerDateToLocalDate(event.published)
+                jobPosition.text = event.authorJob
                 eventType.text = event.type
-                eventData.text = event.datetime
-                participantsBtn.text = event.participantsIds?.size.toString()
+                eventData.text = convertServerDateToLocalDate(event.datetime)
+                content.text = event.content
 
+                linkEvent.isVisible = !event.link.isNullOrBlank()
+                linkEvent.text = event.link
+
+                eventLikeBtn.isChecked = event.likedByMe
+                eventLikeBtn.text = event.likeOwnerIds?.size.toString()
                 eventLikeBtn.setOnClickListener {
                     eventLikeBtn.isChecked = !eventLikeBtn.isChecked
-                    onInteractionListener.onLike(event)
+                    listener.onLike(event)
                 }
 
+                participantsBtn.text = event.participantsIds?.size.toString()
                 participantsBtn.setOnClickListener {
                     participantsBtn.isChecked = !participantsBtn.isChecked
-                    onInteractionListener.onParticipate(event)
+                    listener.onParticipate(event)
                 }
 
-              //  attachment.isVisible = !event.attachment?.url.isNullOrBlank()
-
-                eventMenu.isVisible// = event.ownedByMe
+//                eventMenu.isVisible
 
                 val urlAvatar = "${event.authorAvatar}"
                 Glide.with(binding.avatar)
@@ -76,7 +88,7 @@ class EventsAdapter(
                     .into(binding.avatar)
 
                 val imageIsVisible =
-                    !event.attachment?.url.isNullOrBlank() && (event.attachment?.type?.name.toString() == AttachmentType.IMAGE.toString())
+                    !event.attachment?.url.isNullOrBlank() && (event.attachment?.type?.name.toString() == AttachmentTypeEvent.IMAGE.toString())
                 if (imageIsVisible) {
                     val url = "${event.attachment?.url}"
                     Glide.with(binding.imageAttachment)
@@ -89,18 +101,40 @@ class EventsAdapter(
                     imageAttachment.visibility = View.GONE
                 }
 
+//                iconPlay.isVisible =
+//                    !event.attachment?.url.isNullOrBlank() && (event.attachment?.type?.name.toString() == AttachmentTypePost.AUDIO.toString())
+
+                when (event.attachment?.type) {
+                    AttachmentTypeEvent.AUDIO -> iconPlay.isVisible = true
+                    else -> {
+                        iconPlay.isVisible = false
+                    }
+                }
+
+                when (event.type) {
+                    TypeStatus.ONLINE.toString() -> {
+                        eventType.text =
+                            context.getString(R.string.online)
+                    }
+
+                    TypeStatus.OFFLINE.toString() -> {
+                        eventType.text =
+                            context.getString(R.string.offline)
+                    }
+                }
+
                 eventMenu.setOnClickListener {
                     PopupMenu(it.context, it).apply {
                         inflate(R.menu.option_event)
                         setOnMenuItemClickListener { item ->
                             when (item.itemId) {
-                                R.id.delete -> {
-                                    onInteractionListener.onDelete(event)
+                                R.id.deleteEvent -> {
+                                    listener.onDelete(event)
                                     true
                                 }
 
-                                R.id.edit -> {
-                                    onInteractionListener.onEdit(event)
+                                R.id.editEvent -> {
+                                    listener.onEdit(event)
                                     true
                                 }
 
@@ -109,6 +143,12 @@ class EventsAdapter(
                         }
                     }.show()
                 }
+                linkEvent.setOnClickListener { listener.followTheLink(event) }
+                likeShortBtn.setOnClickListener { listener.onLike(event) }
+                iconPlay.setOnClickListener { listener.onAudio(event) }
+                root.setOnClickListener { listener.onDetails(event) }
+                imageAttachment.setOnClickListener { listener.onImage(event) }
+                eventShareBtn.setOnClickListener { listener.onShare(event) }
             }
         }
     }

@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.netology.nework.dto.Attachment
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.dto.Coordinates
 import ru.netology.nework.dto.Post
 import ru.netology.nework.dto.UserPreview
@@ -29,7 +29,7 @@ data class PostEntity(
     @Embedded
     val attachment: AttachmentEmbeddable? = null,
     val ownedByMe: Boolean = false,
-    val users: Map<Long, UserPreviewEmbeddable>
+    val users: Map<Long, UserPreviewEmbeddable>,
 ) {
     fun toDto() =
         Post(
@@ -47,7 +47,6 @@ data class PostEntity(
             likeOwnerIds,
             likedByMe,
             attachment,
-//            ownedByMe,
             users,
         )
 
@@ -69,7 +68,7 @@ data class PostEntity(
                 likedByMe = dto.likedByMe,
                 attachment = dto.attachment,
 //                ownedByMe = dto.ownedByMe,
-                users = dto.users,
+                users = dto.users
             )
     }
 }
@@ -87,7 +86,7 @@ data class CoordinatesEmbeddable(
 
 data class AttachmentEmbeddable(
     val url: String,
-    val type: AttachmentType
+    val type: AttachmentTypePost
 ) {
     fun toDto() = Attachment(url, type)
 

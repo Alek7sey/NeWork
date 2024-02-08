@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import ru.netology.nework.entity.AttachmentEventEmbeddable
 import ru.netology.nework.entity.CoordinatesEventEmbeddable
 import ru.netology.nework.entity.EventUserPreviewEmbeddable
+import java.io.Serializable
 
 data class Event(
     val id: Long,
@@ -25,7 +26,7 @@ data class Event(
     val attachment: AttachmentEventEmbeddable? = null,
     val link: String? = null,
     val users: Map<Long, EventUserPreviewEmbeddable>,
-)
+) : Serializable
 
 data class CoordinatesEvent(
     val latitude: String,
@@ -34,7 +35,7 @@ data class CoordinatesEvent(
 
 data class AttachmentEvent(
     val url: String,
-    val type: AttachmentType
+    val type: AttachmentTypeEvent
 )
 
 data class EventUserPreview(

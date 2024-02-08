@@ -3,7 +3,7 @@ package ru.netology.nework.utils
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.entity.EventUserPreviewEmbeddable
 import ru.netology.nework.entity.UserPreviewEmbeddable
 
@@ -41,10 +41,10 @@ class TypeConverter {
     }
 
     @TypeConverter
-    fun fromAttachmentType(value: AttachmentType) = value.name
+    fun fromAttachmentType(value: AttachmentTypePost) = value.name
 
     @TypeConverter
-    fun toAttachmentType(value: String) = enumValueOf<AttachmentType>(value)
+    fun toAttachmentType(value: String) = enumValueOf<AttachmentTypePost>(value)
 
     @TypeConverter
     fun fromListIntToString(list: List<Int>): String {

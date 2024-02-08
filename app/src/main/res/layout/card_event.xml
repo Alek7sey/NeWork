@@ -2,10 +2,9 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/common_spacing_10"
     app:cardCornerRadius="12dp"
     app:strokeColor="@color/borders_card_post"
     app:strokeWidth="1dp">
@@ -28,7 +27,7 @@
             tools:srcCompat="@sample/post.json/data/authorAvatar" />
 
         <TextView
-            android:id="@+id/eventAuthor"
+            android:id="@+id/eventAuthorName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16"
@@ -41,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@+id/eventPublished"
             app:layout_constraintEnd_toStartOf="@id/eventMenu"
             app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/avatar"
             tools:text="@sample/post.json/data/author" />
 
         <TextView
@@ -53,23 +52,27 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/color_header"
-            app:layout_constraintBottom_toTopOf="@id/topBarrier"
+
+            app:layout_constraintBottom_toBottomOf="@id/avatar"
             app:layout_constraintEnd_toStartOf="@id/eventMenu"
             app:layout_constraintStart_toEndOf="@id/avatar"
-            app:layout_constraintTop_toBottomOf="@+id/eventAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/eventAuthorName"
             tools:text="@sample/post.json/data/published" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/playBtn"-->
-<!--            android:layout_width="@dimen/icon_size"-->
-<!--            android:layout_height="@dimen/icon_size"-->
-<!--            android:layout_marginStart="@dimen/margin_16"-->
-<!--            android:layout_marginTop="@dimen/margin_16"-->
-<!--            android:contentDescription="@string/play_event"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/attachment"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/content"-->
-<!--            tools:srcCompat="@drawable/ic_play_circle_filled" />-->
+        <TextView
+            android:id="@+id/jobPosition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginBottom="@dimen/margin_16"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_header"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/eventMenu"
+            app:layout_constraintStart_toEndOf="@id/avatar"
+            app:layout_constraintTop_toBottomOf="@+id/eventAuthorName"
+            tools:text="@sample/post.json/data/published" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/eventMenu"
@@ -82,60 +85,74 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/topBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="avatar, eventPublished" />
-
         <ImageView
             android:id="@+id/imageAttachment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
             android:adjustViewBounds="true"
             android:clickable="true"
-            android:visibility="gone"
             android:focusable="true"
             android:contentDescription="@string/attachment"
-            app:layout_constraintTop_toBottomOf="@id/topBarrier"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/avatar"
             app:srcCompat="@drawable/post_video"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/eventType"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
             android:layout_marginTop="@dimen/common_spacing_10"
             android:text="@string/online"
             android:textColor="@color/color_header"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/avatar"
             app:layout_constraintTop_toBottomOf="@id/imageAttachment" />
 
         <TextView
             android:id="@+id/eventData"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_16"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/content"
-            app:layout_constraintStart_toStartOf="@id/avatar"
+            app:layout_constraintStart_toStartOf="@id/eventType"
             app:layout_constraintTop_toBottomOf="@+id/eventType"
             tools:text="@sample/post.json/data/published" />
 
+        <ImageButton
+            android:id="@+id/iconPlay"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="@dimen/margin_16"
+            android:contentDescription="@string/icon_play"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/eventData"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/eventType"
+            app:srcCompat="@drawable/ic_play_circle_filled" />
+
         <TextView
             android:id="@+id/content"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_16"
+            android:layout_marginStart="@dimen/margin_16"
             android:layout_marginTop="@dimen/common_spacing_10"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/margin_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/eventData"
             tools:text="@sample/post.json/data/content" />
+
+        <TextView
+            android:id="@+id/linkEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_spacing_10"
+            app:layout_constraintStart_toStartOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            tools:text="http://github.com/netology-code" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/eventLikeBtn"
@@ -147,7 +164,7 @@
             android:checkable="true"
             android:contentDescription="@string/likes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/linkEvent"
             tools:checked="true"
             tools:text="999k" />
 
@@ -160,7 +177,7 @@
             android:contentDescription="@string/share"
             app:icon="@drawable/ic_share"
             app:layout_constraintStart_toEndOf="@id/eventLikeBtn"
-            app:layout_constraintTop_toBottomOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/linkEvent"
             tools:text="999" />
 
         <com.google.android.material.button.MaterialButton
@@ -172,8 +189,136 @@
             android:contentDescription="@string/share"
             app:icon="@drawable/ic_people_outline"
             app:layout_constraintEnd_toEndOf="@id/content"
-            app:layout_constraintTop_toBottomOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/linkEvent"
             tools:text="12" />
+
+        <TextView
+            android:id="@+id/speakersTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/speakers"
+            android:textColor="@color/color_header"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/linkEvent"
+            app:layout_constraintTop_toBottomOf="@id/linkEvent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/speakersList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="@id/speakersTitle"
+            app:layout_constraintTop_toBottomOf="@id/speakersTitle"
+            tools:listitem="@layout/likers_image" />
+
+        <TextView
+            android:id="@+id/likersTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="@string/likers"
+            android:textColor="@color/color_header"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/speakersList"
+            app:layout_constraintTop_toBottomOf="@id/speakersList" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/likeShortBtn"
+            style="@style/Widget.AppTheme.LikeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/common_spacing_10"
+            android:checkable="true"
+            android:contentDescription="@string/title_likes"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/likersTitle"
+            tools:checked="true"
+            tools:text="999k" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/likersListShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_spacing_10"
+            android:contentDescription="@string/likers_list"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@id/likeShortBtn"
+            app:layout_constraintStart_toEndOf="@id/likeShortBtn"
+            app:layout_constraintTop_toTopOf="@id/likeShortBtn"
+            tools:listitem="@layout/likers_image" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/likersMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_like_tint"
+            android:contentDescription="@string/likers_more"
+            android:visibility="gone"
+            app:borderWidth="0dp"
+            app:fabCustomSize="@dimen/post_avatar_size"
+            app:layout_constraintBottom_toBottomOf="@id/likersListShort"
+            app:layout_constraintStart_toEndOf="@id/likersListShort"
+            app:layout_constraintTop_toTopOf="@id/likersListShort"
+            app:srcCompat="@drawable/ic_plus_math" />
+
+        <TextView
+            android:id="@+id/participantsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="@string/participants"
+            android:textColor="@color/color_header"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/likersTitle"
+            app:layout_constraintTop_toBottomOf="@id/likersListShort" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/participantsShortBtn"
+            style="@style/Widget.AppTheme.LikeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_spacing_10"
+            android:visibility="gone"
+            app:icon="@drawable/ic_people_outline"
+            app:layout_constraintStart_toStartOf="@id/participantsTitle"
+            app:layout_constraintTop_toBottomOf="@id/participantsTitle"
+            tools:checked="true"
+            tools:text="999k" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/participantsListShort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/common_spacing_10"
+            android:contentDescription="@string/participants_list"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/margin_16"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@id/participantsShortBtn"
+            app:layout_constraintStart_toEndOf="@id/participantsShortBtn"
+            app:layout_constraintTop_toTopOf="@id/participantsShortBtn"
+            tools:listitem="@layout/likers_image" />
+
+        <com.yandex.mapkit.mapview.MapView
+            android:id="@+id/eventMapView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/participantsListShort" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

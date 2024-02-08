@@ -4,16 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<com.google.android.material.appbar.MaterialToolbar
-    android:id="@+id/toolbarNewPost"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:layout_gravity="top"
-    android:background="@color/background_of_the_post"
-    app:layout_scrollFlags="scroll|enterAlways|snap"
-    app:liftOnScroll="true"
-    app:menu="@menu/toolbar_new_post"
-    app:navigationIcon="@drawable/ic_arrow_back"
-    app:title="@string/new_post" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarNewPost"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:background="@color/background_of_the_post"
+        app:menu="@menu/toolbar_new_post"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/new_post" />
 
 </com.google.android.material.appbar.AppBarLayout>

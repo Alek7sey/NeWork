@@ -6,17 +6,13 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/navAddEvent"
-        layout="@layout/bottom_nav_add_event" />
-
-    <include
-        android:id="@+id/toolbarAddPost"
+        android:id="@+id/toolbarAddEvent"
         layout="@layout/toolbar_new_event" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/margin_16">
+        android:layout_margin="@dimen/margin_16">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,6 +29,41 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 tools:text="@tools:sample/lorem[50]" />
+
+            <TextView
+                android:id="@+id/eventDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/event_date"
+                android:textColor="@color/color_header"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/eventDateBtn"
+                android:layout_width="wrap_content"
+                style="@style/Widget.AppTheme.MenuButton"
+                android:textColor="@color/color_header"
+                android:layout_height="wrap_content"
+                android:text="@string/dd_mm_yyyy_hh_mm" />
+
+            <TextView
+                android:id="@+id/eventTypeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_type"
+                android:textColor="@color/color_header"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/eventDateTypeBtn"
+                android:layout_width="wrap_content"
+                android:textColor="@color/color_header"
+                style="@style/Widget.AppTheme.MenuButton"
+                android:layout_height="wrap_content"
+                android:text="@string/online" />
 
             <FrameLayout
                 android:id="@+id/photoContainer"
@@ -60,4 +91,60 @@
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/eventBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_gravity="bottom"
+        android:background="@color/color_bottom_nav"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/addPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_16"
+            app:srcCompat="@drawable/ic_photo_camera" />
+
+        <ImageView
+            android:id="@+id/loadPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_16"
+            app:srcCompat="@drawable/ic_attach_file" />
+
+        <ImageView
+            android:id="@+id/peopleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_16"
+            app:srcCompat="@drawable/ic_people" />
+
+        <ImageView
+            android:id="@+id/addLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_location_pin" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/common_spacing_10"
+        android:backgroundTint="@color/color_fab"
+        android:contentDescription="@string/add_date"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.20"
+        app:srcCompat="@drawable/ic_plus_math" />
+
+    <!--    <include-->
+    <!--        android:id="@+id/bottom_sheet"-->
+    <!--        layout="@layout/bottom_sheet_dialog"-->
+    <!--        android:visibility="invisible"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

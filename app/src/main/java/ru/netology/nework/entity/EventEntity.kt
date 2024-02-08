@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.netology.nework.dto.AttachmentEvent
-import ru.netology.nework.dto.AttachmentType
+import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.dto.CoordinatesEvent
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.EventUserPreview
@@ -92,7 +92,7 @@ data class CoordinatesEventEmbeddable(
 
 data class AttachmentEventEmbeddable(
     val url: String,
-    val type: AttachmentType
+    val type: AttachmentTypeEvent
 ) {
     fun toDto() = AttachmentEvent(url, type)
 

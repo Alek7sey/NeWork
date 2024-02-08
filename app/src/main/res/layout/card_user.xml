@@ -56,7 +56,6 @@
             app:layout_constraintStart_toEndOf="@id/avatar"
             app:layout_constraintTop_toBottomOf="@id/userName"
             app:layout_constraintBottom_toBottomOf="@id/avatar"
-
             tools:text="@sample/post.json/data/author" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

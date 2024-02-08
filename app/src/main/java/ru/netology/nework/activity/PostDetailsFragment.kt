@@ -11,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -20,14 +23,16 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import ru.netology.nework.R
-import ru.netology.nework.adapter.OnInteractionListener
 import ru.netology.nework.adapter.LikersShortListAdapter
+import ru.netology.nework.adapter.OnInteractionListener
 import ru.netology.nework.adapter.PostsAdapter
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentPostDetailsBinding
 import ru.netology.nework.dto.Post
 import ru.netology.nework.utils.SeparateIdPostArg
+import ru.netology.nework.utils.convertServerDateToLocalDate
 import ru.netology.nework.viewmodel.AuthViewModel
 import ru.netology.nework.viewmodel.PostViewModel
 import ru.netology.nework.viewmodel.UsersViewModel
@@ -39,9 +44,9 @@ class PostDetailsFragment : Fragment() {
     @Inject
     lateinit var appAuth: AppAuth
 
-    private val postViewModel: PostViewModel by viewModels()
-    private val usersViewModel: UsersViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
+    private val postViewModel: PostViewModel by activityViewModels()
+    private val usersViewModel: UsersViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by activityViewModels()
 
     private var mapView: MapView? = null
 
@@ -53,6 +58,7 @@ class PostDetailsFragment : Fragment() {
         val binding = FragmentPostDetailsBinding.inflate(layoutInflater, container, false)
 
         val arg = arguments?.let { it.idArg }
+        val toolbar = binding.toolbarPost.toolbar
 
         mapView = binding.cardPostDetails.postMapView
 
@@ -66,7 +72,7 @@ class PostDetailsFragment : Fragment() {
                     jobPosition.visibility = View.VISIBLE
 
                     publishedDetails.visibility = View.VISIBLE
-                    publishedDetails.text = published.text
+                    publishedDetails.text = convertServerDateToLocalDate(post.published)
 
                     likersTitle.visibility = View.VISIBLE
                     likersList.isVisible = post.likeOwnerIds?.isNotEmpty() == true
@@ -100,12 +106,20 @@ class PostDetailsFragment : Fragment() {
 
                         override fun onVideo(post: Post) {
                             val videoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
-                            startActivity(videoIntent)
+                            val chooserIntent = Intent.createChooser(
+                                videoIntent,
+                                getString(R.string.choose_where_open_your_video)
+                            )
+                            startActivity(chooserIntent)
                         }
 
                         override fun onAudio(post: Post) {
                             val audioIntent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
-                            startActivity(audioIntent)
+                            val chooserIntent = Intent.createChooser(
+                                audioIntent,
+                                getString(R.string.choose_where_open_your_audio)
+                            )
+                            startActivity(chooserIntent)
                         }
 
                         override fun followTheLink(post: Post) {
@@ -114,10 +128,38 @@ class PostDetailsFragment : Fragment() {
                         }
                     }).bind(post)
 
+                    toolbar.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.share -> {
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, post.content)
+                                    type = "text/plain"
+                                }
+                                val shareIntent =
+                                    Intent.createChooser(intent, getString(R.string.share_post))
+                                startActivity(shareIntent)
+                                postViewModel.shareById(post.id)
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
+
+                    toolbar.setNavigationOnClickListener {
+                        findNavController().navigateUp()
+                    }
+
                     binding.cardPostDetails.apply {
                         likersMore.setOnClickListener {
                             findNavController().navigate(R.id.action_detailsPostFragment_to_postLikersFragment,
                                 Bundle().apply { putSerializable("postKey", post) })
+                        }
+                        mentionedMore.setOnClickListener {
+                            TODO("Фрагмент подписчиков")
+//                            findNavController().navigate(на фрагмент подписчиков,
+//                            Bundle().apply { putSerializable("postKey", post) })
                         }
                     }
 
@@ -125,16 +167,20 @@ class PostDetailsFragment : Fragment() {
                     likersList.adapter = adapter
                     mentionedList.adapter = adapter
 
-                    usersViewModel.data.observe(viewLifecycleOwner) {
-                        val likerOwnersIds = post.likeOwnerIds.orEmpty().toSet()
-                        if (likerOwnersIds.isNotEmpty()) {
-                            likerOwnersIds.forEach { likerOwnerId ->
-                                val filterUsers =
-                                    it.users.filter { it.id == likerOwnerId.toLong() }
-                                adapter.submitList(filterUsers)
-                            }
-                            if (post.likeOwnerIds?.size!! > 5) {
-                                binding.cardPostDetails.likersMore.visibility = View.VISIBLE
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            usersViewModel.data.observe(viewLifecycleOwner) {
+                                val likerOwnersIds = post.likeOwnerIds.orEmpty().toSet()
+                                if (likerOwnersIds.isNotEmpty()) {
+                                    likerOwnersIds.forEach { likerOwnerId ->
+                                        val filterUsers =
+                                            it.users.filter { it.id == likerOwnerId.toLong() }
+                                        adapter.submitList(filterUsers)
+                                    }
+                                    if (post.likeOwnerIds?.size!! > 5) {
+                                        binding.cardPostDetails.likersMore.visibility = View.VISIBLE
+                                    }
+                                }
                             }
                         }
                     }
