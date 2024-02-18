@@ -4,16 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar_my_profile" />
+    <include
+        android:id="@+id/toolbarMyProfile"
+        layout="@layout/toolbar_my_profile" />
 
-    <ScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="?attr/actionBarSize">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/profileMyImage"
@@ -24,13 +27,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/post_video" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <include
-                android:id="@+id/tab"
-                layout="@layout/layout_tab" />
+        <include
+            android:id="@+id/tab"
+            layout="@layout/layout_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_collapseMode="pin" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -43,7 +54,6 @@
         android:contentDescription="@string/add_job"
         app:borderWidth="0dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.20"
-
         app:srcCompat="@drawable/ic_plus_math" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -67,20 +67,39 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUser(login: String, name: String, password: String, file: File) {
-        try {
-            val media = MultipartBody.Part.createFormData(
-                "file", file.name, file.asRequestBody()
-            )
-            val userLogin = login.toRequestBody("text/plain".toMediaType())
-            val userPassword = password.toRequestBody("text/plain".toMediaType())
-            val userName = name.toRequestBody("text/plain".toMediaType())
+        val userLogin = MultipartBody.Part.createFormData("login", login)
+        val userPassword = MultipartBody.Part.createFormData("password", password)
+        val userName = MultipartBody.Part.createFormData("name", name)
+        val media = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
+        try {
             val response = apiService.regUser(userLogin, userPassword, userName, media)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
 
             val result = response.body() ?: throw ApiError(response.message())
+            appAuth.setAuth(result)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun registerUserWithoutAvatar(login: String, name: String, password: String) {
+        try {
+
+            val userLogin = login.toRequestBody("text/plain".toMediaType())
+            val userPassword = password.toRequestBody("text/plain".toMediaType())
+            val userName = name.toRequestBody("text/plain".toMediaType())
+            val response = apiService.registerUserWithoutAvatar(userLogin, userPassword, userName)
+
+            if (!response.isSuccessful) {
+                throw RuntimeException(response.message())
+            }
+
+            val result = response.body() ?: throw RuntimeException("body is null")
             appAuth.setAuth(result)
         } catch (e: IOException) {
             throw NetworkError

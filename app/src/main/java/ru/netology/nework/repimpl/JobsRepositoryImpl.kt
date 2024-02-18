@@ -19,13 +19,13 @@ import javax.inject.Singleton
 class JobsRepositoryImpl @Inject constructor(
     private val jobDao: JobDao,
     private val apiService: JobApiService,
-    userId: Long,
+//    userId: Long,
 ) : JobsRepository {
     override val dataMyJobs: Flow<List<Job>> =
         jobDao.getMyJobs().map(List<JobEntity>::toDto).flowOn(Dispatchers.Default)
 
     override val dataUserJobs: Flow<List<Job>> =
-        jobDao.getUsersJob(userId).map(List<JobEntity>::toDto).flowOn(Dispatchers.Default)
+        jobDao.getMyJobs().map(List<JobEntity>::toDto).flowOn(Dispatchers.Default)
 
     override suspend fun readMyJobs() {
         try {

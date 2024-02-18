@@ -11,17 +11,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nework.R
 import ru.netology.nework.databinding.FragmentAddEventBinding
+import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.model.PhotoModel
 import ru.netology.nework.utils.AndroidUtils
 import ru.netology.nework.utils.EditTextArg
+import ru.netology.nework.utils.convertServerDateToLocalDate
 import ru.netology.nework.viewmodel.EventsViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,27 +34,6 @@ class EventAddFragment : Fragment() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val eventsViewModel: EventsViewModel by activityViewModels()
 
-
-    private val photoLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
-                ImagePicker.RESULT_ERROR -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.picking_photo_error),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@registerForActivityResult
-                }
-
-                Activity.RESULT_OK -> {
-                    val uri = requireNotNull(it.data?.data)
-                    eventsViewModel.setPhoto(PhotoModel(uri = uri, file = uri.toFile()))
-                }
-            }
-        }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,13 +41,31 @@ class EventAddFragment : Fragment() {
 
         val binding = FragmentAddEventBinding.inflate(inflater, container, false)
 
+        if (eventsViewModel.edited.value?.id != 0L && eventsViewModel.edited.value != null) {
+            arguments?.editTextArg?.let {
+                binding.editText.setText(it)
+            }
+            if (binding.editText.text.isNullOrBlank()) {
+                binding.editText.setText(eventsViewModel.edited.value?.content.toString())
+            }
+            binding.editText.requestFocus()
 
-        arguments?.editTextArg?.let(binding.editText::setText)
-        if (binding.editText.text.isNullOrBlank()) {
-            binding.editText.setText(eventsViewModel.edited.value?.content.toString())
-        }
-        binding.editText.requestFocus()
+            binding.eventDateBtn.text = convertServerDateToLocalDate(eventsViewModel.edited.value?.datetime.toString())
+            binding.eventDateTypeBtn.text = eventsViewModel.edited.value?.type.toString()
 
+            val imageUrl = eventsViewModel.edited.value?.attachment?.url
+            val type = eventsViewModel.edited.value?.attachment?.type
+            val imageIsVisible =
+                !imageUrl.isNullOrBlank() && (type.toString() == AttachmentTypeEvent.IMAGE.toString())
+            if (imageIsVisible) {
+                Glide.with(binding.photo)
+                    .load("$imageUrl")
+                    .centerInside()
+                    .error(R.drawable.ic_error)
+                    .into(binding.photo)
+            }
+
+            binding.photoContainer.isVisible = imageIsVisible
 //        requireActivity().onBackPressedDispatcher.addCallback(
 //            viewLifecycleOwner, object : OnBackPressedCallback(true) {
 //                override fun handleOnBackPressed() {
@@ -78,6 +79,7 @@ class EventAddFragment : Fragment() {
 //                }
 //            }
 //        )
+        }
 
         val toolbar = binding.toolbarAddEvent.toolbarNewEvent
 
@@ -91,7 +93,7 @@ class EventAddFragment : Fragment() {
                         eventsViewModel.changeContent(content, datetime, typeEvent)
                         eventsViewModel.save()
                         AndroidUtils.hideKeyboard(requireView())
-                     //   findNavController().navigateUp()//(R.id.eventsFeedFragment)
+                        //   findNavController().navigateUp()//(R.id.eventsFeedFragment)
                     } else {
                         eventsViewModel.clear()
                         binding.editText.clearFocus()
@@ -105,6 +107,7 @@ class EventAddFragment : Fragment() {
         }
 
         toolbar.setNavigationOnClickListener {
+            eventsViewModel.edited.value = null
             findNavController().navigateUp()
         }
 
@@ -115,20 +118,35 @@ class EventAddFragment : Fragment() {
 
         eventsViewModel.photoState.observe(viewLifecycleOwner) {
             if (it == null) {
-//                binding.addPhoto.visibility = View.GONE
-//                binding.removePhoto.visibility = View.GONE
                 binding.photoContainer.visibility = View.GONE
                 return@observe
             }
-//            binding.photoAttachment.visibility = View.VISIBLE
-//            binding.removePhoto.visibility = View.VISIBLE
             binding.photoContainer.visibility = View.VISIBLE
             binding.photo.setImageURI(it.uri)
         }
 
         binding.peopleBtn.setOnClickListener {
-//            findNavController().navigate(на фрагмент выбранных юзеров)
+            findNavController().navigate(R.id.action_eventAddFragment_to_usersSelectedFragment)
         }
+
+        val photoLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when (it.resultCode) {
+                    ImagePicker.RESULT_ERROR -> {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.picking_photo_error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@registerForActivityResult
+                    }
+
+                    Activity.RESULT_OK -> {
+                        val uri = requireNotNull(it.data?.data)
+                        eventsViewModel.setPhoto(PhotoModel(uri = uri, file = uri.toFile()))
+                    }
+                }
+            }
 
         binding.addPhoto.setOnClickListener {
             ImagePicker.Builder(this)
@@ -147,11 +165,11 @@ class EventAddFragment : Fragment() {
         }
 
         binding.removePhoto.setOnClickListener {
-            eventsViewModel.photoState.observe(viewLifecycleOwner) { photoModel ->
-                if (photoModel != null) {
-                    eventsViewModel.clearPhoto()
-                }
-            }
+//            eventsViewModel.photoState.observe(viewLifecycleOwner) { photoModel ->
+//                if (photoModel != null) {
+            eventsViewModel.clearPhoto()
+//                }
+//            }
         }
 
         binding.fab.setOnClickListener {

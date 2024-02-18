@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/likersImage"
+        android:id="@+id/previewImage"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         app:srcCompat="@drawable/ic_account_circle" />

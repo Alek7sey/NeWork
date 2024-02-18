@@ -44,7 +44,7 @@ class EventDetailsFragment : Fragment() {
 
     private var mapView: MapView? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentEventDetailsBinding.inflate(layoutInflater, container, false)
         val toolbar = binding.toolbarEventDetails.toolbarEvent
         mapView = binding.cardEventDetails.eventMapView
@@ -52,11 +52,12 @@ class EventDetailsFragment : Fragment() {
         val eventIdArg = arguments?.let { it.eventIdArg }
 
         viewModel.eventDetailsData.observe(viewLifecycleOwner) { eventModel ->
-            //    eventModel.eventsList.map { eventIdArg?.let { eventId -> it.copy(id = eventId) } }
+            eventModel.eventsList.map { eventIdArg?.let { eventId -> it.copy(id = eventId) } }
             eventModel.eventsList.find { it.id == eventIdArg }?.let { event ->
                 binding.cardEventDetails.apply {
                     eventMenu.isVisible = false
                     eventPublished.visibility = View.INVISIBLE
+                    eventType.text = event.type
                     jobPosition.visibility = View.VISIBLE
                     eventLikeBtn.visibility = View.GONE
                     eventShareBtn.visibility = View.GONE
@@ -96,7 +97,7 @@ class EventDetailsFragment : Fragment() {
                         EventsAdapter.EventViewHolder(this, object : EventsOnInteractionListener {
 
                             override fun onLike(event: Event) {
-                                if (authViewModel.authorized) {
+                                if (authViewModel.authenticated) {
                                     viewModel.likeById(event)
                                 } else {
                                     findNavController().navigate(R.id.action_eventDetailsFragment_to_loginFragment)
@@ -136,6 +137,7 @@ class EventDetailsFragment : Fragment() {
                             }
 
                         }, it).bind(event)
+                    }
 
                         toolbar.setOnMenuItemClickListener { menuItem ->
                             when (menuItem.itemId) {
@@ -165,11 +167,11 @@ class EventDetailsFragment : Fragment() {
                         participantsListShort.adapter = usersFilterAdapter
 
                         usersViewModel.data.observe(viewLifecycleOwner) {
-                            val likerOwnerIds = event.likeOwnerIds.orEmpty().toSet()
-                            if (likerOwnerIds.isNotEmpty()) {
-                                likerOwnerIds.forEach { likerOwnerId ->
+                            val likeOwnerIds = event.likeOwnerIds.orEmpty().toSet()
+                            if (likeOwnerIds.isNotEmpty()) {
+                                likeOwnerIds.forEach { likeOwnerId ->
                                     val filterUsers =
-                                        it.users.filter { it.id == likerOwnerId.toLong() }
+                                        it.users.filter { it.id == likeOwnerId.toLong() }
                                     usersFilterAdapter.submitList(filterUsers)
                                 }
                                 if (event.likeOwnerIds?.size!! > 5) {
@@ -188,6 +190,18 @@ class EventDetailsFragment : Fragment() {
                                 }
                                 if (event.speakerIds?.size!! > 5) {
                                     binding.cardEventDetails.likersMore.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+
+                        usersViewModel.data.observe(viewLifecycleOwner) {
+                            val participantOwnerIds = event.participantsIds.orEmpty().toSet()
+                            if (participantOwnerIds.isNotEmpty()) {
+                                participantsListShort.visibility = View.VISIBLE
+                                participantOwnerIds.forEach { participantId ->
+                                    val filteredUsers =
+                                        it.users.filter { it.id == participantId.toLong() }
+                                    usersFilterAdapter.submitList(filteredUsers)
                                 }
                             }
                         }
@@ -225,8 +239,6 @@ class EventDetailsFragment : Fragment() {
 
                         placemark?.addTapListener(placemarkTapListener)
                         placemark?.removeTapListener(placemarkTapListener)
-
-                    }
                 }
             }
         }

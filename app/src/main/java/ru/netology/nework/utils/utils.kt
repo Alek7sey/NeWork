@@ -53,12 +53,25 @@ object EventIdArg : ReadWriteProperty<Bundle, Long> {
     }
 }
 
-fun convertServerDateToLocalDate (serverDate : String): String {
-    val serverDateFormat = DateTimeFormatter.ISO_INSTANT
-        .withLocale(Locale.getDefault())
-        .withZone(ZoneId.systemDefault());
-    val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-    val localDateTime = serverDateFormat.parse(serverDate)
+fun convertServerDateToLocalDate (serverDate : String): String? {
+    if (serverDate == null) {
+        return ""
+    } else {
+        val serverDateFormat = DateTimeFormatter.ISO_INSTANT
+            .withLocale(Locale.getDefault())
+            .withZone(ZoneId.systemDefault());
+        val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+        val localDateTime = serverDateFormat.parse(serverDate)
 
-    return localDateFormat.format(localDateTime)
+        return localDateFormat.format(localDateTime)
+    }
+}
+
+object UserIdArg : ReadWriteProperty<Bundle, Long> {
+    override fun getValue(thisRef: Bundle, property: KProperty<*>): Long =
+        thisRef.getLong(property.name)
+
+    override fun setValue(thisRef: Bundle, property: KProperty<*>, value: Long) {
+        thisRef.putLong(property.name, value)
+    }
 }

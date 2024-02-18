@@ -1,7 +1,7 @@
 package ru.netology.nework.repository
 
-import ru.netology.nework.dto.Job
 import kotlinx.coroutines.flow.Flow
+import ru.netology.nework.dto.Job
 
 interface JobsRepository {
     val dataMyJobs: Flow<List<Job>>
@@ -10,5 +10,4 @@ interface JobsRepository {
     suspend fun readUserJobs(userId: Long)
     suspend fun removeJob(id: Long)
     suspend fun saveJob(job: Job)
-//    suspend fun editJob(job: Job)
 }

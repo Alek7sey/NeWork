@@ -162,8 +162,6 @@ class EventsAdapter(
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean = oldItem == newItem
     }
 }

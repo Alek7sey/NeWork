@@ -27,7 +27,6 @@ class AppActivity : AppCompatActivity() {
     lateinit var appAuth: AppAuth
     private val authViewModel: AuthViewModel by viewModels()
 
-    // private lateinit var toolbar: Toolbar
     private lateinit var navController: NavController
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -44,16 +43,7 @@ class AppActivity : AppCompatActivity() {
         val navView = binding.bottomNav
 
         val toolbar = binding.toolbar
-        //  setSupportActionBar(toolbar)
 
-//        val bottomAppBarConfig = AppBarConfiguration(
-//            topLevelDestinationIds = setOf(
-//                R.id.postsFeedFragment,
-//                R.id.eventsFeedFragment,
-//                R.id.usersFragment
-//            )
-//        )
-//            setupActionBarWithNavController(navController, bottomAppBarConfig)
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -76,17 +66,15 @@ class AppActivity : AppCompatActivity() {
                     return@let
                 }
 //                findNavController(R.id.nav_graph).navigate(
-//                    R.id.action_feedFragment_to_newPostFragment,
-//                    Bundle().apply {
-//                        textArg = text
-//                    }
+//                    R.id.action_postsFeedFragment_to_postAddFragment,
+//                    Bundle().apply { editTextArg = text }
 //                )
             }
         }
 
         var currentMenuProvider: MenuProvider? = null
 
-        authViewModel.state.observe(this) {
+        authViewModel.data.observe(this) {
             //        currentMenuProvider?.let(::removeMenuProvider)
 //            override fun onCreateOptionsMenu(menu: Menu): Boolean {
 //                menuInflater.inflate(R.menu.auth_menu, menu)
@@ -95,7 +83,7 @@ class AppActivity : AppCompatActivity() {
 //                menu.setGroupVisible(R.id.unregistered, !authViewModel.authorized)
 //                return true
 //            }
-            if (authViewModel.authorized) {
+            if (authViewModel.authenticated) {
                 toolbar.menu.setGroupVisible(R.id.registered, true)
                 toolbar.menu.setGroupVisible(R.id.unregistered, false)
             } else {
@@ -105,7 +93,7 @@ class AppActivity : AppCompatActivity() {
 
             toolbar.overflowIcon = resources.getDrawable(R.drawable.ic_account_circle)
             toolbar.setOnMenuItemClickListener { menuItem ->
-                if (!authViewModel.authorized) {
+                if (!authViewModel.authenticated) {
                     when (menuItem.itemId) {
                         R.id.signUp -> {
                             findNavController(R.id.nav_graph).navigate(R.id.action_postsFeedFragment_to_registrationFragment)
@@ -122,12 +110,12 @@ class AppActivity : AppCompatActivity() {
                 } else {
                     when (menuItem.itemId) {
                         R.id.logout -> {
-                            appAuth.clear()
+                            appAuth.clearAuth()
                             true
                         }
 
                         R.id.profil -> {
-                            //                findNavController(R.id.nav_graph).navigate(на фрагмент профиля юзера)
+                            findNavController(R.id.nav_graph).navigate(R.id.action_eventsFeedFragment_to_profileMyFragment)
                             true
                         }
 
@@ -135,38 +123,6 @@ class AppActivity : AppCompatActivity() {
                     }
                 }
             }
-
-//            addMenuProvider(
-//                object : MenuProvider {
-//                    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//                        menuInflater.inflate(R.menu.auth_menu, menu)
-//                        menu.setGroupVisible(R.id.registered, authViewModel.authorized)
-//                        menu.setGroupVisible(R.id.unregistered, !authViewModel.authorized)
-//                    }
-//
-//                    override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-//                        when (menuItem.itemId) {
-//                            R.id.signUp -> {
-//                                findNavController(R.id.nav_graph).navigate(R.id.action_postsFeedFragment_to_registrationFragment)
-//                                true
-//                            }
-//
-//                            R.id.signIn -> {
-//                                findNavController(R.id.nav_graph).navigate(R.id.action_postsFeedFragment_to_loginFragment)
-//                                true
-//                            }
-//
-//                            R.id.logout -> {
-//                                appAuth.clear()
-//                                true
-//                            }
-//
-//                            else -> false
-//                        }
-//                }.also {
-//                    currentMenuProvider = it
-//                }, this
-//            )
         }
     }
 

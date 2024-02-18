@@ -1,6 +1,5 @@
 package ru.netology.nework.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,14 +24,13 @@ class PostLikersFragment : Fragment() {
 
     private val usersViewModel: UsersViewModel by activityViewModels()
 
-    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentLikersPostBinding.inflate(layoutInflater, container, false)
+        val binding = FragmentLikersPostBinding.inflate(inflater, container, false)
         val post = requireArguments().getSerializable("postKey") as Post
         val toolbar = binding.toolbarLikersFull.toolbarLikers
 
@@ -54,18 +52,17 @@ class PostLikersFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 usersViewModel.data.observe(viewLifecycleOwner) {
-                    val likerOwnersIds = post.likeOwnerIds.orEmpty().toSet()
-                    if (likerOwnersIds.isNotEmpty()) {
-                        likerOwnersIds.forEach { likerOwnerId ->
+                    val likeOwnersIds = post.likeOwnerIds.orEmpty().toSet()
+                    if (likeOwnersIds.isNotEmpty()) {
+                        likeOwnersIds.forEach { likeOwnerId ->
                             val filterUsers =
-                                it.users.filter { it.id == likerOwnerId.toLong() }
+                                it.users.filter { it.id == likeOwnerId.toLong() }
                             adapter.submitList(filterUsers)
                         }
                     }
                 }
             }
         }
-
         return binding.root
     }
 }

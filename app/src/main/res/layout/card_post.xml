@@ -89,7 +89,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/avatar">
 
             <ImageView
@@ -99,6 +98,7 @@
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="gone"
                 android:contentDescription="@string/imageAttachment"
                 app:srcCompat="@drawable/post_video" />
 
@@ -107,6 +107,7 @@
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:contentDescription="@string/icon_play"
                 app:srcCompat="@drawable/ic_play_circle_filled" />
 
@@ -196,7 +197,7 @@
             app:layout_constraintBottom_toBottomOf="@id/likeBtn"
             app:layout_constraintStart_toEndOf="@id/likeBtn"
             app:layout_constraintTop_toTopOf="@id/likeBtn"
-            tools:listitem="@layout/likers_image" />
+            tools:listitem="@layout/card_image" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/likersMore"
@@ -250,7 +251,7 @@
             app:layout_constraintBottom_toBottomOf="@id/mentionedBtn"
             app:layout_constraintStart_toEndOf="@id/mentionedBtn"
             app:layout_constraintTop_toTopOf="@id/mentionedBtn"
-            tools:listitem="@layout/likers_image" />
+            tools:listitem="@layout/card_image" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/mentionedMore"

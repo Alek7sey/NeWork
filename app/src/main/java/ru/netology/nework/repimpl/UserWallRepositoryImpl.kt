@@ -19,13 +19,15 @@ import ru.netology.nework.error.UnknownError
 import ru.netology.nework.mediator.UserWallRemoteMediator
 import ru.netology.nework.repository.UserWallRepository
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserWallRepositoryImpl(
+@Singleton
+class UserWallRepositoryImpl @Inject constructor(
     private val dao: PostDao,
     private val apiService: UserWallApiService,
     keyDao: UserWallRemoteKeyDao,
     appDb: AppDb,
-    private val post: Post
 ) : UserWallRepository {
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
@@ -36,25 +38,27 @@ class UserWallRepositoryImpl(
             dao = dao,
             remoteKey = keyDao,
             appDb = appDb,
-            post = post
         )
     ).flow.map {
         it.map(PostEntity::toDto)
     }
 
-    override suspend fun readAll() {
+    override suspend fun readAllFromUserWall(authorId: Long): List<Post> {
         try {
-            val response = apiService.readUserWall(post.authorId)
+            val response = apiService.readUserWall(authorId)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
             val posts = response.body() ?: throw ApiError(response.message())
             dao.removeAll()
             dao.insert(posts.map(PostEntity::fromDto))
+            return posts
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
+
+
 }

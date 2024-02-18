@@ -110,7 +110,7 @@
             app:layout_constraintTop_toBottomOf="@id/dateFormsLayout">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancelButton"
+                android:id="@+id/cancelBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -121,7 +121,7 @@
                 android:textColor="@color/violet" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/okButton"
+                android:id="@+id/okBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"

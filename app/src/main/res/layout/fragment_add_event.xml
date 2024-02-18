@@ -68,7 +68,9 @@
             <FrameLayout
                 android:id="@+id/photoContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/photo"

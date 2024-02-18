@@ -19,10 +19,11 @@ import ru.netology.nework.error.UnknownError
 import ru.netology.nework.mediator.MyWallRemoteMediator
 import ru.netology.nework.repository.MyWallRepository
 import java.io.IOException
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MyWallRepositoryImpl(
+class MyWallRepositoryImpl @Inject constructor(
     private val dao: PostDao,
     private val apiService: MyWallApiService,
     keyDao: MyWallRemoteKeyDao,
@@ -43,7 +44,7 @@ class MyWallRepositoryImpl(
         it.map(PostEntity::toDto)
     }
 
-    override suspend fun readAll() {
+    override suspend fun readAll(): List<Post> {
         try {
             val response = apiService.readMyWall()
             if (!response.isSuccessful) {
@@ -52,6 +53,7 @@ class MyWallRepositoryImpl(
             val posts = response.body() ?: throw ApiError(response.message())
             dao.removeAll()
             dao.insert(posts.map(PostEntity::fromDto))
+            return posts
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

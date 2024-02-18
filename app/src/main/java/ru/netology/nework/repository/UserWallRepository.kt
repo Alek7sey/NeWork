@@ -6,5 +6,5 @@ import ru.netology.nework.dto.Post
 
 interface UserWallRepository {
     val data: Flow<PagingData<Post>>
-    suspend fun readAll()
+    suspend fun readAllFromUserWall(authorId: Long): List<Post>
 }

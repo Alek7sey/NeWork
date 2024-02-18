@@ -103,4 +103,9 @@
     <string name="dd_mm_yyyy_hh_mm">дд.мм.гггг чч:мм</string>
     <string name="date_type">Тип события</string>
     <string name="body_is_null">Ответ пуст</string>
+    <string name="savechooseusers">Сохранить выбранных юзеров</string>
+    <string name="registration_error">Ошибка регистрации</string>
+    <string name="my_profile_photo">Фото моего профиля</string>
+    <string name="download_error_try_again">Ошибка загрузки. Повторите заново.</string>
+    <string name="to_add_job_you_need_to_register_or_login">Чтобы добавить работу, необходимо войти или зарегистрироваться.</string>
 </resources>

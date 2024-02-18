@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nework.R
-import ru.netology.nework.databinding.LikersImageBinding
+import ru.netology.nework.databinding.CardImageBinding
 import ru.netology.nework.dto.User
 
 class LikersShortListAdapter : ListAdapter<User, LikersShortListAdapter.LikersShortListViewHolder>(LikersShortListDiffCallBack()) {
     //class LikersShortListAdapter(data: List<User>) : BaseQuickAdapter<User, RecyclerView.ViewHolder>(data) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikersShortListViewHolder {
-        return LikersShortListViewHolder(LikersImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return LikersShortListViewHolder(CardImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: LikersShortListViewHolder, position: Int) {
@@ -21,16 +21,16 @@ class LikersShortListAdapter : ListAdapter<User, LikersShortListAdapter.LikersSh
     }
 
     class LikersShortListViewHolder(
-        private val binding: LikersImageBinding
+        private val binding: CardImageBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.apply {
-                Glide.with(binding.likersImage)
+                Glide.with(binding.previewImage)
                     .load("${user.avatar}")
                     .circleCrop()
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_error)
-                    .into(binding.likersImage)
+                    .into(binding.previewImage)
             }
         }
 //        fun bind(post: Post) {

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     app:cardCornerRadius="12dp"
     app:strokeColor="@color/borders_card_post"
-    android:layout_gravity="bottom"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,13 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/date"
+            app:boxStrokeColor="@color/violet"
             app:endIconDrawable="@drawable/ic_event"
             app:endIconMode="custom"
+            app:errorEnabled="true"
             app:helperText="dd.mm.yyyy HH:mm"
             app:helperTextEnabled="true"
             app:helperTextTextColor="@color/color_menu"
             app:hintEnabled="true"
-            app:boxStrokeColor="@color/violet"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -52,8 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checkedButton="@+id/radioBtnOnline"
-            app:layout_constraintStart_toStartOf="parent"
             android:theme="@style/MyRadioButton"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/typeEvent">
 
             <RadioButton

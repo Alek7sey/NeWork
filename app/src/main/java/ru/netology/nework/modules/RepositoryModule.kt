@@ -6,11 +6,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.netology.nework.repimpl.EventRepositoryImpl
 import ru.netology.nework.repimpl.JobsRepositoryImpl
+import ru.netology.nework.repimpl.MyWallRepositoryImpl
 import ru.netology.nework.repimpl.PostRepositoryImpl
+import ru.netology.nework.repimpl.UserWallRepositoryImpl
 import ru.netology.nework.repimpl.UsersRepositoryImpl
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.repository.JobsRepository
+import ru.netology.nework.repository.MyWallRepository
 import ru.netology.nework.repository.PostRepository
+import ru.netology.nework.repository.UserWallRepository
 import ru.netology.nework.repository.UsersRepository
 import javax.inject.Singleton
 
@@ -34,5 +38,12 @@ interface RepositoryModule {
     @Singleton
     fun bindJobRepository(jobsRepositoryImpl: JobsRepositoryImpl): JobsRepository
 
+    @Binds
+    @Singleton
+    fun bindMyWallRepository(myWallRepositoryImpl: MyWallRepositoryImpl): MyWallRepository
+
+    @Binds
+    @Singleton
+    fun bindUserWallRepository(userWallRepositoryImpl: UserWallRepositoryImpl): UserWallRepository
 
 }

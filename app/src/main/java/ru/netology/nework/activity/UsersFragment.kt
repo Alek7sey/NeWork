@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,9 +20,10 @@ import ru.netology.nework.adapter.UsersAdapter
 import ru.netology.nework.adapter.UsersOnInteractionListener
 import ru.netology.nework.databinding.FragmentUsersBinding
 import ru.netology.nework.dto.User
+import ru.netology.nework.utils.UserIdArg
 import ru.netology.nework.viewmodel.UsersViewModel
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
 
@@ -35,7 +37,7 @@ class UsersFragment : Fragment() {
         val binding = FragmentUsersBinding.inflate(inflater, container, false)
         val adapter = UsersAdapter(object : UsersOnInteractionListener {
             override fun onDetailsClick(user: User) {
-                //    findNavController().navigate(на детальный фрагмент юзера, Bundle().apply{userArg = user.id})
+                findNavController().navigate(R.id.action_usersFragment_to_profileUserFragment, Bundle().apply { userId = user.id })
             }
         })
 
@@ -73,7 +75,7 @@ class UsersFragment : Fragment() {
         return binding.root
     }
 
-//    companion object {
-//        var Bundle.userArg: Long by UserArg
-//    }
+    companion object {
+        var Bundle.userId: Long by UserIdArg
+    }
 }

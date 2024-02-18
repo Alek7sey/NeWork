@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/common_spacing_10"
+    android:layout_marginTop="@dimen/common_spacing_10"
+    android:layout_marginEnd="@dimen/common_spacing_10"
+    app:cardCornerRadius="12dp"
+    app:strokeColor="@color/borders_card_post"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_of_the_post"
+        android:padding="@dimen/common_spacing_10">
+
+        <ImageView
+            android:id="@+id/selectedUserAvatar"
+            android:layout_width="@dimen/post_avatar_size"
+            android:layout_height="@dimen/post_avatar_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@sample/post.json/data/authorAvatar" />
+
+        <TextView
+            android:id="@+id/selectedUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/color_header"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/selectedUserLogin"
+            app:layout_constraintEnd_toStartOf="@id/selectedUserCheckBox"
+            app:layout_constraintStart_toEndOf="@id/selectedUserAvatar"
+            app:layout_constraintTop_toTopOf="@id/selectedUserAvatar"
+            tools:text="@sample/post.json/data/author" />
+
+        <TextView
+            android:id="@+id/selectedUserLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/selectedUserAvatar"
+            app:layout_constraintEnd_toStartOf="@id/selectedUserCheckBox"
+            app:layout_constraintStart_toEndOf="@id/selectedUserAvatar"
+            app:layout_constraintTop_toBottomOf="@id/selectedUserName"
+            tools:text="@sample/post.json/data/author" />
+
+        <CheckBox
+            android:id="@+id/selectedUserCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            style="@style/Widget.App.CheckBox"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -18,6 +18,6 @@ interface JobApiService {
     @GET("{userId}/jobs")
     suspend fun readUserJobs(@Path("userId") userId: Long): Response<List<Job>>
 
-//    @PATCH("jobs")
-//    suspend fun editJob(@Body job: Job): Response<Job>
+    @PATCH("my/jobs")
+    suspend fun editJob(@Body job: Job): Response<Job>
 }

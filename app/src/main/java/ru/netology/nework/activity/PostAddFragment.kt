@@ -6,16 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nework.R
 import ru.netology.nework.databinding.FragmentAddPostBinding
+import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.model.PhotoModel
 import ru.netology.nework.utils.AndroidUtils
 import ru.netology.nework.utils.EditTextArg
@@ -26,25 +28,6 @@ import ru.netology.nework.viewmodel.PostViewModel
 class PostAddFragment : Fragment() {
 
     private val postViewModel: PostViewModel by activityViewModels()
-
-    private val photoLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            when (it.resultCode) {
-                ImagePicker.RESULT_ERROR -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.picking_photo_error),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@registerForActivityResult
-                }
-
-                Activity.RESULT_OK -> {
-                    val uri = requireNotNull(it.data?.data)
-                    postViewModel.setPhoto(PhotoModel(uri = uri, file = uri.toFile()))
-                }
-            }
-        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,19 +51,33 @@ class PostAddFragment : Fragment() {
         }
         binding.editText.requestFocus()
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (postViewModel.edited.value?.id == 0L) {
-                        val content = binding.editText.text.toString()
-                        postViewModel.changeContent(content)
-                    } else {
-                        postViewModel.clear()
-                    }
-                    findNavController().navigateUp()
-                }
-            }
-        )
+        val imageUrl = postViewModel.edited.value?.attachment?.url
+        val type = postViewModel.edited.value?.attachment?.type
+        val imageIsVisible =
+            !imageUrl.isNullOrBlank() && (type.toString() == AttachmentTypeEvent.IMAGE.toString())
+        if (imageIsVisible) {
+            Glide.with(binding.photoAttachment)
+                .load("$imageUrl")
+                .centerInside()
+                .error(R.drawable.ic_error)
+                .into(binding.photoAttachment)
+        }
+
+        binding.postPhotoContainer.isVisible = imageIsVisible
+
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//                    if (postViewModel.edited.value?.id == 0L) {
+//                        val content = binding.editText.text.toString()
+//                        postViewModel.changeContent(content)
+//                    } else {
+//                        postViewModel.clear()
+//                    }
+//                    findNavController().navigateUp()
+//                }
+//            }
+//        )
 
         val toolbar = binding.toolbarPost.toolbarNewPost
 
@@ -105,6 +102,7 @@ class PostAddFragment : Fragment() {
         }
 
         toolbar.setNavigationOnClickListener {
+            postViewModel.clear()
             findNavController().navigateUp()
         }
 
@@ -115,18 +113,35 @@ class PostAddFragment : Fragment() {
 
         postViewModel.photoState.observe(viewLifecycleOwner) {
             if (it == null) {
-                binding.photoAttachment.visibility = View.GONE
-                binding.removePhoto.visibility = View.GONE
+                binding.postPhotoContainer.visibility = View.GONE
                 return@observe
             }
-            binding.photoAttachment.visibility = View.VISIBLE
-            binding.removePhoto.visibility = View.VISIBLE
+            binding.postPhotoContainer.visibility = View.VISIBLE
             binding.photoAttachment.setImageURI(it.uri)
         }
 
         binding.peopleBtn.setOnClickListener {
-//            findNavController().navigate(на фрагмент выбранных юзеров)
+            findNavController().navigate(R.id.action_postAddFragment_to_usersSelectedFragment)
         }
+
+        val photoLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when (it.resultCode) {
+                    ImagePicker.RESULT_ERROR -> {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.picking_photo_error),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@registerForActivityResult
+                    }
+
+                    Activity.RESULT_OK -> {
+                        val uri = requireNotNull(it.data?.data)
+                        postViewModel.setPhoto(PhotoModel(uri = uri, file = uri.toFile()))
+                    }
+                }
+            }
 
         binding.addPhoto.setOnClickListener {
             ImagePicker.Builder(this)
@@ -144,9 +159,9 @@ class PostAddFragment : Fragment() {
                 .createIntent(photoLauncher::launch)
         }
 
-        binding.removePhoto.setOnClickListener {
+        binding.postRemovePhoto.setOnClickListener {
 //            postViewModel.photoState.observe(viewLifecycleOwner) { photoModel ->
-//                if (photoModel != null) {
+ //               if (photoModel != null) {
                     postViewModel.clearPhoto()
  //               }
  //           }

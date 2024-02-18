@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +51,7 @@ class PostViewModel @Inject constructor(
     appAuth: AppAuth,
 ) : ViewModel() {
 
-    private val cached = repository.data.cachedIn(viewModelScope)
+//    private val cached = repository.data.cachedIn(viewModelScope)
 
 //    val data: Flow<PagingData<Post>> = appAuth
 //        .authFlow

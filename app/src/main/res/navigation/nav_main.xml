@@ -9,7 +9,11 @@
         android:id="@+id/loginFragment"
         android:name="ru.netology.nework.activity.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login"/>
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/postsFeedFragment"
         android:name="ru.netology.nework.activity.PostsFeedFragment"
@@ -35,7 +39,11 @@
         android:id="@+id/registrationFragment"
         android:name="ru.netology.nework.activity.RegistrationFragment"
         android:label="RegistrationFragment"
-        tools:layout="@layout/fragment_registration"/>
+        tools:layout="@layout/fragment_registration">
+        <action
+            android:id="@+id/action_registrationFragment_to_registrationWithPhotoFragment"
+            app:destination="@id/registrationWithPhotoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/eventsFeedFragment"
         android:name="ru.netology.nework.activity.EventsFeedFragment"
@@ -57,12 +65,19 @@
         <action
             android:id="@+id/action_eventsFeedFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
+        <action
+            android:id="@+id/action_eventsFeedFragment_to_profileMyFragment"
+            app:destination="@id/profileMyFragment" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
         android:name="ru.netology.nework.activity.UsersFragment"
         android:label="UsersFragment"
-        tools:layout="@layout/fragment_users"/>
+        tools:layout="@layout/fragment_users">
+        <action
+            android:id="@+id/action_usersFragment_to_profileUserFragment"
+            app:destination="@id/profileUserFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detailsPostFragment"
         android:name="ru.netology.nework.activity.PostDetailsFragment"
@@ -92,7 +107,11 @@
         android:id="@+id/postAddFragment"
         android:name="ru.netology.nework.activity.PostAddFragment"
         android:label="PostAddOrEditFragment"
-        tools:layout="@layout/fragment_add_post" />
+        tools:layout="@layout/fragment_add_post" >
+        <action
+            android:id="@+id/action_postAddFragment_to_usersSelectedFragment"
+            app:destination="@id/usersSelectedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/eventImageFragment"
         android:name="ru.netology.nework.activity.EventImageFragment"
@@ -102,7 +121,11 @@
         android:id="@+id/eventAddFragment"
         android:name="ru.netology.nework.activity.EventAddFragment"
         android:label="EventAddFragment"
-        tools:layout="@layout/fragment_add_event"/>
+        tools:layout="@layout/fragment_add_event">
+        <action
+            android:id="@+id/action_eventAddFragment_to_usersSelectedFragment"
+            app:destination="@id/usersSelectedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="ru.netology.nework.activity.EventDetailsFragment"
@@ -123,4 +146,36 @@
         android:name="ru.netology.nework.activity.EventLikersFragment"
         android:label="EventLikersFragment"
         tools:layout="@layout/fragment_likers_event"/>
+    <fragment
+        android:id="@+id/usersSelectedFragment"
+        android:name="ru.netology.nework.activity.UsersSelectedFragment"
+        android:label="UsersSelectedFragment"
+        tools:layout="@layout/fragment_users_selected"/>
+    <fragment
+        android:id="@+id/registrationWithPhotoFragment"
+        android:name="ru.netology.nework.activity.RegistrationWithPhotoFragment"
+        android:label="RegistrationWithPhotoFragment"
+        tools:layout="@layout/register_load_image"/>
+    <fragment
+        android:id="@+id/profileMyFragment"
+        android:name="ru.netology.nework.activity.ProfileMyFragment"
+        android:label="ProfileMyFragment"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_profileMyFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileMyFragment_to_jobAddFragment"
+            app:destination="@id/jobAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/jobAddFragment"
+        android:name="ru.netology.nework.activity.JobAddFragment"
+        android:label="JobAddFragment"
+        tools:layout="@layout/fragment_add_job"/>
+    <fragment
+        android:id="@+id/profileUserFragment"
+        android:name="ru.netology.nework.activity.ProfileUserFragment"
+        android:label="ProfileUserFragment"
+        tools:layout="@layout/fragment_user_profile"/>
 </navigation>

@@ -102,4 +102,10 @@
     <string name="dd_mm_yyyy_hh_mm">dd.mm.yyyy HH:mm</string>
     <string name="date_type">Date type</string>
     <string name="body_is_null">Body is null!</string>
+    <string name="savechooseusers">SaveChooseUsers</string>
+    <string name="registration_error">Registration error</string>
+    <string name="my_profile_photo">My profile photo</string>
+    <string name="download_error_try_again">Download error. Try again</string>
+    <string name="end_icon" translatable="false">end icon</string>
+    <string name="to_add_job_you_need_to_register_or_login">To add  job, you need to register or login</string>
 </resources>

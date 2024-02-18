@@ -47,7 +47,7 @@ class PostsFeedFragment : Fragment() {
         val adapter = PostsAdapter(object : OnInteractionListener {
 
             override fun onLike(post: Post) {
-                if (authViewModel.authorized) {
+                if (authViewModel.authenticated) {
                     viewModel.likeById(post)
                 } else {
                     findNavController().navigate(R.id.action_postsFeedFragment_to_loginFragment)
@@ -95,11 +95,11 @@ class PostsFeedFragment : Fragment() {
 
             override fun onAudio(post: Post) {
                 val audioIntent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
-//                val chooserIntent = Intent.createChooser(
-//                    intent,
-//                    getString(R.string.choose_where_open_your_audio)
-//                )
-                startActivity(audioIntent)
+                val chooserIntent = Intent.createChooser(
+                    audioIntent,
+                    getString(R.string.choose_where_open_your_audio)
+                )
+                startActivity(chooserIntent)
             }
 
             override fun onDetails(post: Post) {

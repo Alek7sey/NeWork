@@ -2,67 +2,47 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <!--    <ScrollView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content">-->
-
-    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginTop="?attr/actionBarSize">-->
     <com.google.android.material.appbar.AppBarLayout
-        
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar_user_detals" />
 
-        <LinearLayout
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-        <ImageView
-            android:id="@+id/profileUserImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/photo"
-            app:srcCompat="@drawable/post_video" />
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/profileUserImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/photo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/post_video" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+            <include
+                android:id="@+id/toolbarProfileUser"
+                layout="@layout/toolbar_user_detals"
+                app:layout_collapseMode="pin" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <include
+            android:id="@+id/tabUser"
+            layout="@layout/layout_tab"
             android:layout_width="match_parent"
-            android:layout_height="1200dp"
-            android:background="@color/background_of_the_post"
-            app:layout_constraintTop_toBottomOf="@id/profileUserImage"
-            app:tabTextColor="@color/color_header"
-            app:tabTextAppearance="@style/CustomTextAppearanceTab">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/wall"
-                />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/jobs" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-    <!--    </ScrollView>-->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerUser"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

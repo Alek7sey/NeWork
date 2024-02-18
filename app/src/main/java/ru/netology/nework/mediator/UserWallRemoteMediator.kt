@@ -20,29 +20,30 @@ class UserWallRemoteMediator(
     private val dao: PostDao,
     private val remoteKey: UserWallRemoteKeyDao,
     private val appDb: AppDb,
-    private val post: Post
+//    private val post: Post
 ) : RemoteMediator<Int, PostEntity>() {
 
+    val post: Post? = null
     override suspend fun load(loadType: LoadType, state: PagingState<Int, PostEntity>): MediatorResult {
         try {
             val result = when (loadType) {
                 LoadType.REFRESH -> {
                     if (dao.isEmpty() && remoteKey.isEmpty()) {
-                        apiService.getLatestUserWall(post.id, state.config.initialLoadSize)
+                        apiService.getLatestUserWall(post?.authorId!!, state.config.initialLoadSize)
                     } else {
                         val id = remoteKey.max() ?: return MediatorResult.Success(false)
-                        apiService.getAfterUserWall(post.id, id, state.config.pageSize)
+                        apiService.getAfterUserWall(post?.authorId!!, id, state.config.pageSize)
                     }
                 }
 
                 LoadType.PREPEND -> {
                     val id = remoteKey.max() ?: return MediatorResult.Success(true)
-                    apiService.getAfterUserWall(post.id, id, state.config.pageSize)
+                    apiService.getAfterUserWall(post?.authorId!!, id, state.config.pageSize)
                 }
 
                 LoadType.APPEND -> {
                     val id = remoteKey.min() ?: return MediatorResult.Success(false)
-                    apiService.getBeforeUserWall(post.id, id, state.config.pageSize)
+                    apiService.getBeforeUserWall(post?.authorId!!, id, state.config.pageSize)
                 }
             }
 

@@ -10,6 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nework.databinding.BottomSheetDialogBinding
+import ru.netology.nework.utils.convertServerDateToLocalDate
 import ru.netology.nework.viewmodel.EventsViewModel
 
 @AndroidEntryPoint
@@ -25,6 +26,7 @@ class EventModalBottomSheet : BottomSheetDialogFragment() {
         val binding = BottomSheetDialogBinding.inflate(inflater, container, false)
 
         binding.radioBtnOnline.isChecked = true
+        binding.outlinedTextField.editText?.setText(convertServerDateToLocalDate(viewModel.edited.value?.datetime.toString()))
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {

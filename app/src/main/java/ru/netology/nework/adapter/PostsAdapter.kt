@@ -96,13 +96,14 @@ class PostsAdapter(
                         .centerInside()
                         .error(R.drawable.ic_error)
                         .into(binding.imageAttachment)
-//                }
-                    postAttachmentFrame.visibility = View.VISIBLE
+
+                    imageAttachment.isVisible = post.attachment?.type == AttachmentTypePost.IMAGE
+                            || post.attachment?.type == AttachmentTypePost.VIDEO
                     iconPlay.isVisible = post.attachment?.type == AttachmentTypePost.VIDEO
+                            || post.attachment?.type == AttachmentTypePost.AUDIO
                 } else {
                     postAttachmentFrame.visibility = View.GONE
                 }
-//                imageAttachment.isVisible = !post.attachment?.url.isNullOrBlank()
 
                 postMenu.setOnClickListener {
                     PopupMenu(it.context, it).apply {
@@ -143,8 +144,6 @@ class PostsAdapter(
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
         }
-    }
 }

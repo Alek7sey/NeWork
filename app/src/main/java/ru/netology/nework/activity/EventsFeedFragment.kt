@@ -48,7 +48,7 @@ class EventsFeedFragment : Fragment() {
         val adapter = EventsAdapter(object : EventsOnInteractionListener {
 
             override fun onLike(event: Event) {
-                if (authViewModel.authorized) {
+                if (authViewModel.authenticated) {
                     viewModel.likeById(event)
                 } else {
                     findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)

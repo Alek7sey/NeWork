@@ -63,9 +63,7 @@ class UsersAdapter(
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem
     }
 }
 

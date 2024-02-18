@@ -13,10 +13,18 @@ interface UserApiService {
     @FormUrlEncoded
     @POST("users/registration")
     suspend fun regUser(
+        @Part("login") login: MultipartBody.Part,
+        @Part("password") password: MultipartBody.Part,
+        @Part("name") name: MultipartBody.Part,
+        @Part media: MultipartBody.Part
+    ): Response<Token>
+
+    @FormUrlEncoded
+    @POST("/api/users/registration/")
+    suspend fun registerUserWithoutAvatar(
         @Part("login") login: RequestBody,
         @Part("password") password: RequestBody,
-        @Part("name") name: RequestBody,
-        @Part media: MultipartBody.Part
+        @Part("name") name: RequestBody
     ): Response<Token>
 
     @FormUrlEncoded

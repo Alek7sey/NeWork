@@ -25,9 +25,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.netology.nework.R
-import ru.netology.nework.adapter.LikersShortListAdapter
 import ru.netology.nework.adapter.OnInteractionListener
 import ru.netology.nework.adapter.PostsAdapter
+import ru.netology.nework.adapter.UsersFilteredPostAdapter
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentPostDetailsBinding
 import ru.netology.nework.dto.Post
@@ -63,7 +63,7 @@ class PostDetailsFragment : Fragment() {
         mapView = binding.cardPostDetails.postMapView
 
         postViewModel.postData.observe(viewLifecycleOwner) { postModel ->
-            //     postModel.posts.map { arg?.let { postId -> it.copy(id = postId) } }
+            postModel.posts.map { arg?.let { postId -> it.copy(id = postId) } }
             postModel.posts.find { it.id == arg }?.let { post ->
                 binding.cardPostDetails.apply {
                     shareBtn.visibility = View.GONE
@@ -87,7 +87,7 @@ class PostDetailsFragment : Fragment() {
                     PostsAdapter.PostViewHolder(this, object : OnInteractionListener {
 
                         override fun onLike(post: Post) {
-                            if (authViewModel.authorized) {
+                            if (authViewModel.authenticated) {
                                 postViewModel.likeById(post)
                             } else {
                                 findNavController().navigate(R.id.action_detailsPostFragment_to_loginFragment)
@@ -157,13 +157,12 @@ class PostDetailsFragment : Fragment() {
                                 Bundle().apply { putSerializable("postKey", post) })
                         }
                         mentionedMore.setOnClickListener {
-                            TODO("Фрагмент подписчиков")
 //                            findNavController().navigate(на фрагмент подписчиков,
 //                            Bundle().apply { putSerializable("postKey", post) })
                         }
                     }
 
-                    val adapter = LikersShortListAdapter()
+                    val adapter = UsersFilteredPostAdapter()
                     likersList.adapter = adapter
                     mentionedList.adapter = adapter
 

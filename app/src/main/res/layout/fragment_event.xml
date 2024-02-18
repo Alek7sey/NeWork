@@ -124,7 +124,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="@id/speakersTitle"
                 app:layout_constraintTop_toBottomOf="@id/speakersTitle"
-                tools:listitem="@layout/likers_image" />
+                tools:listitem="@layout/card_image" />
 
             <TextView
                 android:id="@+id/likersTitle"
@@ -160,7 +160,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/likeBtn"
                 app:layout_constraintStart_toEndOf="@id/likeBtn"
                 app:layout_constraintTop_toTopOf="@id/likeBtn"
-                tools:listitem="@layout/likers_image" />
+                tools:listitem="@layout/card_image" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/likersMore"
@@ -211,7 +211,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/participantsBtn"
                 app:layout_constraintStart_toEndOf="@id/participantsBtn"
                 app:layout_constraintTop_toTopOf="@id/participantsBtn"
-                tools:listitem="@layout/likers_image" />
+                tools:listitem="@layout/card_image" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/participantsMore"

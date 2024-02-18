@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbarMenuMyProfileMy"
+        android:id="@+id/toolbarMenuMyProfile"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="top"
