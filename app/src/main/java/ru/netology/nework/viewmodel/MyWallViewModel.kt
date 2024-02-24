@@ -29,10 +29,14 @@ class MyWallViewModel @Inject constructor(
 
     val data: Flow<PagingData<Post>> = appAuth
         .authFlow
-        .flatMapLatest { (myId, _) ->
+        .flatMapLatest { token ->
             cached.map { posts ->
                 posts.map { item ->
-                    if (item is Post) item else item//.copy(ownedByMe = item.authorId == myId)
+                    if (item is Post) {
+                        item.copy(ownedByMe = item.authorId == token.id)
+                    } else {
+                        item
+                    }
                 }
             }
         }

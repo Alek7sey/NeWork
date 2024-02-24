@@ -45,22 +45,21 @@ class AppAuth @Inject constructor(
 
     @Synchronized
     fun setAuth(token: Token) {
-        _authFlow.value = AuthState(token.id, token.token)
         prefs.edit {
             putLong(idKey, token.id)
             putString(tokenKey, token.token)
             apply()
         }
-//        _authFlow.value = token
+        _authFlow.value = AuthState(token.id, token.token)
     }
 
     @Synchronized
     fun clearAuth() {
-        _authFlow.value = AuthState()
         prefs.edit {
             clear()
             apply()
         }
+        _authFlow.value = AuthState()
     }
 
     companion object {
@@ -74,9 +73,7 @@ class AppAuth @Inject constructor(
         }
 
         fun initApp(context: Context): AppAuth = instance ?: synchronized(this) {
-            instance ?: buildAuth(context).also { instance = it }
+            instance ?: AppAuth(context).also { instance = it }
         }
-
-        private fun buildAuth(context: Context): AppAuth = AppAuth(context)
     }
 }

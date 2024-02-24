@@ -17,7 +17,7 @@ import ru.netology.nework.viewmodel.LoginViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginFragment: Fragment() {
+class LoginFragment : Fragment() {
 
     @Inject
     lateinit var appAuth: AppAuth
@@ -27,6 +27,12 @@ class LoginFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        val toolbar = binding.toolbarLogin.toolbarSignIn
+
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.loginBtn.setOnClickListener {
             val userName = binding.loginTextField.editText?.text.toString()
@@ -43,12 +49,12 @@ class LoginFragment: Fragment() {
                     findNavController().navigateUp()
                 }
             }
-
-            binding.registerBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
-            }
-
         }
+
+        binding.registerBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
+        }
+
         return binding.root
     }
 }

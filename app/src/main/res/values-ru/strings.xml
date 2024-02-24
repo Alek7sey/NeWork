@@ -3,7 +3,7 @@
     <string name="app_name">NeWork</string>
     <string name="logout">Выход</string>
     <string name="profil">Профиль</string>
-    <string name="aut">Авторизация</string>
+    <string name="aut">Войти</string>
     <string name="register">Регистрация</string>
     <string name="retry">Повторить</string>
     <string name="network_error">Ошибка сети</string>
@@ -108,4 +108,6 @@
     <string name="my_profile_photo">Фото моего профиля</string>
     <string name="download_error_try_again">Ошибка загрузки. Повторите заново.</string>
     <string name="to_add_job_you_need_to_register_or_login">Чтобы добавить работу, необходимо войти или зарегистрироваться.</string>
+    <string name="pass_do_not_match">Введенные пароли не совпадают</string>
+    <string name="users_photo">Аватарка юзера</string>
 </resources>

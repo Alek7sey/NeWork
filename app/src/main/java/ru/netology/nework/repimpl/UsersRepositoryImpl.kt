@@ -14,9 +14,7 @@ import ru.netology.nework.dao.UserDao
 import ru.netology.nework.dto.User
 import ru.netology.nework.entity.UserEntity
 import ru.netology.nework.entity.toDto
-import ru.netology.nework.error.ApiError
-import ru.netology.nework.error.NetworkError
-import ru.netology.nework.error.UnknownError
+import ru.netology.nework.error.*
 import ru.netology.nework.repository.UsersRepository
 import java.io.File
 import java.io.IOException
@@ -67,9 +65,9 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUser(login: String, name: String, password: String, file: File) {
-        val userLogin = MultipartBody.Part.createFormData("login", login)
-        val userPassword = MultipartBody.Part.createFormData("password", password)
-        val userName = MultipartBody.Part.createFormData("name", name)
+        val userLogin = login.toRequestBody("text/plain".toMediaType())
+        val userPassword = password.toRequestBody("text/plain".toMediaType())
+        val userName = name.toRequestBody("text/plain".toMediaType())
         val media = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
         try {
@@ -78,7 +76,7 @@ class UsersRepositoryImpl @Inject constructor(
                 throw ApiError(response.message())
             }
 
-            val result = response.body() ?: throw ApiError(response.message())
+            val result = response.body() ?: throw RuntimeException("body is null")
             appAuth.setAuth(result)
         } catch (e: IOException) {
             throw NetworkError
@@ -88,15 +86,14 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUserWithoutAvatar(login: String, name: String, password: String) {
+        val userLogin = login.toRequestBody("text/plain".toMediaType())
+        val userPassword = password.toRequestBody("text/plain".toMediaType())
+        val userName = name.toRequestBody("text/plain".toMediaType())
+
         try {
-
-            val userLogin = login.toRequestBody("text/plain".toMediaType())
-            val userPassword = password.toRequestBody("text/plain".toMediaType())
-            val userName = name.toRequestBody("text/plain".toMediaType())
             val response = apiService.registerUserWithoutAvatar(userLogin, userPassword, userName)
-
             if (!response.isSuccessful) {
-                throw RuntimeException(response.message())
+                throw ApiError(response.message())
             }
 
             val result = response.body() ?: throw RuntimeException("body is null")

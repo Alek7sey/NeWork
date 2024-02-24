@@ -22,11 +22,11 @@ class DateInputFragment : DialogFragment() {
             val builder = MaterialAlertDialogBuilder(it)
 
             requireNotNull(binding.selectStartDate.editText).doAfterTextChanged { start ->
-                viewModel.editStartDate(start.toString().orEmpty())
+                viewModel.editStartDate(start?.toString().orEmpty())
             }
 
             requireNotNull(binding.selectEndDate.editText).doAfterTextChanged { end ->
-                viewModel.editEndDate(end.toString().orEmpty())
+                viewModel.editEndDate(end?.toString().orEmpty())
             }
 
             builder.setView(binding.root).let {

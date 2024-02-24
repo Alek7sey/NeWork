@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ru.netology.nework.R
@@ -30,10 +31,12 @@ import ru.netology.nework.viewmodel.PostViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class PostsFeedFragment : Fragment() {
 
     @Inject
     lateinit var appAuth: AppAuth
+
 
     private val viewModel: PostViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
@@ -44,6 +47,48 @@ class PostsFeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedPostsBinding.inflate(layoutInflater, container, false)
+
+        val toolbar = binding.toolbar
+
+        authViewModel.data.observe(viewLifecycleOwner) {
+
+            if (authViewModel.authenticated) {
+                toolbar.menu.setGroupVisible(R.id.registered, true)
+                toolbar.menu.setGroupVisible(R.id.unregistered, false)
+            } else {
+                toolbar.menu.setGroupVisible(R.id.unregistered, true)
+                toolbar.menu.setGroupVisible(R.id.registered, false)
+            }
+
+            toolbar.overflowIcon = resources.getDrawable(R.drawable.ic_account_circle)
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                if (!authViewModel.authenticated) {
+                    when (menuItem.itemId) {
+                        R.id.signIn -> {
+                            findNavController().navigate(R.id.action_postsFeedFragment_to_loginFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                } else {
+                    when (menuItem.itemId) {
+                        R.id.logout -> {
+                            appAuth.clearAuth()
+                            true
+                        }
+
+                        R.id.profil -> {
+                            findNavController().navigate(R.id.action_postsFeedFragment_to_profileMyFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            }
+        }
+
         val adapter = PostsAdapter(object : OnInteractionListener {
 
             override fun onLike(post: Post) {
@@ -72,7 +117,8 @@ class PostsFeedFragment : Fragment() {
                     R.id.action_postsFeedFragment_to_postAddFragment,
                     Bundle().apply {
                         textArg = post.content
-                        putString("urlAttach", post.attachment?.url)
+//                        postIdArg = post.id
+                   //     putString("urlAttach", post.attachment?.url)
                     }
                 )
             }
@@ -200,5 +246,6 @@ class PostsFeedFragment : Fragment() {
 
     companion object {
         var Bundle.textArg by EditTextArg
+//        var Bundle.postIdArg by PostIdArg
     }
 }

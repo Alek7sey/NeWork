@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nework.R
 import ru.netology.nework.databinding.FragmentAddPostBinding
 import ru.netology.nework.dto.AttachmentTypeEvent
@@ -25,6 +26,7 @@ import ru.netology.nework.viewmodel.PostViewModel
 
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class PostAddFragment : Fragment() {
 
     private val postViewModel: PostViewModel by activityViewModels()
@@ -36,20 +38,12 @@ class PostAddFragment : Fragment() {
 
         val binding = FragmentAddPostBinding.inflate(inflater, container, false)
 
-//        val attachUrl = "${arguments?.getString("urlAttach")}"
-//        if (attachUrl.toString() != null) {
-//            Glide.with(binding.photoAttachment)
-//                .load(attachUrl)
-//                .placeholder(R.drawable.ic_launcher_foreground)
-//                .error(R.drawable.ic_error)
-//                .into(binding.photoAttachment)
-//        }
-
         arguments?.editTextArg?.let(binding.editText::setText)
         if (binding.editText.text.isNullOrBlank()) {
             binding.editText.setText(postViewModel.edited.value?.content.toString())
         }
         binding.editText.requestFocus()
+
 
         val imageUrl = postViewModel.edited.value?.attachment?.url
         val type = postViewModel.edited.value?.attachment?.type
@@ -65,20 +59,6 @@ class PostAddFragment : Fragment() {
 
         binding.postPhotoContainer.isVisible = imageIsVisible
 
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            viewLifecycleOwner, object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    if (postViewModel.edited.value?.id == 0L) {
-//                        val content = binding.editText.text.toString()
-//                        postViewModel.changeContent(content)
-//                    } else {
-//                        postViewModel.clear()
-//                    }
-//                    findNavController().navigateUp()
-//                }
-//            }
-//        )
-
         val toolbar = binding.toolbarPost.toolbarNewPost
 
         toolbar.setOnMenuItemClickListener { menuItem ->
@@ -89,8 +69,11 @@ class PostAddFragment : Fragment() {
                         postViewModel.changeContent(content)
                         postViewModel.save()
                         AndroidUtils.hideKeyboard(requireView())
+                        postViewModel.clearPhoto()
+                        postViewModel.clear()
                     } else {
                         postViewModel.clear()
+                        postViewModel.clearPhoto()
                         binding.editText.clearFocus()
                     }
                     findNavController().navigateUp()
@@ -103,6 +86,7 @@ class PostAddFragment : Fragment() {
 
         toolbar.setNavigationOnClickListener {
             postViewModel.clear()
+            postViewModel.clearPhoto()
             findNavController().navigateUp()
         }
 
@@ -160,11 +144,7 @@ class PostAddFragment : Fragment() {
         }
 
         binding.postRemovePhoto.setOnClickListener {
-//            postViewModel.photoState.observe(viewLifecycleOwner) { photoModel ->
- //               if (photoModel != null) {
-                    postViewModel.clearPhoto()
- //               }
- //           }
+            postViewModel.clearPhoto()
         }
         return binding.root
     }

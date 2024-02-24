@@ -26,6 +26,7 @@ data class Event(
     val attachment: AttachmentEventEmbeddable? = null,
     val link: String? = null,
     val users: Map<Long, EventUserPreviewEmbeddable>,
+    val ownedByMe: Boolean = false,
 ) : Serializable
 
 data class CoordinatesEvent(

@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.netology.nework.error.NetworkError
+import ru.netology.nework.error.UnknownError
 import ru.netology.nework.repository.UsersRepository
 import ru.netology.nework.state.FeedModelState
-
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +26,12 @@ class LoginViewModel @Inject constructor(
             _state.value = FeedModelState(refreshing = true)
             try {
                 repository.setIdAndTokenAuth(id, token)
+            } catch (e: IOException) {
+                _state.value = FeedModelState(error = true)
+                throw NetworkError
             } catch (e: Exception) {
                 _state.value = FeedModelState(error = true)
-                e.printStackTrace()
+                throw UnknownError
             }
         }
     }

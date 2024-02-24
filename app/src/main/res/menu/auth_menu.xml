@@ -17,8 +17,5 @@
 
             android:title="@string/aut" />
 
-        <item
-            android:id="@+id/signUp"
-            android:title="@string/register" />
     </group>
 </menu>

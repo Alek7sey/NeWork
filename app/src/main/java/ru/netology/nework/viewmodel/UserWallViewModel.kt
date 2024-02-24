@@ -8,9 +8,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
@@ -29,13 +31,19 @@ class UserWallViewModel @Inject constructor(
 
     val data: Flow<PagingData<Post>> = appAuth
         .authFlow
-        .flatMapLatest { (userId, _) ->
+        .flatMapLatest { token ->
             cached.map { posts ->
                 posts.map { item ->
-                    if (item is Post) item else item.copy(authorId = userId)
+                    if (item is Post) {
+                        //item.copy(authorId = token.id)
+                        item
+                    } else {
+                        item
+                    }
                 }
-            }
+            }.flowOn(Dispatchers.Default)
         }
+
 
     private val _userWallPostsState = MutableLiveData(UserWallPostsState())
     val userWallPostsState: LiveData<UserWallPostsState>

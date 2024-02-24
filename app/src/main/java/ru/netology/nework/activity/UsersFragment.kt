@@ -18,16 +18,23 @@ import kotlinx.coroutines.launch
 import ru.netology.nework.R
 import ru.netology.nework.adapter.UsersAdapter
 import ru.netology.nework.adapter.UsersOnInteractionListener
+import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentUsersBinding
 import ru.netology.nework.dto.User
 import ru.netology.nework.utils.UserIdArg
+import ru.netology.nework.viewmodel.AuthViewModel
 import ru.netology.nework.viewmodel.UsersViewModel
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class UsersFragment : Fragment() {
 
+    @Inject
+    lateinit var appAuth: AppAuth
+
     private val viewModel: UsersViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +49,47 @@ class UsersFragment : Fragment() {
         })
 
         binding.usersList.adapter = adapter
+
+        val toolbar = binding.toolbar
+
+        authViewModel.data.observe(viewLifecycleOwner) {
+
+            if (authViewModel.authenticated) {
+                toolbar.menu.setGroupVisible(R.id.registered, true)
+                toolbar.menu.setGroupVisible(R.id.unregistered, false)
+            } else {
+                toolbar.menu.setGroupVisible(R.id.unregistered, true)
+                toolbar.menu.setGroupVisible(R.id.registered, false)
+            }
+
+            toolbar.overflowIcon = resources.getDrawable(R.drawable.ic_account_circle)
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                if (!authViewModel.authenticated) {
+                    when (menuItem.itemId) {
+                        R.id.signIn -> {
+                            findNavController().navigate(R.id.action_usersFragment_to_loginFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                } else {
+                    when (menuItem.itemId) {
+                        R.id.logout -> {
+                            appAuth.clearAuth()
+                            true
+                        }
+
+                        R.id.profil -> {
+                            findNavController().navigate(R.id.action_usersFragment_to_profileUserFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

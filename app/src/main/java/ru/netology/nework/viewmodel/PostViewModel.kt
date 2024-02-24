@@ -39,34 +39,16 @@ private val empty = Post(
     likeOwnerIds = null,
     likedByMe = false,
     attachment = null,
-    //ownedByMe = false,
     users = emptyMap()
 )
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     appAuth: AppAuth,
 ) : ViewModel() {
-
-//    private val cached = repository.data.cachedIn(viewModelScope)
-
-//    val data: Flow<PagingData<Post>> = appAuth
-//        .authFlow
-//        .flatMapLatest { token ->
-//            cached.map { posts ->
-//                posts.map { post ->
-//                    if (post is Post) {
-//                 //       post.copy(ownedByMe = post.authorId == token?.id)
-//                        post
-//                    } else {
-//                        post
-//                    }
-//                }
-//            }.flowOn(Dispatchers.Default)
-//        }
 
     val data: Flow<PagingData<Post>> = appAuth
         .authFlow
@@ -74,8 +56,7 @@ class PostViewModel @Inject constructor(
             repository.data.map { posts ->
                 posts.map { post ->
                     if (post is Post) {
-                        //    post.copy(ownedByMe = post.authorId == token?.id)
-                        post
+                            post.copy(ownedByMe = post.authorId == token.id)
                     } else {
                         post
                     }
@@ -125,18 +106,6 @@ class PostViewModel @Inject constructor(
     fun clearPhoto() {
         _photoState.value = null
     }
-
-    /*fun refreshPosts() {
-        viewModelScope.launch {
-            _state.value = FeedModelState(refreshing = true)
-            _state.value = try {
-                repository.getAll()
-                FeedModelState()
-            } catch (e: Exception) {
-                FeedModelState(error = true)
-            }
-        }
-    }*/
 
     fun likeById(post: Post) {
         viewModelScope.launch {

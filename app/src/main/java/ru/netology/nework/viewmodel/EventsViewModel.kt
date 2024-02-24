@@ -64,8 +64,8 @@ class EventsViewModel @Inject constructor(
             cached.map { events ->
                 events.map { event ->
                     if (event is Event) {
-                        //       event.copy(ownedByMe = post.authorId == token?.id)
-                        event
+                        event.copy(ownedByMe = event.authorId == token.id)
+                       // event
                     } else {
                         event
                     }
@@ -190,18 +190,9 @@ class EventsViewModel @Inject constructor(
     fun changeContent(content: String, datetime: String, eventType: String) {
         if (edited.value?.content != content.trim()) {
             val localDateTime = localDateFormat.parse(datetime.trim() + ":00.000")
-//            val ld = LocalDate.from(localDateTime)
-//            val lt = LocalTime.of(
-//                localDateTime.get(ChronoField.HOUR_OF_DAY),
-//                localDateTime.get(ChronoField.MINUTE_OF_HOUR),
-//                0,
-//                0
-//            )
-//            val dateTime = ZonedDateTime.of(ld, lt, ZoneId.systemDefault()).toInstant()
             edited.value =
                 edited.value?.copy(
                     content = content.trim(),
-//                    datetime = serverDate.format(dateTime),
                     datetime = serverDate.format(localDateTime),
                     type = eventType.trim()
                 )

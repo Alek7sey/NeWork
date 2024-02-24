@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_24"
-        android:layout_marginEnd="@dimen/margin_24"
-        android:layout_marginTop="?actionBarSize">
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginEnd="@dimen/margin_24">
 
         <LinearLayout
-            android:id="@+id/loginLayout"
+            android:id="@+id/regLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -37,6 +37,7 @@
                     android:layout_width="@dimen/circle_120"
                     android:layout_height="@dimen/circle_120"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/users_photo"
                     android:background="@drawable/circle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +116,8 @@
                 android:hint="@string/confirm_password"
                 app:endIconCheckable="false"
                 app:endIconMode="password_toggle"
-                app:helperTextEnabled="true"
+                app:helperText="@string/pass_do_not_match"
+                app:helperTextEnabled="false"
                 app:helperTextTextAppearance="?attr/textAppearanceCaption"
                 app:helperTextTextColor="@color/red">
 

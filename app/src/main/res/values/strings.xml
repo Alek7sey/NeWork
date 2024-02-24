@@ -108,4 +108,6 @@
     <string name="download_error_try_again">Download error. Try again</string>
     <string name="end_icon" translatable="false">end icon</string>
     <string name="to_add_job_you_need_to_register_or_login">To add  job, you need to register or login</string>
+    <string name="pass_do_not_match">The entered passwords do not match</string>
+    <string name="users_photo">Users photo</string>
 </resources>

@@ -35,7 +35,7 @@ class WallUserFragment : Fragment() {
     private val postViewModel: PostViewModel by activityViewModels()
     private val userWallViewModel: UserWallViewModel by activityViewModels()
     private val jobsViewModel: JobsViewModel by activityViewModels()
-    private val appAuthViewModel: AuthViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by activityViewModels()
 
     @Inject
     lateinit var appAuth: AppAuth
@@ -45,7 +45,7 @@ class WallUserFragment : Fragment() {
 
         val adapter = UserWallAdapter(object : OnInteractionListenerUserWall {
             override fun onLike(post: Post) {
-                if (appAuthViewModel.authenticated) {
+                if (authViewModel.authenticated) {
                     postViewModel.likeById(post)
                 } else {
                     findNavController().navigate(R.id.action_postsFeedFragment_to_loginFragment)

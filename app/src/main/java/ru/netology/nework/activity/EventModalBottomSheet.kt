@@ -26,8 +26,9 @@ class EventModalBottomSheet : BottomSheetDialogFragment() {
         val binding = BottomSheetDialogBinding.inflate(inflater, container, false)
 
         binding.radioBtnOnline.isChecked = true
-        binding.outlinedTextField.editText?.setText(convertServerDateToLocalDate(viewModel.edited.value?.datetime.toString()))
-
+        if (!viewModel.edited.value?.datetime.isNullOrBlank()) {
+            binding.outlinedTextField.editText?.setText(convertServerDateToLocalDate(viewModel.edited.value!!.datetime))
+        }
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 binding.radioBtnOnline.id -> viewModel.editType(binding.radioBtnOnline.text.toString())

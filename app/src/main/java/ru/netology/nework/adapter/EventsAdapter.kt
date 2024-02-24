@@ -77,8 +77,6 @@ class EventsAdapter(
                     listener.onParticipate(event)
                 }
 
-//                eventMenu.isVisible
-
                 val urlAvatar = "${event.authorAvatar}"
                 Glide.with(binding.avatar)
                     .load(urlAvatar)
@@ -143,6 +141,9 @@ class EventsAdapter(
                         }
                     }.show()
                 }
+
+               // eventMenu.isVisible = event.ownedByMe
+
                 linkEvent.setOnClickListener { listener.followTheLink(event) }
                 likeShortBtn.setOnClickListener { listener.onLike(event) }
                 iconPlay.setOnClickListener { listener.onAudio(event) }

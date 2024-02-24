@@ -45,6 +45,7 @@ class EventsFeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedEventsBinding.inflate(layoutInflater, container, false)
+
         val adapter = EventsAdapter(object : EventsOnInteractionListener {
 
             override fun onLike(event: Event) {
@@ -104,6 +105,47 @@ class EventsFeedFragment : Fragment() {
 
         }, requireContext())
 
+        val toolbar = binding.toolbar
+
+        authViewModel.data.observe(viewLifecycleOwner) {
+
+            if (authViewModel.authenticated) {
+                toolbar.menu.setGroupVisible(R.id.registered, true)
+                toolbar.menu.setGroupVisible(R.id.unregistered, false)
+            } else {
+                toolbar.menu.setGroupVisible(R.id.unregistered, true)
+                toolbar.menu.setGroupVisible(R.id.registered, false)
+            }
+
+            toolbar.overflowIcon = resources.getDrawable(R.drawable.ic_account_circle)
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                if (!authViewModel.authenticated) {
+                    when (menuItem.itemId) {
+                        R.id.signIn -> {
+                            findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                } else {
+                    when (menuItem.itemId) {
+                        R.id.logout -> {
+                            appAuth.clearAuth()
+                            true
+                        }
+
+                        R.id.profil -> {
+                            findNavController().navigate(R.id.action_eventsFeedFragment_to_profileMyFragment)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.data.collectLatest(adapter::submitData)
@@ -122,8 +164,6 @@ class EventsFeedFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 adapter.loadStateFlow.collectLatest { state ->
                     binding.swipeRefreshLayout.isRefreshing = state.refresh is LoadState.Loading
-//                    val isListEmpty = state.refresh is LoadState.NotLoading && adapter.itemCount == 0
-//                    binding.groupEmpty.isVisible = isListEmpty
                 }
             }
         }
@@ -145,21 +185,8 @@ class EventsFeedFragment : Fragment() {
             //       if (appAuth.authFlow.value != null) {
             findNavController().navigate(R.id.action_eventsFeedFragment_to_eventAddFragment)
             //      }
-
-//            context?.let { it1 ->
-//                MaterialAlertDialogBuilder(it1)
-//                    .setTitle(resources.getString(R.string.fab_click_message))
-//                    .setNegativeButton(resources.getString(R.string.login)) { dialog, _ ->
-//                        dialog.dismiss()
-//                        findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)
-//                    }
-//                    .setPositiveButton(resources.getString(R.string.registration)) { dialog, _ ->
-//                        dialog.dismiss()
-//                        findNavController().navigate(R.id.action_eventsFeedFragment_to_registrationFragment)
-//                    }
-//                    .show()
-//            }
         }
+
         return binding.root
     }
 

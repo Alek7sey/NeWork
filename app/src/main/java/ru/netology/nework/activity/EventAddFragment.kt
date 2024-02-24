@@ -66,19 +66,8 @@ class EventAddFragment : Fragment() {
             }
 
             binding.photoContainer.isVisible = imageIsVisible
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            viewLifecycleOwner, object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    if (eventsViewModel.edited.value?.id == 0L) {
-//                        val content = binding.editText.text.toString()
-//                        eventsViewModel.changeContent(content)
-//                    } else {
-//                        eventsViewModel.clear()
-//                    }
-//                    findNavController().navigateUp()
-//                }
-//            }
-//        )
+//            binding.eventDateTypeBtn.text = eventsViewModel.edited.value!!.type
+
         }
 
         val toolbar = binding.toolbarAddEvent.toolbarNewEvent
@@ -107,7 +96,10 @@ class EventAddFragment : Fragment() {
         }
 
         toolbar.setNavigationOnClickListener {
-            eventsViewModel.edited.value = null
+            eventsViewModel.editType("")
+            eventsViewModel.editDateTime("dd.mm.yyyy HH:mm")
+            eventsViewModel.clearPhoto()
+            eventsViewModel.clear()
             findNavController().navigateUp()
         }
 
@@ -165,11 +157,7 @@ class EventAddFragment : Fragment() {
         }
 
         binding.removePhoto.setOnClickListener {
-//            eventsViewModel.photoState.observe(viewLifecycleOwner) { photoModel ->
-//                if (photoModel != null) {
             eventsViewModel.clearPhoto()
-//                }
-//            }
         }
 
         binding.fab.setOnClickListener {

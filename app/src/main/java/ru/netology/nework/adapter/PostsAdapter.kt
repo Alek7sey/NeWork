@@ -126,6 +126,8 @@ class PostsAdapter(
                     }.show()
                 }
 
+             //  postMenu.isVisible = post.ownedByMe
+
                 shareBtn.setOnClickListener { onInteractionListener.onShare(post) }
                 link.setOnClickListener { onInteractionListener.followTheLink(post) }
                 iconPlay.setOnClickListener { onInteractionListener.onVideo(post) }

@@ -5,20 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="NeWork"
-        app:menu="@menu/auth_menu"
-        app:titleTextColor="@color/color_header"
-        android:background="@color/background_of_the_post"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_collapseMode="pin" />
-<!--    <include-->
-<!--            android:id="@+id/toolbar"-->
-<!--            layout="@layout/toolbar" />-->
+<!--    <com.google.android.material.appbar.MaterialToolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:title="NeWork"-->
+<!--        app:menu="@menu/auth_menu"-->
+<!--        app:titleTextColor="@color/color_header"-->
+<!--        android:background="@color/background_of_the_post"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_collapseMode="pin" />-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_graph"

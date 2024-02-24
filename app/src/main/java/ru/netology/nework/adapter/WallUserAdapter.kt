@@ -23,10 +23,7 @@ class UserWallAdapter(
     private val listener: OnInteractionListenerUserWall
 ) : PagingDataAdapter<Post, UserWallAdapter.UserWallViewHolder>(UserWallDiffCallback()) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): UserWallViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserWallViewHolder {
         return UserWallViewHolder(
             CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             listener = listener

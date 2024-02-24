@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
@@ -19,7 +21,7 @@ import ru.netology.nework.viewmodel.RegisterViewModel
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
-    private val viewModel: RegisterViewModel by activityViewModels()
+    private val viewModel: RegisterViewModel by viewModels()
     private val registerViewModel: RegisterViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
 
@@ -41,8 +43,7 @@ class RegistrationFragment : Fragment() {
             val media = registerViewModel.photoState.value
 
             if (userPassword != userPasswordConfirm) {
-                Snackbar.make(binding.root, getString(R.string.passwords_do_not_match), Snackbar.LENGTH_LONG).show()
-                return@setOnClickListener
+                binding.passwordConfirmTextField.isHelperTextEnabled = true
             } else {
                 if (media == null) {
                     viewModel.saveRegisteredUserWithoutAvatar(login, userPassword, userName)
@@ -58,18 +59,20 @@ class RegistrationFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            registerViewModel.photoState.observe(viewLifecycleOwner) { media ->
-                Glide.with(this)
-                    .load(media?.file)
-                    .override(2048, 2048)
-                    .into(binding.registerPhoto)
-            }
-
             authViewModel.data.observe(viewLifecycleOwner) {
                 if (authViewModel.authenticated) {
                     findNavController().navigateUp()
                 }
             }
+        }
+
+        registerViewModel.photoState.observe(viewLifecycleOwner) { media ->
+            Glide.with(this)
+                .load(media?.file)
+                .circleCrop()
+                .override(2048, 2048)
+                .into(binding.registerPhoto)
+            binding.registerIconCamera.isVisible = false
         }
 
         binding.registerPhotoContainer.setOnClickListener {

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:backgroundTint="@color/background_field_new_job"
-    android:visibility="gone"
     app:cardCornerRadius="28dp"
     tools:visibility="visible">
 

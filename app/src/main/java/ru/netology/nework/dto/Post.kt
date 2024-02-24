@@ -22,8 +22,8 @@ data class Post(
     val likeOwnerIds: List<Int>?,
     val likedByMe: Boolean,
     val attachment: AttachmentEmbeddable? = null,
-   // val ownedByMe: Boolean = false,
     val users: Map<Long, UserPreviewEmbeddable>,
+    val ownedByMe: Boolean = false,
 ) : Serializable
 
 data class Coordinates(

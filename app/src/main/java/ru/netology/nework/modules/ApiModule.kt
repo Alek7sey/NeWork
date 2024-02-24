@@ -18,6 +18,7 @@ import ru.netology.nework.api.PostApiService
 import ru.netology.nework.api.UserApiService
 import ru.netology.nework.api.UserWallApiService
 import ru.netology.nework.auth.AppAuth
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -37,6 +38,7 @@ class ApiModule {
     fun provideOkHttp(
         appAuth: AppAuth,
     ): OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -50,6 +52,15 @@ class ApiModule {
                     .addHeader("Api-Key", API_KEY)
                     .build()
             chain.proceed(request)
+        }
+        .addInterceptor { chain ->
+            appAuth.authFlow.value.token?.let {
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", API_KEY)
+                    .build()
+                return@addInterceptor chain.proceed(newRequest)
+            }
+            chain.proceed(chain.request())
         }
         .build()
 
