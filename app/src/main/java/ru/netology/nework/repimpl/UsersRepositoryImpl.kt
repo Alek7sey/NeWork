@@ -1,13 +1,15 @@
 package ru.netology.nework.repimpl
 
+import android.content.Context
+import android.widget.Toast
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import ru.netology.nework.R
 import ru.netology.nework.api.UserApiService
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dao.UserDao
@@ -23,9 +25,12 @@ import javax.inject.Singleton
 
 @Singleton
 class UsersRepositoryImpl @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
     private val userDao: UserDao,
     private val apiService: UserApiService,
-) : UsersRepository {
+
+    ) : UsersRepository {
     override val data: Flow<List<User>> = userDao.getAllUsers().map(List<UserEntity>::toDto).flowOn(Dispatchers.Default)
 
     @Inject
@@ -47,15 +52,23 @@ class UsersRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setIdAndTokenAuth(id: String, token: String) {
+    override suspend fun setIdAndTokenAuth(login: String, pass: String) {
         try {
-
-            val response = apiService.authUser(id, token)
+            val response = apiService.authUser(login, pass)
             if (!response.isSuccessful) {
-                throw ApiError(response.message())
-            }
+                when (response.code()) {
+                    400 -> {
+                        Toast.makeText(context, context.getString(R.string.incorrect_username_or_password), Toast.LENGTH_LONG).show()
+                    }
 
-            val result = response.body() ?: throw ApiError(response.message())
+                    404 -> {
+                        Toast.makeText(context, context.getString(R.string.user_is_not_registered), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Toast.makeText(context, context.getString(R.string.unknown_error), Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+            val result = response.body() ?: throw RuntimeException("Body is null")
             appAuth.setAuth(result)
         } catch (e: IOException) {
             throw NetworkError
@@ -65,18 +78,25 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUser(login: String, name: String, password: String, file: File) {
-        val userLogin = login.toRequestBody("text/plain".toMediaType())
-        val userPassword = password.toRequestBody("text/plain".toMediaType())
-        val userName = name.toRequestBody("text/plain".toMediaType())
         val media = MultipartBody.Part.createFormData("file", file.name, file.asRequestBody())
 
         try {
-            val response = apiService.regUser(userLogin, userPassword, userName, media)
+            val response = apiService.regUser(login, password, name, media)
             if (!response.isSuccessful) {
-                throw ApiError(response.message())
+                when (response.code()) {
+                    403 -> {
+                        Toast.makeText(context, context.getString(R.string.user_is_already_registered), Toast.LENGTH_LONG).show()
+                    }
+
+                    415 -> {
+                        Toast.makeText(context, context.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Toast.makeText(context, context.getString(R.string.unknown_error), Toast.LENGTH_LONG).show()
+                }
+               return
             }
 
-            val result = response.body() ?: throw RuntimeException("body is null")
+            val result = response.body() ?: throw RuntimeException("Body is null")
             appAuth.setAuth(result)
         } catch (e: IOException) {
             throw NetworkError
@@ -86,17 +106,19 @@ class UsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerUserWithoutAvatar(login: String, name: String, password: String) {
-        val userLogin = login.toRequestBody("text/plain".toMediaType())
-        val userPassword = password.toRequestBody("text/plain".toMediaType())
-        val userName = name.toRequestBody("text/plain".toMediaType())
 
         try {
-            val response = apiService.registerUserWithoutAvatar(userLogin, userPassword, userName)
+            val response = apiService.registerUserWithoutAvatar(login, password, name)
             if (!response.isSuccessful) {
-                throw ApiError(response.message())
+                when (response.code()) {
+                    403 -> {
+                        Toast.makeText(context, context.getString(R.string.user_is_already_registered), Toast.LENGTH_LONG).show()
+                    }
+                    else -> Toast.makeText(context, context.getString(R.string.unknown_error), Toast.LENGTH_LONG).show()
+                }
+                return
             }
-
-            val result = response.body() ?: throw RuntimeException("body is null")
+            val result = response.body() ?: throw RuntimeException("Body is null")
             appAuth.setAuth(result)
         } catch (e: IOException) {
             throw NetworkError

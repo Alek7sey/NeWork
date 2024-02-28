@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -117,8 +118,6 @@ class PostsFeedFragment : Fragment() {
                     R.id.action_postsFeedFragment_to_postAddFragment,
                     Bundle().apply {
                         textArg = post.content
-//                        postIdArg = post.id
-                   //     putString("urlAttach", post.attachment?.url)
                     }
                 )
             }
@@ -172,18 +171,6 @@ class PostsFeedFragment : Fragment() {
             }
         }
 
-//        viewModel.state.observe(viewLifecycleOwner) { state ->
-//            binding.progress.isVisible = state.loading
-//            binding.swipeRefreshLayout.isRefreshing = state.refreshing
-//            if (state.error) {
-//                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_INDEFINITE)
-//                    .setAction(R.string.retry) {
-//                        adapter.refresh()
-//                    }
-//                    .show()
-//            }
-//        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 appAuth.authFlow.collect() {
@@ -197,19 +184,6 @@ class PostsFeedFragment : Fragment() {
                 adapter.loadStateFlow.collectLatest { state ->
                     binding.swipeRefreshLayout.isRefreshing =
                         state.refresh is LoadState.Loading
-
-//                    val isListEmpty = state.refresh is LoadState.NotLoading && adapter.itemCount == 0
-//                    binding.groupEmpty.isVisible = isListEmpty
-//                    binding.list.isVisible = !isListEmpty
-//                    binding.retryBtnEmpty.isVisible = state.source.refresh is LoadState.Error
-//
-//                    val errorState = state.source.append as? LoadState.Error
-//                        ?: state.source.prepend as? LoadState.Error
-//                        ?: state.append as? LoadState.Error
-//                        ?: state.prepend as? LoadState.Error
-//                    errorState?.let {
-//                        Toast.makeText(requireActivity(), "Whoops ${it.error}", Toast.LENGTH_LONG).show()
-//                    }
                 }
             }
         }
@@ -223,29 +197,29 @@ class PostsFeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            //   if (appAuth.authFlow.value?.token != null) {
+               if (appAuth.authFlow.value.token != null) {
             findNavController().navigate(R.id.action_postsFeedFragment_to_postAddFragment)
-            //     }
+                 } else {
 
-//            context?.let { it1 ->
-//                MaterialAlertDialogBuilder(it1)
-//                    .setTitle(resources.getString(R.string.fab_click_message))
-//                    .setNegativeButton(resources.getString(R.string.login)) { dialog, _ ->
-//                        dialog.dismiss()
-//                        findNavController().navigate(R.id.action_postsFeedFragment_to_loginFragment)
-//                    }
-//                    .setPositiveButton(resources.getString(R.string.registration)) { dialog, _ ->
-//                        dialog.dismiss()
-//                        findNavController().navigate(R.id.action_postsFeedFragment_to_registrationFragment)
-//                    }
-//                    .show()
-//            }
+                   context?.let { it1 ->
+                       MaterialAlertDialogBuilder(it1)
+                           .setTitle(resources.getString(R.string.fab_click_message))
+                           .setNegativeButton(resources.getString(R.string.login)) { dialog, _ ->
+                               dialog.dismiss()
+                               findNavController().navigate(R.id.action_postsFeedFragment_to_loginFragment)
+                           }
+                           .setPositiveButton(resources.getString(R.string.registration)) { dialog, _ ->
+                               dialog.dismiss()
+                               findNavController().navigate(R.id.action_postsFeedFragment_to_registrationFragment)
+                           }
+                           .show()
+                   }
+               }
         }
         return binding.root
     }
 
     companion object {
         var Bundle.textArg by EditTextArg
-//        var Bundle.postIdArg by PostIdArg
     }
 }

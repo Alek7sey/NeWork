@@ -25,7 +25,7 @@ import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.model.PhotoModel
 import ru.netology.nework.utils.AndroidUtils
 import ru.netology.nework.utils.EditTextArg
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertServerDateTimeToLocalDateTime
 import ru.netology.nework.viewmodel.EventsViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -50,7 +50,7 @@ class EventAddFragment : Fragment() {
             }
             binding.editText.requestFocus()
 
-            binding.eventDateBtn.text = convertServerDateToLocalDate(eventsViewModel.edited.value?.datetime.toString())
+            binding.eventDateBtn.text = convertServerDateTimeToLocalDateTime(eventsViewModel.edited.value?.datetime.toString())
             binding.eventDateTypeBtn.text = eventsViewModel.edited.value?.type.toString()
 
             val imageUrl = eventsViewModel.edited.value?.attachment?.url
@@ -66,8 +66,6 @@ class EventAddFragment : Fragment() {
             }
 
             binding.photoContainer.isVisible = imageIsVisible
-//            binding.eventDateTypeBtn.text = eventsViewModel.edited.value!!.type
-
         }
 
         val toolbar = binding.toolbarAddEvent.toolbarNewEvent
@@ -82,7 +80,6 @@ class EventAddFragment : Fragment() {
                         eventsViewModel.changeContent(content, datetime, typeEvent)
                         eventsViewModel.save()
                         AndroidUtils.hideKeyboard(requireView())
-                        //   findNavController().navigateUp()//(R.id.eventsFeedFragment)
                     } else {
                         eventsViewModel.clear()
                         binding.editText.clearFocus()

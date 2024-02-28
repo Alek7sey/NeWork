@@ -14,6 +14,5 @@ interface EventsRepository {
     suspend fun edit(event: Event)
     suspend fun saveWithAttachment(event: Event, file: File)
     suspend fun likeById(event: Event)
-
     suspend fun participatedById(event: Event)
 }

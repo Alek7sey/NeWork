@@ -32,7 +32,7 @@ import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentPostDetailsBinding
 import ru.netology.nework.dto.Post
 import ru.netology.nework.utils.SeparateIdPostArg
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertServerDateTimeToLocalDateTime
 import ru.netology.nework.viewmodel.AuthViewModel
 import ru.netology.nework.viewmodel.PostViewModel
 import ru.netology.nework.viewmodel.UsersViewModel
@@ -57,7 +57,7 @@ class PostDetailsFragment : Fragment() {
     ): View {
         val binding = FragmentPostDetailsBinding.inflate(layoutInflater, container, false)
 
-        val arg = arguments?.let { it.idArg }
+        val arg = arguments?.idArg
         val toolbar = binding.toolbarPost.toolbar
 
         mapView = binding.cardPostDetails.postMapView
@@ -72,7 +72,7 @@ class PostDetailsFragment : Fragment() {
                     jobPosition.visibility = View.VISIBLE
 
                     publishedDetails.visibility = View.VISIBLE
-                    publishedDetails.text = convertServerDateToLocalDate(post.published)
+                    publishedDetails.text = convertServerDateTimeToLocalDateTime(post.published)
 
                     likersTitle.visibility = View.VISIBLE
                     likersList.isVisible = post.likeOwnerIds?.isNotEmpty() == true

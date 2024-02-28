@@ -77,11 +77,12 @@ class UsersFragment : Fragment() {
                     when (menuItem.itemId) {
                         R.id.logout -> {
                             appAuth.clearAuth()
+                            findNavController().navigateUp()
                             true
                         }
 
                         R.id.profil -> {
-                            findNavController().navigate(R.id.action_usersFragment_to_profileUserFragment)
+                            findNavController().navigate(R.id.action_usersFragment_to_profileMyFragment)
                             true
                         }
 

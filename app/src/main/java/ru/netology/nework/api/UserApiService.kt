@@ -1,7 +1,6 @@
 package ru.netology.nework.api
 
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 import ru.netology.nework.dto.Token
@@ -13,18 +12,18 @@ interface UserApiService {
     @Multipart
     @POST("users/registration")
     suspend fun regUser(
-        @Part("login") login: RequestBody,
-        @Part("pass") password: RequestBody,
-        @Part("name") name: RequestBody,
+        @Field("login") login: String,
+        @Field("pass") password: String,
+        @Field("name") name: String,
         @Part media: MultipartBody.Part
     ): Response<Token>
 
     @FormUrlEncoded
     @POST("users/registration")
     suspend fun registerUserWithoutAvatar(
-        @Part("login") login: RequestBody,
-        @Part("pass") password: RequestBody,
-        @Part("name") name: RequestBody
+        @Field("login") login: String,
+        @Field("pass") password: String,
+        @Field("name") name: String,
     ): Response<Token>
 
     @FormUrlEncoded

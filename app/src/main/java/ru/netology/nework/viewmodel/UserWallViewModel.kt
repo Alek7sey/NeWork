@@ -35,8 +35,7 @@ class UserWallViewModel @Inject constructor(
             cached.map { posts ->
                 posts.map { item ->
                     if (item is Post) {
-                        //item.copy(authorId = token.id)
-                        item
+                        item.copy(ownedByMe = item.authorId == token.id)
                     } else {
                         item
                     }

@@ -24,20 +24,20 @@ import javax.inject.Singleton
 
 @Singleton
 class UserWallRepositoryImpl @Inject constructor(
-    private val dao: PostDao,
+    private val postDao: PostDao,
     private val apiService: UserWallApiService,
     keyDao: UserWallRemoteKeyDao,
-    appDb: AppDb,
+    appDb: AppDb
 ) : UserWallRepository {
     @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
         config = PagingConfig(pageSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = { dao.getPagingSource() },
+        pagingSourceFactory = { postDao.getPagingSource() },
         remoteMediator = UserWallRemoteMediator(
             apiService = apiService,
-            dao = dao,
+            dao = postDao,
             remoteKey = keyDao,
-            appDb = appDb,
+            appDb = appDb
         )
     ).flow.map {
         it.map(PostEntity::toDto)
@@ -50,8 +50,8 @@ class UserWallRepositoryImpl @Inject constructor(
                 throw ApiError(response.message())
             }
             val posts = response.body() ?: throw ApiError(response.message())
-            dao.removeAll()
-            dao.insert(posts.map(PostEntity::fromDto))
+            postDao.removeAll()
+            postDao.insert(posts.map(PostEntity::fromDto))
             return posts
         } catch (e: IOException) {
             throw NetworkError

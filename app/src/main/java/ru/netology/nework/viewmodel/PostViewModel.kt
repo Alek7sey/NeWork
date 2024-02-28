@@ -128,7 +128,6 @@ class PostViewModel @Inject constructor(
 
     fun save() {
         edited.value?.let { post ->
-            //  postCreated.postValue(Unit)
             viewModelScope.launch {
                 try {
                     _photoState.value?.let {
@@ -170,7 +169,6 @@ class PostViewModel @Inject constructor(
     fun shareById(id: Long) {
         viewModelScope.launch {
             _feedState.value = FeedModelState(refreshing = true)
-            //     repository.shareById(id)
         }
     }
 

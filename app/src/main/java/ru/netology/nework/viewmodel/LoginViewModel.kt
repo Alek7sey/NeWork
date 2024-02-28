@@ -21,11 +21,11 @@ class LoginViewModel @Inject constructor(
     val state: LiveData<FeedModelState>
         get() = _state
 
-    fun saveIdAndToken(id: String, token: String) {
+    fun saveIdAndToken(login: String, pass: String) {
         viewModelScope.launch {
             _state.value = FeedModelState(refreshing = true)
             try {
-                repository.setIdAndTokenAuth(id, token)
+                repository.setIdAndTokenAuth(login, pass)
             } catch (e: IOException) {
                 _state.value = FeedModelState(error = true)
                 throw NetworkError

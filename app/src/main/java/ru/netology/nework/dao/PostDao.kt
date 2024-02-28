@@ -10,7 +10,6 @@ import ru.netology.nework.entity.PostEntity
 
 @Dao
 interface PostDao {
-
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getAllPosts(): Flow<List<PostEntity>>
 
@@ -49,6 +48,4 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity")
     suspend fun removeAll()
-
-
 }

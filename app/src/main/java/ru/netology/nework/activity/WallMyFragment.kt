@@ -30,7 +30,6 @@ import javax.inject.Inject
 class WallMyFragment : Fragment() {
     private val postViewModel: PostViewModel by activityViewModels()
     private val myWallViewModel: MyWallViewModel by activityViewModels()
-   // private val jobsViewModel: JobsViewModel by activityViewModels()
 
     @Inject
     lateinit var appAuth: AppAuth

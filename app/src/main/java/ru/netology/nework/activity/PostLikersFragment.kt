@@ -1,5 +1,7 @@
 package ru.netology.nework.activity
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,20 +33,20 @@ class PostLikersFragment : Fragment() {
     ): View {
 
         val binding = FragmentLikersPostBinding.inflate(inflater, container, false)
-        val post = requireArguments().getSerializable("postKey") as Post
         val toolbar = binding.toolbarLikersFull.toolbarLikers
 
         toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-//        val intent = Intent(activity, PostLikersFragment::class.java)
-//         val post = getParcelableExtra(intent, "postKey", Post::class.java)
+        val intent = Intent(activity, PostLikersFragment::class.java)
 
-//        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            intent.getParcelableExtra("postKey", Post::class.java)
-//        } else {
-//            intent.getParcelableExtra<Post>("postKey")
-//        }
+        val post = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("postKey", Post::class.java)
+            requireArguments().getSerializable("postKey", Post::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            requireArguments().getSerializable("postKey") as Post
+        }
 
         val adapter = PostLikersListAdapter()
         binding.likersList.adapter = adapter
@@ -52,7 +54,7 @@ class PostLikersFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 usersViewModel.data.observe(viewLifecycleOwner) {
-                    val likeOwnersIds = post.likeOwnerIds.orEmpty().toSet()
+                    val likeOwnersIds = post?.likeOwnerIds.orEmpty().toSet()
                     if (likeOwnersIds.isNotEmpty()) {
                         likeOwnersIds.forEach { likeOwnerId ->
                             val filterUsers =
@@ -66,10 +68,3 @@ class PostLikersFragment : Fragment() {
         return binding.root
     }
 }
-
-//fun <T : Serializable?> getSerializable(key: String, m_class: Class<T>): T {
-//    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-//       getSerializableExtra(key, m_class)!!
-//    else
-//        getSerializableExtra(key) as T
-//}

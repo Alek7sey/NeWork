@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nework.R
 import ru.netology.nework.adapter.ViewPagerAdapter
 import ru.netology.nework.auth.AppAuth
@@ -18,6 +19,7 @@ import ru.netology.nework.viewmodel.RegisterViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class ProfileMyFragment : Fragment(R.layout.fragment_my_profile) {
 
     @Inject
@@ -28,6 +30,8 @@ class ProfileMyFragment : Fragment(R.layout.fragment_my_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val binding = FragmentMyProfileBinding.bind(view)
+
+
 
 //        requireActivity().addMenuProvider(object : MenuProvider {
 //            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

@@ -7,17 +7,8 @@ import android.view.inputmethod.InputMethodManager
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.math.floor
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-
-fun clicksCount(count: Int): String = when (count) {
-    in 0..999 -> count.toString()
-    in 1000..1099 -> "1K"
-    in 1100..9999 -> (floor((count / 100).toDouble()) / 10).toString() + "K"
-    in 10_000..999_999 -> (count / 1000).toString() + "K"
-    else -> (floor((count / 100000).toDouble()) / 10).toString() + "M"
-}
 
 object AndroidUtils {
     fun hideKeyboard(view: View) {
@@ -53,17 +44,31 @@ object EventIdArg : ReadWriteProperty<Bundle, Long> {
     }
 }
 
-fun convertServerDateToLocalDate (serverDate : String): String? {
-    if (serverDate == null) {
-        return ""
+fun convertServerDateTimeToLocalDateTime (serverDateTime : String?): String? {
+    return if (serverDateTime == null) {
+        ""
     } else {
         val serverDateFormat = DateTimeFormatter.ISO_INSTANT
             .withLocale(Locale.getDefault())
             .withZone(ZoneId.systemDefault());
         val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-        val localDateTime = serverDateFormat.parse(serverDate)
+        val localDateTime = serverDateFormat.parse(serverDateTime)
 
-        return localDateFormat.format(localDateTime)
+        localDateFormat.format(localDateTime)
+    }
+}
+
+fun convertLocalDateToServerDate (localDate : String?): String? {
+    return if (localDate == null) {
+        ""
+    } else {
+        val serverDateFormat = DateTimeFormatter.ISO_DATE
+//            .withLocale(Locale.getDefault())
+//            .withZone(ZoneId.systemDefault());
+        val localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val serverDate = localDateFormat.parse(localDate.trim())
+
+        serverDateFormat.format(serverDate)
     }
 }
 

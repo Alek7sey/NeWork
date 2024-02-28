@@ -20,7 +20,6 @@ class UserWallRemoteMediator(
     private val dao: PostDao,
     private val remoteKey: UserWallRemoteKeyDao,
     private val appDb: AppDb,
-//    private val post: Post
 ) : RemoteMediator<Int, PostEntity>() {
 
     val post: Post? = null
@@ -56,7 +55,6 @@ class UserWallRemoteMediator(
                 when (loadType) {
                     LoadType.REFRESH -> {
                         if (remoteKey.isEmpty()) {
-                            //   postRemoteKeyDao.clear()
                             remoteKey.insert(
                                 listOf(
                                     UserWallRemoteKeyEntity(
@@ -98,9 +96,7 @@ class UserWallRemoteMediator(
                     }
                 }
                 dao.insert(body.map(PostEntity::fromDto))
-
             }
-
             return MediatorResult.Success(endOfPaginationReached = body.isEmpty())
         } catch (e: Exception) {
             return MediatorResult.Error(e)

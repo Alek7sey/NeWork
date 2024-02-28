@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_usersFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_usersFragment_to_profileMyFragment"
+            app:destination="@id/profileMyFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsPostFragment"

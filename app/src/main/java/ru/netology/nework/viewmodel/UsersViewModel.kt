@@ -19,21 +19,10 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class UsersViewModel @Inject constructor(
     private val repository: UsersRepository,
-//    appAuth: AppAuth,
 ) : ViewModel() {
 
     val data: LiveData<UserModel> =
         repository.data.map(::UserModel).asLiveData(Dispatchers.Default)
-
-//    val data: LiveData<UserModel> = appAuth.authFlow.flatMapLatest { token ->
-//        repository.data
-//            .map { users ->
-//                UserModel(users.map {
-//                    //   it.copy(ownedByMe = it.authorId == token?.id)
-//                    it
-//                }, users.isEmpty())
-//            }
-//    }.asLiveData(Dispatchers.Default)
 
     private val _state = MutableLiveData<UserModelState>()
     val state: LiveData<UserModelState>

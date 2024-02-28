@@ -12,7 +12,7 @@ import ru.netology.nework.R
 import ru.netology.nework.databinding.CardPostBinding
 import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.dto.Post
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertServerDateTimeToLocalDateTime
 
 interface OnInteractionListenerUserWall {
     fun onLike(post: Post) {}
@@ -43,7 +43,7 @@ class UserWallAdapter(
             binding.apply {
                 postAuthor.text = post.author
                 content.text = post.content
-                published.text = convertServerDateToLocalDate(post.published)
+                published.text = convertServerDateTimeToLocalDateTime(post.published)
 
                 likeBtn.isChecked = post.likedByMe
                 likeBtn.text = post.likeOwnerIds?.size.toString()

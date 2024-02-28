@@ -14,24 +14,33 @@ import ru.netology.nework.databinding.CardUserSelectedBinding
 import ru.netology.nework.dto.User
 
 class UsersSelectedAdapter : ListAdapter<User, UsersSelectedAdapter.UserSelectedViewHolder>(UserSelectedDiffCallback()) {
+
+    private val _selectedList = MutableLiveData<Int>()
+    val selectedList: LiveData<Int>
+        get() = _selectedList
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSelectedViewHolder {
         return UserSelectedViewHolder(
             CardUserSelectedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
-    private val _selectedList = MutableLiveData<Int>()
-    val selectedList: LiveData<Int>
-        get() = _selectedList
+    override fun setHasStableIds(hasStableIds: Boolean) {
+        super.setHasStableIds(true)
+    }
 
     override fun onBindViewHolder(holder: UserSelectedViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        holder.bind(getItem(position))
         holder.itemView.findViewById<CheckBox>(R.id.selectedUserCheckBox)
             .setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     _selectedList.value = getItemId(position).toInt()
                 }
             }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     class UserSelectedViewHolder(
@@ -49,6 +58,7 @@ class UsersSelectedAdapter : ListAdapter<User, UsersSelectedAdapter.UserSelected
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_error)
                     .into(binding.selectedUserAvatar)
+
             }
         }
     }
@@ -62,8 +72,6 @@ class UsersSelectedAdapter : ListAdapter<User, UsersSelectedAdapter.UserSelected
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem
     }
 }

@@ -47,20 +47,19 @@ class ApiModule {
             }
         })
         .addInterceptor { chain ->
+            appAuth.authFlow.value.token?.let { token ->
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", token)
+                    .addHeader("Api-Key", API_KEY)
+                    .build()
+                return@addInterceptor chain.proceed(newRequest)
+            }
+
             val request =
                 chain.request().newBuilder()
                     .addHeader("Api-Key", API_KEY)
                     .build()
             chain.proceed(request)
-        }
-        .addInterceptor { chain ->
-            appAuth.authFlow.value.token?.let {
-                val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", API_KEY)
-                    .build()
-                return@addInterceptor chain.proceed(newRequest)
-            }
-            chain.proceed(chain.request())
         }
         .build()
 

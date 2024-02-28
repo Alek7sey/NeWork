@@ -22,9 +22,9 @@ import javax.inject.Singleton
 @Module
 interface RepositoryModule {
 
-    @Singleton
     @Binds
-    fun bindsPostRepository(postRepositoryImpl: PostRepositoryImpl): PostRepository
+    @Singleton
+    fun bindPostRepository(postRepositoryImpl: PostRepositoryImpl): PostRepository
 
     @Binds
     @Singleton

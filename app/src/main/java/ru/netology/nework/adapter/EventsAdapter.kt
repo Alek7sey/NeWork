@@ -15,7 +15,7 @@ import ru.netology.nework.databinding.CardEventBinding
 import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.TypeStatus
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertServerDateTimeToLocalDateTime
 
 interface EventsOnInteractionListener {
     fun onLike(event: Event) {}
@@ -55,10 +55,10 @@ class EventsAdapter(
         fun bind(event: Event) {
             binding.apply {
                 eventAuthorName.text = event.author
-                eventPublished.text = convertServerDateToLocalDate(event.published)
+                eventPublished.text = convertServerDateTimeToLocalDateTime(event.published)
                 jobPosition.text = event.authorJob
                 eventType.text = event.type
-                eventData.text = convertServerDateToLocalDate(event.datetime)
+                eventData.text = convertServerDateTimeToLocalDateTime(event.datetime)
                 content.text = event.content
 
                 linkEvent.isVisible = !event.link.isNullOrBlank()

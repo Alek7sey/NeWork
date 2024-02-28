@@ -214,7 +214,6 @@ class EventsViewModel @Inject constructor(
     fun shareById(id: Long) {
         viewModelScope.launch {
             _eventState.value = EventModelState(refreshing = true)
-            //     repository.shareById(id)
         }
     }
 

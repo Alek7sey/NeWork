@@ -19,7 +19,6 @@ import javax.inject.Singleton
 class JobsRepositoryImpl @Inject constructor(
     private val jobDao: JobDao,
     private val apiService: JobApiService,
-//    userId: Long,
 ) : JobsRepository {
     override val dataMyJobs: Flow<List<Job>> =
         jobDao.getMyJobs().map(List<JobEntity>::toDto).flowOn(Dispatchers.Default)
@@ -92,21 +91,4 @@ class JobsRepositoryImpl @Inject constructor(
             throw UnknownError
         }
     }
-
-//    override suspend fun editJob(job: Job) {
-//        try {
-//            val response = apiService.editJob(job)
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.message())
-//            }
-//            val body = response.body() ?: throw ApiError(response.message())
-//            jobDao.insert(JobEntity.fromDto(body))
-//        } catch (e: AppError) {
-//            throw e
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//            throw UnknownError
-//        }
-//    }
 }

@@ -54,7 +54,7 @@ class UsersSelectedFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.saveChooseUsers -> {
                     postViewModel.saveMentionedIds(mentionedIds)
-                    postViewModel.save()
+//                    postViewModel.save()
                     findNavController().navigateUp()
                     true
                 }

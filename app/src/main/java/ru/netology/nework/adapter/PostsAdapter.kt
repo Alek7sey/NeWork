@@ -14,7 +14,7 @@ import ru.netology.nework.R
 import ru.netology.nework.databinding.CardPostBinding
 import ru.netology.nework.dto.AttachmentTypePost
 import ru.netology.nework.dto.Post
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertServerDateTimeToLocalDateTime
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -57,7 +57,7 @@ class PostsAdapter(
 
             binding.apply {
                 postAuthor.text = post.author
-                published.text = convertServerDateToLocalDate(post.published)
+                published.text = convertServerDateTimeToLocalDateTime(post.published)
                 content.text = post.content
                 jobPosition.text = post.authorJob
                 link.text = post.link

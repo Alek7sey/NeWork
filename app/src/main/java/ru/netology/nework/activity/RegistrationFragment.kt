@@ -45,6 +45,7 @@ class RegistrationFragment : Fragment() {
             if (userPassword != userPasswordConfirm) {
                 binding.passwordConfirmTextField.isHelperTextEnabled = true
             } else {
+                binding.passwordConfirmTextField.isHelperTextEnabled = false
                 if (media == null) {
                     viewModel.saveRegisteredUserWithoutAvatar(login, userPassword, userName)
                 } else {

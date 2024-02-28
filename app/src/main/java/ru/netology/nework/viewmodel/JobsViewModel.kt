@@ -16,7 +16,7 @@ import ru.netology.nework.repository.JobsRepository
 import ru.netology.nework.state.MyJobState
 import ru.netology.nework.state.UserJobState
 import ru.netology.nework.utils.SingleLiveEvent
-import ru.netology.nework.utils.convertServerDateToLocalDate
+import ru.netology.nework.utils.convertLocalDateToServerDate
 import javax.inject.Inject
 
 val emptyJob = Job(
@@ -137,13 +137,13 @@ class JobsViewModel @Inject constructor(
         val finish = dateFinish?.trim()
 
         edited.value =
-            convertServerDateToLocalDate(start)?.let { startDate ->
+            convertLocalDateToServerDate(start)?.let {
                 edited.value?.copy(
                     name = nameArg.trim(),
                     position = positionArg.trim(),
-                    link = link?.trim()?.takeIf { it.isNotBlank() },
-                    start = startDate,
-                    finish = finish?.let { convertServerDateToLocalDate(it) }
+                    link = link?.trim()?.takeIf { link -> link.isNotBlank() },
+                    start = it,
+                    finish = finish?.let { date -> convertLocalDateToServerDate(date) }
                 )
             }
 
