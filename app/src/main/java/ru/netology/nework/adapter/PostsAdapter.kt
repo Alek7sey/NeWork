@@ -59,16 +59,17 @@ class PostsAdapter(
                 postAuthor.text = post.author
                 published.text = convertServerDateTimeToLocalDateTime(post.published)
                 content.text = post.content
-                jobPosition.text = post.authorJob
+                jobPosition.text = post.authorJob ?: "Looking for a job"
                 link.text = post.link
                 link.isVisible = !post.link.isNullOrBlank()
 
                 likeBtn.isChecked = post.likedByMe
-                likeBtn.text = post.likeOwnerIds?.size.toString()
+                post.likes = post.likeOwnerIds?.size ?: 0
                 likeBtn.setOnClickListener {
                     likeBtn.isChecked = !likeBtn.isChecked
                     onInteractionListener.onLike(post)
                 }
+                likeBtn.text = post.likes.toString()
 
                 postMenu.isVisible// = post.ownedByMe
 

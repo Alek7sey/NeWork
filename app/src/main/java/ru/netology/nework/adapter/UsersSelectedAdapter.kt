@@ -2,9 +2,6 @@ package ru.netology.nework.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.CheckBox
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,43 +10,48 @@ import ru.netology.nework.R
 import ru.netology.nework.databinding.CardUserSelectedBinding
 import ru.netology.nework.dto.User
 
-class UsersSelectedAdapter : ListAdapter<User, UsersSelectedAdapter.UserSelectedViewHolder>(UserSelectedDiffCallback()) {
+interface OnInteractionListenerSelectedUsers {
+    fun selectUser(user: User)
+}
 
-    private val _selectedList = MutableLiveData<Int>()
-    val selectedList: LiveData<Int>
-        get() = _selectedList
+class UsersSelectedAdapter(
+    private val listener: OnInteractionListenerSelectedUsers,
+//    private val selectUser: Boolean,
+    private val selectedUser: List<Int>? = null
+) : ListAdapter<User, UsersSelectedAdapter.UserSelectedViewHolder>(UserSelectedDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSelectedViewHolder {
-        return UserSelectedViewHolder(
-            CardUserSelectedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = CardUserSelectedBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        return UserSelectedViewHolder(binding, listener)
     }
-
-    override fun setHasStableIds(hasStableIds: Boolean) {
-        super.setHasStableIds(true)
-    }
-
     override fun onBindViewHolder(holder: UserSelectedViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.findViewById<CheckBox>(R.id.selectedUserCheckBox)
-            .setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    _selectedList.value = getItemId(position).toInt()
-                }
-            }
+        val item = getItem(position) as User
+        holder.bind(
+            if (selectedUser?.firstOrNull { it.toLong() == item.id } == null)
+                item
+            else {
+                item.copy(selected = true)
+            })
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
 
     class UserSelectedViewHolder(
-        private val binding: CardUserSelectedBinding
+        private val binding: CardUserSelectedBinding,
+        private val listener: OnInteractionListenerSelectedUsers,
+//        private val selectUser: Boolean
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.apply {
                 selectedUserName.text = user.name
                 selectedUserLogin.text = user.login
+                selectedUserCheckBox.isChecked = user.selected
+                selectedUserCheckBox.setOnClickListener {
+                    listener.selectUser(user)
+                }
 
                 val urlAvatar = "${user.avatar}"
                 Glide.with(binding.selectedUserAvatar)
@@ -58,6 +60,7 @@ class UsersSelectedAdapter : ListAdapter<User, UsersSelectedAdapter.UserSelected
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .error(R.drawable.ic_error)
                     .into(binding.selectedUserAvatar)
+
 
             }
         }

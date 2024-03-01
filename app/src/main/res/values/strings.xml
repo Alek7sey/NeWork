@@ -115,4 +115,10 @@
     <string name="user_is_already_registered">User is already registered</string>
     <string name="incorrect_photo_format">Incorrect photo format</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="attach_must_not_exceed_15_mb">The attachment must not exceed 15 MB</string>
+    <string name="edit_text">edit text</string>
+    <string name="add_photo">Add photo</string>
+    <string name="load_file">Load file</string>
+    <string name="mentioned_users">mentioned users</string>
+    <string name="add_location">add location</string>
 </resources>

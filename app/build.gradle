@@ -28,14 +28,7 @@ android {
             properties.load(secrets.newDataInputStream())
         }
         buildConfigField "String", "API_KEY", properties.getProperty("API_KEY", "")
-
-        def properties2 = new Properties()
-        def maps = rootProject.file("maps.properties")
-        if (maps.exists()) {
-            properties2.load(maps.newDataInputStream())
-        }
-        buildConfigField "String", "MAPS_API_KEY", properties2.getProperty("MAPS_API_KEY", "")
-
+        buildConfigField "String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY", "")
     }
 
     buildTypes {

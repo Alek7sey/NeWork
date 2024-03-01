@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,15 +11,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_16">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/eventBottomAppBar"
+        app:layout_constraintTop_toBottomOf="@id/toolbarAddEvent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="?actionBarSize"
-            android:paddingBottom="?actionBarSize">
+            android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editText"
@@ -27,6 +26,8 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:gravity="start|top"
+                android:hint="@string/edit_text"
+                android:autofillHints="@string/edit_text"
                 android:inputType="textMultiLine"
                 tools:text="@tools:sample/lorem[50]" />
 
@@ -35,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_16"
+                android:autofillHints="name"
                 android:text="@string/event_date"
                 android:textColor="@color/color_header"
                 android:textSize="16sp"
@@ -42,11 +44,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/eventDateBtn"
-                android:layout_width="wrap_content"
                 style="@style/Widget.AppTheme.MenuButton"
-                android:textColor="@color/color_header"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dd_mm_yyyy_hh_mm" />
+                android:text="@string/dd_mm_yyyy_hh_mm"
+                android:textColor="@color/color_header" />
 
             <TextView
                 android:id="@+id/eventTypeText"
@@ -59,11 +61,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/eventDateTypeBtn"
-                android:layout_width="wrap_content"
-                android:textColor="@color/color_header"
                 style="@style/Widget.AppTheme.MenuButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/online" />
+                android:text="@string/online"
+                android:textColor="@color/color_header" />
 
             <FrameLayout
                 android:id="@+id/photoContainer"
@@ -89,8 +91,32 @@
                     android:text="@string/remove"
                     android:textAllCaps="false"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.50" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.yandex.mapkit.mapview.MapView
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
+
+                <Button
+                    android:id="@+id/removeLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="25dp"
+                    android:text="@string/remove"
+                    android:textAllCaps="false"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.50" />
 
             </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 
@@ -100,19 +126,22 @@
         android:layout_height="?actionBarSize"
         android:layout_gravity="bottom"
         android:background="@color/color_bottom_nav"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
             android:id="@+id/addPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/add_photo"
             android:padding="@dimen/margin_16"
             app:srcCompat="@drawable/ic_photo_camera" />
 
         <ImageView
-            android:id="@+id/loadPhoto"
+            android:id="@+id/loadFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/load_file"
             android:padding="@dimen/margin_16"
             app:srcCompat="@drawable/ic_attach_file" />
 
@@ -120,6 +149,7 @@
             android:id="@+id/peopleBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/mentioned_users"
             android:padding="@dimen/margin_16"
             app:srcCompat="@drawable/ic_people" />
 
@@ -127,6 +157,7 @@
             android:id="@+id/addLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/add_location"
             android:padding="16dp"
             app:srcCompat="@drawable/ic_location_pin" />
     </LinearLayout>
@@ -137,16 +168,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/margin_16"
-        android:layout_marginBottom="@dimen/common_spacing_10"
         android:backgroundTint="@color/color_fab"
         android:contentDescription="@string/add_date"
         app:borderWidth="0dp"
         app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@id/eventBottomAppBar"
+        app:layout_constraintEnd_toEndOf="@id/eventBottomAppBar"
+        app:layout_constraintTop_toTopOf="@id/eventBottomAppBar"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.NeWork.Button.20"
         app:srcCompat="@drawable/ic_plus_math" />
 
-    <!--    <include-->
-    <!--        android:id="@+id/bottom_sheet"-->
-    <!--        layout="@layout/bottom_sheet_dialog"-->
-    <!--        android:visibility="invisible"/>-->
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

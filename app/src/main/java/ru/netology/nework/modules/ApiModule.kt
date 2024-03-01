@@ -18,7 +18,6 @@ import ru.netology.nework.api.PostApiService
 import ru.netology.nework.api.UserApiService
 import ru.netology.nework.api.UserWallApiService
 import ru.netology.nework.auth.AppAuth
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -36,9 +35,10 @@ class ApiModule {
     @Singleton
     @Provides
     fun provideOkHttp(
+        logging: HttpLoggingInterceptor,
         appAuth: AppAuth,
     ): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
+        .addInterceptor(logging)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -55,17 +55,16 @@ class ApiModule {
                 return@addInterceptor chain.proceed(newRequest)
             }
 
-            val request =
-                chain.request().newBuilder()
-                    .addHeader("Api-Key", API_KEY)
-                    .build()
+            val request = chain.request().newBuilder()
+                .addHeader("Api-Key", API_KEY)
+                .build()
             chain.proceed(request)
         }
         .build()
 
     @Singleton
     @Provides
-    fun provideRetrofit(okhttp: OkHttpClient) =
+    fun provideRetrofit(okhttp: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

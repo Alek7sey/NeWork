@@ -115,4 +115,10 @@
     <string name="user_is_already_registered">Юзер уже зарегистрирован</string>
     <string name="incorrect_photo_format">Неправильный формат фото</string>
     <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="attach_must_not_exceed_15_mb">Вложение не должно превышать 15 МБ</string>
+    <string name="edit_text">редактируемый текст</string>
+    <string name="add_photo">Добавить фото</string>
+    <string name="load_file">Загрузить файл</string>
+    <string name="mentioned_users">Упомянутые юзеры</string>
+    <string name="add_location">Добавить локацию</string>
 </resources>

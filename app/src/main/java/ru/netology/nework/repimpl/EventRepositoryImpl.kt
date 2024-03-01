@@ -15,7 +15,6 @@ import ru.netology.nework.api.EventsApiService
 import ru.netology.nework.dao.EventDao
 import ru.netology.nework.dao.EventRemoteKeyDao
 import ru.netology.nework.db.AppDb
-import ru.netology.nework.dto.AttachmentTypeEvent
 import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.Media
 import ru.netology.nework.entity.AttachmentEventEmbeddable
@@ -26,6 +25,7 @@ import ru.netology.nework.error.AppError
 import ru.netology.nework.error.NetworkError
 import ru.netology.nework.error.UnknownError
 import ru.netology.nework.mediator.EventRemoteMediator
+import ru.netology.nework.model.AttachmentModelEvent
 import ru.netology.nework.repository.EventsRepository
 import java.io.File
 import java.io.IOException
@@ -141,17 +141,10 @@ class EventRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveWithAttachment(event: Event, file: File) {
+    override suspend fun saveWithAttachment(event: Event, attachmentModel: AttachmentModelEvent) {
         try {
-            val media = upload(file)
-//            val response = apiService.saveEvent(
-//                event.copy(
-//                    attachment = AttachmentEventEmbeddable(url = media.id, type = AttachmentTypeEvent.IMAGE)
-//                )
-//            )
-//            val body = response.body() ?: throw RuntimeException("body is null")
-//            eventDao.insert(EventEntity.fromDto(body))
-            val eventWithAttachment = event.copy(attachment = AttachmentEventEmbeddable(url = media.id, type = AttachmentTypeEvent.IMAGE))
+            val media = upload(attachmentModel.file)
+            val eventWithAttachment = event.copy(attachment = AttachmentEventEmbeddable(url = media.id, type = attachmentModel.attachmentTypeEvent))
             save(eventWithAttachment)
         } catch (e: AppError) {
             throw e

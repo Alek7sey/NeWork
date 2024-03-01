@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.yandex.mapkit.geometry.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,8 +19,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dto.Event
+import ru.netology.nework.entity.CoordinatesEventEmbeddable
+import ru.netology.nework.model.AttachmentModelEvent
 import ru.netology.nework.model.EventModel
-import ru.netology.nework.model.PhotoModel
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
@@ -86,9 +88,9 @@ class EventsViewModel @Inject constructor(
     val eventEdited: SingleLiveEvent<Unit>
         get() = _eventEdited
 
-    private val _photoState = MutableLiveData<PhotoModel?>()
-    val photoState: LiveData<PhotoModel?>
-        get() = _photoState
+    private val _attachState = MutableLiveData<AttachmentModelEvent?>()
+    val attachState: LiveData<AttachmentModelEvent?>
+        get() = _attachState
 
     val edited = MutableLiveData(emptyEvent)
 
@@ -128,12 +130,12 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-    fun setPhoto(photoModel: PhotoModel) {
-        _photoState.value = photoModel
+    fun setAttachment(attachModel: AttachmentModelEvent) {
+        _attachState.value = attachModel
     }
 
-    fun clearPhoto() {
-        _photoState.value = null
+    fun clearAttachment() {
+        _attachState.value = null
     }
 
     fun likeById(event: Event) {
@@ -164,8 +166,8 @@ class EventsViewModel @Inject constructor(
         edited.value?.let { event ->
             viewModelScope.launch {
                 try {
-                    _photoState.value?.let {
-                        repository.saveWithAttachment(event, it.file)
+                    _attachState.value?.let {
+                        repository.saveWithAttachment(event, it)
                     } ?: repository.save(event)
                     eventCreated.postValue(Unit)
                     clear()
@@ -176,6 +178,7 @@ class EventsViewModel @Inject constructor(
             }
         }
     }
+
 
     fun edit(event: Event) {
         edited.value = event
@@ -216,6 +219,28 @@ class EventsViewModel @Inject constructor(
             _eventState.value = EventModelState(refreshing = true)
         }
     }
+
+    fun setCoord(point: Point?) {
+        if (point != null) {
+            edited.value = edited.value?.copy(
+                coordinates = CoordinatesEventEmbeddable(point.latitude.toString(), point.longitude.toString())
+            )
+        }
+    }
+
+    fun removeCoords() {
+        edited.value = edited.value?.copy(
+            coordinates = null
+        )
+    }
+
+    fun saveMentionedIds(list: List<Int>) {
+        if (edited.value?.participantsIds == list) {
+            return
+        }
+        edited.value = edited.value?.copy(participantsIds = list)
+    }
+
 
     fun clear() {
         edited.value = emptyEvent

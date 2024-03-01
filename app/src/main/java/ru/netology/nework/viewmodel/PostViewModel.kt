@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.yandex.mapkit.geometry.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.dto.Post
-import ru.netology.nework.model.PhotoModel
+import ru.netology.nework.entity.CoordinatesEmbeddable
+import ru.netology.nework.model.AttachmentModelPost
 import ru.netology.nework.model.PostModel
 import ru.netology.nework.repository.PostRepository
 import ru.netology.nework.state.FeedModelState
@@ -39,7 +41,8 @@ private val empty = Post(
     likeOwnerIds = null,
     likedByMe = false,
     attachment = null,
-    users = emptyMap()
+    users = emptyMap(),
+    likes = 0
 )
 
 
@@ -56,7 +59,7 @@ class PostViewModel @Inject constructor(
             repository.data.map { posts ->
                 posts.map { post ->
                     if (post is Post) {
-                            post.copy(ownedByMe = post.authorId == token.id)
+                        post.copy(ownedByMe = post.authorId == token.id)
                     } else {
                         post
                     }
@@ -69,9 +72,9 @@ class PostViewModel @Inject constructor(
     val feedState: LiveData<FeedModelState>
         get() = _feedState
 
-    private val _photoState = MutableLiveData<PhotoModel?>()
-    val photoState: LiveData<PhotoModel?>
-        get() = _photoState
+    private val _attachState = MutableLiveData<AttachmentModelPost?>()
+    val attachState: LiveData<AttachmentModelPost?>
+        get() = _attachState
 
 
     val edited = MutableLiveData(empty)
@@ -99,12 +102,12 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun setPhoto(photoModel: PhotoModel) {
-        _photoState.value = photoModel
+    fun setAttachment(attachModel: AttachmentModelPost) {
+        _attachState.value = attachModel
     }
 
-    fun clearPhoto() {
-        _photoState.value = null
+    fun clearAttachment() {
+        _attachState.value = null
     }
 
     fun likeById(post: Post) {
@@ -130,10 +133,11 @@ class PostViewModel @Inject constructor(
         edited.value?.let { post ->
             viewModelScope.launch {
                 try {
-                    _photoState.value?.let {
-                        repository.saveWithAttachment(post, it.file)
+                    _attachState.value?.let {
+                        repository.saveWithAttachment(post, attachmentModel = it)
                     } ?: repository.save(post)
                     _postCreated.value = Unit
+                    _attachState.value = null
                     clear()
                     _feedState.value = FeedModelState()
                 } catch (e: Exception) {
@@ -170,6 +174,20 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch {
             _feedState.value = FeedModelState(refreshing = true)
         }
+    }
+
+    fun setCoord(point: Point?) {
+        if (point != null) {
+            edited.value = edited.value?.copy(
+                coordinates = CoordinatesEmbeddable(point.latitude.toString(), point.longitude.toString())
+            )
+        }
+    }
+
+    fun removeCoords() {
+        edited.value = edited.value?.copy(
+            coordinates = null
+        )
     }
 
     fun clear() {

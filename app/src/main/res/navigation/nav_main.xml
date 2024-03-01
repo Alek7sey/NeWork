@@ -126,6 +126,9 @@
         <action
             android:id="@+id/action_postAddFragment_to_usersSelectedFragment"
             app:destination="@id/usersSelectedFragment" />
+        <action
+            android:id="@+id/action_postAddFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventImageFragment"
@@ -140,6 +143,9 @@
         <action
             android:id="@+id/action_eventAddFragment_to_usersSelectedFragment"
             app:destination="@id/usersSelectedFragment" />
+        <action
+            android:id="@+id/action_eventAddFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventDetailsFragment"
@@ -218,4 +224,9 @@
         android:name="ru.netology.nework.activity.DateInputFragment"
         android:label="DateInputFragment"
         tools:layout="@layout/card_dates"/>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="ru.netology.nework.activity.MapsFragment"
+        android:label="MapsFragment"
+        tools:layout="@layout/fragment_maps"/>
 </navigation>

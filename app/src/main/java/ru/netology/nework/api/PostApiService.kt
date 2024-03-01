@@ -28,9 +28,6 @@ interface PostApiService {
     @GET("posts/{id}/after")
     suspend fun getAfter(@Path("id") id: Long, @Query("count") count: Int): Response<List<Post>>
 
-//    @PATCH("posts")
-//    suspend fun editPost(@Body post: Post): Response<Post>
-
     @GET("posts/{id}")
     suspend fun getPost(@Path("id") id: Long): Response<Post>
 

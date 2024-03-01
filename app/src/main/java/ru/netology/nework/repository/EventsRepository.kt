@@ -3,7 +3,7 @@ package ru.netology.nework.repository
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nework.dto.Event
-import java.io.File
+import ru.netology.nework.model.AttachmentModelEvent
 
 interface EventsRepository {
     val data: Flow<PagingData<Event>>
@@ -12,7 +12,7 @@ interface EventsRepository {
     suspend fun removeById(id: Long)
     suspend fun save(event: Event)
     suspend fun edit(event: Event)
-    suspend fun saveWithAttachment(event: Event, file: File)
+    suspend fun saveWithAttachment(event: Event, attachmentModel: AttachmentModelEvent)
     suspend fun likeById(event: Event)
     suspend fun participatedById(event: Event)
 }
