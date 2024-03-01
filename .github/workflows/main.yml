@@ -22,10 +22,10 @@ jobs:
       - name: Decode nework properties
         env:
           API_KEY: ${{ secrets.API_KEY }}
-          MAPKIT_API_KEY: ${{ secrets.MAPKIT_API_KEY }}
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
         run: |
           echo "API_KEY=${API_KEY}" > secrets.properties
-          echo "MAPKIT_API_KEY=${MAPKIT_API_KEY}" >> secrets.properties
+          echo "MAPS_API_KEY=${MAPS_API_KEY}" >> secrets.properties
       - name: Build
         run: |
           chmod +x ./gradlew
