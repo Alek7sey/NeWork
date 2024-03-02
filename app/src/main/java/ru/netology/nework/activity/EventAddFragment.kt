@@ -84,7 +84,7 @@ class EventAddFragment : Fragment() {
 
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.save -> {
+                R.id.saveEvent -> {
                     val content = binding.editText.text.toString()
                     val datetime = binding.eventDateBtn.text.toString()
                     val typeEvent = binding.eventDateTypeBtn.text.toString()
@@ -92,6 +92,8 @@ class EventAddFragment : Fragment() {
                         eventsViewModel.changeContent(content, datetime, typeEvent)
                         eventsViewModel.save()
                         AndroidUtils.hideKeyboard(requireView())
+                        eventsViewModel.clearAttachment()
+                        eventsViewModel.clear()
                     } else {
                         eventsViewModel.clear()
                         binding.editText.clearFocus()

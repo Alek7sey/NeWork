@@ -13,7 +13,7 @@ import ru.netology.nework.entity.PostEntity
 import ru.netology.nework.entity.PostRemoteKeyEntity
 import ru.netology.nework.error.ApiError
 
-@OptIn(ExperimentalPagingApi::class)
+@ExperimentalPagingApi
 class PostRemoteMediator(
     private val apiService: PostApiService,
     private val postDao: PostDao,
@@ -54,7 +54,6 @@ class PostRemoteMediator(
                 when (loadType) {
                     LoadType.REFRESH -> {
                         if (postRemoteKeyDao.isEmpty()) {
-                         //   postRemoteKeyDao.clear()
                             postRemoteKeyDao.insert(
                                 listOf(
                                     PostRemoteKeyEntity(

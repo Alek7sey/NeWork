@@ -63,8 +63,6 @@ fun convertLocalDateToServerDate (localDate : String?): String? {
         ""
     } else {
         val serverDateFormat = DateTimeFormatter.ISO_DATE
-//            .withLocale(Locale.getDefault())
-//            .withZone(ZoneId.systemDefault());
         val localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val serverDate = localDateFormat.parse(localDate.trim())
 

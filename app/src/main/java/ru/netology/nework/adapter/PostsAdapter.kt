@@ -71,8 +71,6 @@ class PostsAdapter(
                 }
                 likeBtn.text = post.likes.toString()
 
-                postMenu.isVisible// = post.ownedByMe
-
                 binding.imageAttachment.setOnClickListener {
                     when (post.attachment?.type) {
                         AttachmentTypePost.IMAGE -> onInteractionListener.onImage(post)
@@ -127,7 +125,7 @@ class PostsAdapter(
                     }.show()
                 }
 
-             //  postMenu.isVisible = post.ownedByMe
+                postMenu.isVisible = post.ownedByMe
 
                 shareBtn.setOnClickListener { onInteractionListener.onShare(post) }
                 link.setOnClickListener { onInteractionListener.followTheLink(post) }
@@ -148,5 +146,5 @@ class PostsAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
-        }
+    }
 }

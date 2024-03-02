@@ -99,9 +99,6 @@ class EventsAdapter(
                     imageAttachment.visibility = View.GONE
                 }
 
-//                iconPlay.isVisible =
-//                    !event.attachment?.url.isNullOrBlank() && (event.attachment?.type?.name.toString() == AttachmentTypePost.AUDIO.toString())
-
                 when (event.attachment?.type) {
                     AttachmentTypeEvent.AUDIO -> iconPlay.isVisible = true
                     else -> {
@@ -142,7 +139,7 @@ class EventsAdapter(
                     }.show()
                 }
 
-               // eventMenu.isVisible = event.ownedByMe
+                eventMenu.isVisible = event.ownedByMe
 
                 linkEvent.setOnClickListener { listener.followTheLink(event) }
                 likeShortBtn.setOnClickListener { listener.onLike(event) }

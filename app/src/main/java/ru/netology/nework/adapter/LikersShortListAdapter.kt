@@ -11,7 +11,6 @@ import ru.netology.nework.databinding.CardImageBinding
 import ru.netology.nework.dto.User
 
 class LikersShortListAdapter : ListAdapter<User, LikersShortListAdapter.LikersShortListViewHolder>(LikersShortListDiffCallBack()) {
-    //class LikersShortListAdapter(data: List<User>) : BaseQuickAdapter<User, RecyclerView.ViewHolder>(data) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikersShortListViewHolder {
         return LikersShortListViewHolder(CardImageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -33,19 +32,6 @@ class LikersShortListAdapter : ListAdapter<User, LikersShortListAdapter.LikersSh
                     .into(binding.previewImage)
             }
         }
-//        fun bind(post: Post) {
-//            binding.apply {
-//                post.users.forEach { user ->
-//                    val url = user.value.avatar.orEmpty()
-//                    Glide.with(likerImagePreview)
-//                        .load(url)
-//                        .circleCrop()
-//                        .placeholder(R.drawable.ic_launcher_foreground)
-//                        .error(R.drawable.ic_error)
-//                        .into(binding.likerImagePreview)
-//                }
-//            }
-//        }
     }
 }
 

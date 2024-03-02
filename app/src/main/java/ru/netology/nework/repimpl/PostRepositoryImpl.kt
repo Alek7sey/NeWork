@@ -87,13 +87,11 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun save(post: Post) {
         try {
-//            postDao.insert(PostEntity.fromDto(post))
             val response = apiService.savePost(post)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
             val body = response.body() ?: throw ApiError(response.message())
- //           postDao.removeById(post.id)
             postDao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError

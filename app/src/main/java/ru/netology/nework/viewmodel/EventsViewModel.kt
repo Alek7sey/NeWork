@@ -25,6 +25,7 @@ import ru.netology.nework.model.EventModel
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -37,8 +38,8 @@ private val emptyEvent = Event(
     authorJob = "",
     authorAvatar = null,
     content = "",
-    datetime = "",
-    published = "",
+    datetime = OffsetDateTime.now().toString(),
+    published = OffsetDateTime.now().toString(),
     coordinates = null,
     type = "",
     likeOwnerIds = null,
@@ -48,7 +49,8 @@ private val emptyEvent = Event(
     participatedByMe = false,
     attachment = null,
     link = "",
-    users = emptyMap()
+    users = emptyMap(),
+    ownedByMe = false
 )
 
 @HiltViewModel
@@ -67,7 +69,6 @@ class EventsViewModel @Inject constructor(
                 events.map { event ->
                     if (event is Event) {
                         event.copy(ownedByMe = event.authorId == token.id)
-                       // event
                     } else {
                         event
                     }

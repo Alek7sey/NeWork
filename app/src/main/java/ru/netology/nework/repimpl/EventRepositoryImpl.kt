@@ -76,13 +76,13 @@ class EventRepositoryImpl @Inject constructor(
         val event = eventDao.searchEvent(id)
         try {
             eventDao.removeById(id)
-//            val response = apiService.deleteEvent(id)
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.message())
-//            }
-//        } catch (e: IOException) {
-//            eventDao.insert(event)
-//            throw NetworkError
+            val response = apiService.deleteEvent(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.message())
+            }
+        } catch (e: IOException) {
+            eventDao.insert(event)
+            throw NetworkError
         } catch (e: Exception) {
             eventDao.insert(event)
             throw UnknownError
@@ -91,13 +91,11 @@ class EventRepositoryImpl @Inject constructor(
 
     override suspend fun save(event: Event) {
         try {
-            eventDao.insert(EventEntity.fromDto(event))
             val response = apiService.saveEvent(event)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
             val body = response.body() ?: throw ApiError(response.message())
-            eventDao.removeById(event.id)
             eventDao.insert(EventEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError

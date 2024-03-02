@@ -1,5 +1,6 @@
 package ru.netology.nework.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -39,6 +41,7 @@ class EventsFeedFragment : Fragment() {
     private val viewModel: EventsViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by activityViewModels()
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -182,9 +185,23 @@ class EventsFeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            //       if (appAuth.authFlow.value != null) {
-            findNavController().navigate(R.id.action_eventsFeedFragment_to_eventAddFragment)
-            //      }
+            if (appAuth.authFlow.value.token != null) {
+                findNavController().navigate(R.id.action_eventsFeedFragment_to_eventAddFragment)
+            } else {
+                context?.let { it1 ->
+                    MaterialAlertDialogBuilder(it1)
+                        .setTitle(resources.getString(R.string.fab_click_message))
+                        .setNegativeButton(resources.getString(R.string.login)) { dialog, _ ->
+                            dialog.dismiss()
+                            findNavController().navigate(R.id.action_eventsFeedFragment_to_loginFragment)
+                        }
+                        .setPositiveButton(resources.getString(R.string.registration)) { dialog, _ ->
+                            dialog.dismiss()
+                            findNavController().navigate(R.id.action_eventsFeedFragment_to_registrationFragment)
+                        }
+                        .show()
+                }
+            }
         }
 
         return binding.root

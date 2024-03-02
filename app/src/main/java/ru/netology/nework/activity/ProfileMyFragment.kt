@@ -31,34 +31,6 @@ class ProfileMyFragment : Fragment(R.layout.fragment_my_profile) {
 
         val binding = FragmentMyProfileBinding.bind(view)
 
-
-
-//        requireActivity().addMenuProvider(object : MenuProvider {
-//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//                if (appAuth.authFlow.value.token != null) {
-//                    menuInflater.inflate(R.menu.menu_my_profile, menu)
-//                } else {
-//                    menuInflater.inflate(R.menu.menu_my_profile_auth, menu)
-//                }
-//            }
-//
-//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
-//                when (menuItem.itemId) {
-//                    R.id.loginMyProfile -> {
-//                               findNavController().navigate(R.id.action_profileMyFragment_to_loginFragment)
-//                        true
-//
-//                    }
-//
-//                    R.id.logoutMyProfile -> {
-//                        appAuth.clearAuth()
-//                        true
-//                    }
-//
-//                    else -> false
-//                }
-//        }, viewLifecycleOwner)
-
         val toolbar = binding.toolbarMyProfile.toolbarMenuMyProfile
 
         toolbar.setOnMenuItemClickListener { menuItem ->

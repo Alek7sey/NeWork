@@ -25,7 +25,6 @@ class UsersAdapter(
     }
 
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
-       // getItem(position)?.let { holder.bind(it) }
         val user= getItem(position)
         holder.bind(user)
     }

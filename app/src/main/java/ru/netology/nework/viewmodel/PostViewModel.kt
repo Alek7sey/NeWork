@@ -24,6 +24,7 @@ import ru.netology.nework.model.PostModel
 import ru.netology.nework.repository.PostRepository
 import ru.netology.nework.state.FeedModelState
 import ru.netology.nework.utils.SingleLiveEvent
+import java.time.OffsetDateTime
 import javax.inject.Inject
 
 private val empty = Post(
@@ -33,7 +34,7 @@ private val empty = Post(
     authorAvatar = null,
     authorJob = null,
     content = "",
-    published = "",
+    published = OffsetDateTime.now().toString(),
     coordinates = null,
     link = null,
     mentionIds = null,

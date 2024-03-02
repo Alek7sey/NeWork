@@ -53,7 +53,6 @@ class MyWallRemoteMediator(
                 when (loadType) {
                     LoadType.REFRESH -> {
                         if (remoteKey.isEmpty()) {
-                            //   postRemoteKeyDao.clear()
                             remoteKey.insert(
                                 listOf(
                                     MyWallRemoteKeyEntity(

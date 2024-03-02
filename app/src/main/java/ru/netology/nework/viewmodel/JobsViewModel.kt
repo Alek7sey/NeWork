@@ -120,9 +120,6 @@ class JobsViewModel @Inject constructor(
         edited.value = emptyJob
     }
 
-    //  private val serverDateFormat = DateTimeFormatter.ISO_DATE
-    //  private val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
     fun changeContent(
         nameArg: String,
         positionArg: String,

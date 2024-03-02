@@ -97,9 +97,10 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:clickable="true"
-                android:focusable="true"
-                android:visibility="gone"
                 android:contentDescription="@string/imageAttachment"
+                android:focusable="true"
+                android:maxHeight="250dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/post_video" />
 
             <ImageButton
@@ -107,8 +108,8 @@
                 android:layout_width="@dimen/icon_size"
                 android:layout_height="@dimen/icon_size"
                 android:layout_gravity="center"
-                android:visibility="gone"
                 android:contentDescription="@string/icon_play"
+                android:visibility="gone"
                 app:srcCompat="@drawable/ic_play_circle_filled" />
 
         </FrameLayout>

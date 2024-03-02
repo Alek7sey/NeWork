@@ -10,7 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="top"
         android:background="@color/background_of_the_post"
-        app:menu="@menu/toolbar_new_post"
+        app:menu="@menu/toolbar_new_event"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:title="@string/new_event"
         app:titleTextColor="@color/color_header" />

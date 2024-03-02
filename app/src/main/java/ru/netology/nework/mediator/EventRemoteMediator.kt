@@ -13,7 +13,7 @@ import ru.netology.nework.entity.EventEntity
 import ru.netology.nework.entity.EventRemoteKeyEntity
 import ru.netology.nework.error.ApiError
 
-@OptIn(ExperimentalPagingApi::class)
+@ExperimentalPagingApi
 class EventRemoteMediator(
     private val apiService: EventsApiService,
     private val eventDao: EventDao,
@@ -54,7 +54,6 @@ class EventRemoteMediator(
                 when (loadType) {
                     LoadType.REFRESH -> {
                         if (eventRemoteKeyDao.isEmpty()) {
-                            //   postRemoteKeyDao.clear()
                             eventRemoteKeyDao.insert(
                                 listOf(
                                     EventRemoteKeyEntity(
