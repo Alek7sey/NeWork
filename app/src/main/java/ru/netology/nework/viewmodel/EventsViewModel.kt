@@ -188,7 +188,7 @@ class EventsViewModel @Inject constructor(
     private val localDateFormat: DateTimeFormatter = DateTimeFormatter
         .ofPattern("dd.MM.yyyy HH:mm") //:ss.SSS
         .withLocale(Locale.getDefault())
-        .withZone(ZoneId.systemDefault());
+        .withZone(ZoneId.systemDefault())
 
     fun changeContent(content: String, datetime: String, eventType: String) {
         if (edited.value?.content != content.trim()) {

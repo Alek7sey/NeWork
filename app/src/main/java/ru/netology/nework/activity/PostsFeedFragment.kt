@@ -174,7 +174,7 @@ class PostsFeedFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                appAuth.authFlow.collect() {
+                appAuth.authFlow.collect {
                     adapter.refresh()
                 }
             }

@@ -58,7 +58,7 @@ class ProfileUserFragment : Fragment(R.layout.fragment_user_profile) {
             }
         })
 
-        val userId = arguments?.let { it.userId }
+        val userId = arguments?.userId
 
         usersViewModel.data.observe(viewLifecycleOwner) { userModel ->
             userModel.users.find { it.id == userId }.let { user ->

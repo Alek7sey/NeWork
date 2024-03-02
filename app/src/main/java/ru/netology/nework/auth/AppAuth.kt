@@ -32,7 +32,7 @@ class AppAuth @Inject constructor(
 
         if (token == null || id == 0L) {
             _authFlow = MutableStateFlow(AuthState())
-            prefs.edit() {
+            prefs.edit {
                 clear()
                 apply()
             }

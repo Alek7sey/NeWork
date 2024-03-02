@@ -49,7 +49,7 @@ class EventDetailsFragment : Fragment() {
         val toolbar = binding.toolbarEventDetails.toolbarEvent
         mapView = binding.cardEventDetails.eventMapView
 
-        val eventIdArg = arguments?.let { it.eventIdArg }
+        val eventIdArg = arguments?.eventIdArg
 
         viewModel.eventDetailsData.observe(viewLifecycleOwner) { eventModel ->
             eventModel.eventsList.map { eventIdArg?.let { eventId -> it.copy(id = eventId) } }

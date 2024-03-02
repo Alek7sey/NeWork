@@ -50,7 +50,7 @@ fun convertServerDateTimeToLocalDateTime (serverDateTime : String?): String? {
     } else {
         val serverDateFormat = DateTimeFormatter.ISO_INSTANT
             .withLocale(Locale.getDefault())
-            .withZone(ZoneId.systemDefault());
+            .withZone(ZoneId.systemDefault())
         val localDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
         val localDateTime = serverDateFormat.parse(serverDateTime)
 

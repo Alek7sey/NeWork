@@ -8,5 +8,6 @@
         android:id="@+id/previewImage"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        app:srcCompat="@drawable/ic_account_circle" />
+        app:srcCompat="@drawable/ic_account_circle"
+        android:contentDescription="@string/avatar" />
 </com.google.android.material.card.MaterialCardView>

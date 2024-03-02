@@ -24,8 +24,8 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
         run: |
-          echo "API_KEY=${API_KEY}" > secrets.properties
-          echo "MAPS_API_KEY=${MAPS_API_KEY}" >> secrets.properties
+          echo $API_KEY > secrets.properties
+          echo $MAPS_API_KEY >> secrets.properties
       - name: Build
         run: |
           chmod +x ./gradlew

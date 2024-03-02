@@ -29,6 +29,7 @@
         <ImageView
             android:id="@+id/registerProfilePhoto"
             android:layout_width="match_parent"
+            android:contentDescription="@string/photo"
             android:layout_height="250dp" />
 
         <Button
@@ -56,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_16"
+            android:contentDescription="@string/photo_camera"
             app:srcCompat="@drawable/ic_photo_camera" />
 
         <ImageView
@@ -63,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin_16"
+            android:contentDescription="@string/load_file"
             app:srcCompat="@drawable/ic_attach_file" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
