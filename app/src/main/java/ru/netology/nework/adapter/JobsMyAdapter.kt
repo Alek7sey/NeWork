@@ -11,6 +11,7 @@ import ru.netology.nework.dto.Job
 
 interface OnInteractionListenerJobsMy {
     fun followTheLink(job: Job) {}
+    fun deleteJob(job: Job) {}
 }
 
 class JobsMyAdapter(
@@ -48,6 +49,10 @@ class JobsMyAdapter(
 
                 binding.jobLink.setOnClickListener {
                     listener.followTheLink(job)
+                }
+
+                binding.deleteJob.setOnClickListener {
+                    listener.deleteJob(job)
                 }
             }
         }

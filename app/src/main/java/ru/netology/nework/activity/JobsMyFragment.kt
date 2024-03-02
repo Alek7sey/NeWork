@@ -34,6 +34,10 @@ class JobsMyFragment: Fragment() {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(job.link))
                 startActivity(intent)
             }
+
+            override fun deleteJob(job: Job) {
+                viewModel.removeJob(job.id)
+            }
         })
 
         binding.myJobsList.adapter = adapter
@@ -64,6 +68,7 @@ class JobsMyFragment: Fragment() {
                 }.show()
             }
         }
+
 
         return binding.root
     }

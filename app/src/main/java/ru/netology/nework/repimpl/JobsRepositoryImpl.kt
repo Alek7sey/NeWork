@@ -80,14 +80,17 @@ class JobsRepositoryImpl @Inject constructor(
             jobDao.insert(JobEntity.fromDto(job))
             val response = apiService.saveJob(job)
             if (!response.isSuccessful) {
+                jobDao.removeJob(job.id)
                 throw ApiError(response.message())
             }
             val body = response.body() ?: throw ApiError(response.message())
             jobDao.removeJob(job.id)
             jobDao.insert(JobEntity.fromDto(body))
         } catch (e: IOException) {
+            jobDao.removeJob(job.id)
             throw NetworkError
         } catch (e: Exception) {
+            jobDao.removeJob(job.id)
             throw UnknownError
         }
     }

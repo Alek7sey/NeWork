@@ -38,7 +38,7 @@ private val emptyEvent = Event(
     authorJob = "",
     authorAvatar = null,
     content = "",
-    datetime = OffsetDateTime.now().toString(),
+    datetime = "",
     published = OffsetDateTime.now().toString(),
     coordinates = null,
     type = "",
@@ -170,7 +170,7 @@ class EventsViewModel @Inject constructor(
                     _attachState.value?.let {
                         repository.saveWithAttachment(event, it)
                     } ?: repository.save(event)
-                    eventCreated.postValue(Unit)
+                    _eventCreated.value = Unit
                     clear()
                     _eventState.value = EventModelState()
                 } catch (e: Exception) {
@@ -180,20 +180,19 @@ class EventsViewModel @Inject constructor(
         }
     }
 
-
     fun edit(event: Event) {
         edited.value = event
     }
 
     private val serverDate = DateTimeFormatter.ISO_INSTANT
     private val localDateFormat: DateTimeFormatter = DateTimeFormatter
-        .ofPattern("dd.MM.yyyy HH:mm:ss.SSS")
+        .ofPattern("dd.MM.yyyy HH:mm") //:ss.SSS
         .withLocale(Locale.getDefault())
         .withZone(ZoneId.systemDefault());
 
     fun changeContent(content: String, datetime: String, eventType: String) {
         if (edited.value?.content != content.trim()) {
-            val localDateTime = localDateFormat.parse(datetime.trim() + ":00.000")
+            val localDateTime = localDateFormat.parse(datetime.trim() ) //+ ":00.000"
             edited.value =
                 edited.value?.copy(
                     content = content.trim(),
@@ -202,6 +201,7 @@ class EventsViewModel @Inject constructor(
                 )
         }
     }
+
 
     fun removeById(id: Long) {
         viewModelScope.launch {

@@ -121,4 +121,5 @@
     <string name="load_file">Загрузить файл</string>
     <string name="mentioned_users">Упомянутые юзеры</string>
     <string name="add_location">Добавить локацию</string>
+    <string name="check">Проверка</string>
 </resources>

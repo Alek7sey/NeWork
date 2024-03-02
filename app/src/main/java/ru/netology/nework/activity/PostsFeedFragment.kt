@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -184,6 +185,11 @@ class PostsFeedFragment : Fragment() {
                 adapter.loadStateFlow.collectLatest { state ->
                     binding.swipeRefreshLayout.isRefreshing =
                         state.refresh is LoadState.Loading
+
+                    val isListEmpty = state.refresh is LoadState.NotLoading && adapter.itemCount == 0
+
+                    binding.empty.isVisible = isListEmpty
+                    binding.retryBtnEmpty.isVisible = state.source.refresh is LoadState.Error
                 }
             }
         }
