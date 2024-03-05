@@ -144,12 +144,11 @@ class PostRepositoryImpl @Inject constructor(
             val media = MultipartBody.Part.createFormData(
                 "file", file.name, file.asRequestBody()
             )
-            Log.d("Logging", "upload:${media.headers}")
+//            Log.d("Logging", "upload до отправки на сервер медиа:${media.headers}")
             val response = apiService.saveMedia(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
-            Log.d("Logging", "upload:${response.body()?.id}")
             return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError

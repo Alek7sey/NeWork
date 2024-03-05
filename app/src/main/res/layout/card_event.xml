@@ -258,19 +258,19 @@
             app:layout_constraintTop_toTopOf="@id/likeShortBtn"
             tools:listitem="@layout/card_image" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/likersMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_like_tint"
-            android:contentDescription="@string/likers_more"
-            android:visibility="gone"
-            app:borderWidth="0dp"
-            app:fabCustomSize="@dimen/post_avatar_size"
-            app:layout_constraintBottom_toBottomOf="@id/likersListShort"
-            app:layout_constraintStart_toEndOf="@id/likersListShort"
-            app:layout_constraintTop_toTopOf="@id/likersListShort"
-            app:srcCompat="@drawable/ic_plus_math" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/likersMore"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/color_like_tint"-->
+<!--            android:contentDescription="@string/likers_more"-->
+<!--            android:visibility="gone"-->
+<!--            app:borderWidth="0dp"-->
+<!--            app:fabCustomSize="@dimen/post_avatar_size"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/likersListShort"-->
+<!--            app:layout_constraintStart_toEndOf="@id/likersListShort"-->
+<!--            app:layout_constraintTop_toTopOf="@id/likersListShort"-->
+<!--            app:srcCompat="@drawable/ic_plus_math" />-->
 
         <TextView
             android:id="@+id/participantsTitle"

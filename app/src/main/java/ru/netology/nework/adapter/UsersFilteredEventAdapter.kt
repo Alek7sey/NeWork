@@ -8,34 +8,40 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nework.R
 import ru.netology.nework.databinding.CardImageBinding
-import ru.netology.nework.dto.Event
 import ru.netology.nework.dto.User
 
-interface OnIteractionListenerUsersFiltered {
-    fun returnEvent(event: Event) {}
-}
+//interface OnIteractionListenerUsersFiltered {
+//    fun returnEvent(event: Event) {}
+//}
 
 class UsersFilteredEventAdapter(
-    private val listener: OnIteractionListenerUsersFiltered
+//    private val listener: OnIteractionListenerUsersFiltered
 ) : ListAdapter<User, UsersFilteredEventAdapter.UsersFilteredEventViewHolder>(UsersFilteredEventDiffCallback()) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): UsersFilteredEventViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersFilteredEventViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return UsersFilteredEventViewHolder(
-            CardImageBinding.inflate(inflater, parent, false), listener
-        )
+        val binding = CardImageBinding.inflate(inflater, parent, false)
+        return UsersFilteredEventViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: UsersFilteredEventViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        if (position == 5) {
+            holder.addButtonMore()
+        } else {
+            val user = getItem(position) as User
+            holder.bind(user)
+        }
+
+    }
+
+    override fun getItemCount(): Int {
+        val size = currentList.size
+        return if (size > 4) size + 1 else size
     }
 
     class UsersFilteredEventViewHolder(
         private val binding: CardImageBinding,
-        private val listener: OnIteractionListenerUsersFiltered
+//        private val listener: OnIteractionListenerUsersFiltered
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
             binding.apply {
@@ -46,6 +52,10 @@ class UsersFilteredEventAdapter(
                     .error(R.drawable.ic_error)
                     .into(binding.previewImage)
             }
+        }
+
+        fun addButtonMore() {
+            binding.previewImage.setImageResource(R.drawable.ic_add_avatar)
         }
     }
 

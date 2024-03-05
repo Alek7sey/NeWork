@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -18,15 +19,17 @@ import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import ru.netology.nework.R
 import ru.netology.nework.activity.EventsFeedFragment.Companion.eventIdArg
 import ru.netology.nework.adapter.EventsAdapter
 import ru.netology.nework.adapter.EventsOnInteractionListener
-import ru.netology.nework.adapter.OnIteractionListenerUsersFiltered
 import ru.netology.nework.adapter.UsersFilteredEventAdapter
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentEventDetailsBinding
 import ru.netology.nework.dto.Event
+import ru.netology.nework.model.InvolvedUserType
+import ru.netology.nework.utils.AvatarItemDecorator
 import ru.netology.nework.viewmodel.AuthViewModel
 import ru.netology.nework.viewmodel.EventsViewModel
 import ru.netology.nework.viewmodel.UsersViewModel
@@ -63,35 +66,49 @@ class EventDetailsFragment : Fragment() {
                     eventShareBtn.visibility = View.GONE
                     participantsBtn.visibility = View.GONE
 
-                    speakersTitle.visibility = View.VISIBLE
-                    speakersList.isVisible = event.speakerIds?.isNotEmpty() == true
-
-                    likersTitle.visibility = View.VISIBLE
+                    speakersTitle.isVisible = event.speakerIds?.isNotEmpty() == true
                     likeShortBtn.isChecked = event.likedByMe
                     likeShortBtn.text = event.likeOwnerIds?.size.toString()
                     likeShortBtn.visibility = View.VISIBLE
-                    likersListShort.isVisible = event.likeOwnerIds?.isNotEmpty() == true
 
-                    participantsTitle.visibility = View.VISIBLE
                     participantsShortBtn.text = event.participantsIds?.size.toString()
                     participantsShortBtn.visibility = View.VISIBLE
-                    participantsListShort.isVisible = event.participantsIds?.isNotEmpty() == true
 
                     eventMapView.isVisible = !event.coordinates?.latitude.isNullOrEmpty() && !event.coordinates?.longitude.isNullOrBlank()
 
-                    val usersFilterAdapter =
-                        UsersFilteredEventAdapter(object : OnIteractionListenerUsersFiltered {
-                            override fun returnEvent(event: Event) {
-                                likersMore.setOnClickListener {
-                                    findNavController().navigate(
-                                        R.id.action_eventDetailsFragment_to_eventLikersFragment,
-                                        Bundle().apply {
-                                            putSerializable("eventKey", event)
-                                        }
-                                    )
-                                }
-                            }
-                        })
+//                    val usersFilterAdapter =
+//                        UsersFilteredEventAdapter(object : OnIteractionListenerUsersFiltered {
+//                            override fun returnEvent(event: Event) {
+//                                likersMore.setOnClickListener {
+//                                    findNavController().navigate(
+//                                        R.id.action_eventDetailsFragment_to_eventLikersFragment,
+//                                        Bundle().apply {
+//                                            putSerializable("eventKey", event)
+//                                        }
+//                                    )
+//                                }
+//                            }
+//                        })
+
+                    val avatarDecorator = AvatarItemDecorator(48)
+                    val speakersAdapter = UsersFilteredEventAdapter()
+                    val likersAdapter = UsersFilteredEventAdapter()
+                    val participantsAdapter = UsersFilteredEventAdapter()
+
+                    likersListShort.apply {
+                        addItemDecoration(avatarDecorator)
+                        adapter = likersAdapter
+                    }
+
+                    speakersList.apply {
+                        addItemDecoration(avatarDecorator)
+                        adapter = speakersAdapter
+                    }
+
+                    participantsListShort.apply {
+                        addItemDecoration(avatarDecorator)
+                        adapter = participantsAdapter
+                    }
 
                     context?.let {
                         EventsAdapter.EventViewHolder(this, object : EventsOnInteractionListener {
@@ -139,106 +156,98 @@ class EventDetailsFragment : Fragment() {
                         }, it).bind(event)
                     }
 
-                        toolbar.setOnMenuItemClickListener { menuItem ->
-                            when (menuItem.itemId) {
-                                R.id.shareEvent -> {
-                                    val intent = Intent().apply {
-                                        action = Intent.ACTION_SEND
-                                        putExtra(Intent.EXTRA_TEXT, event.content)
-                                        type = "text/plain"
-                                    }
-                                    val shareIntent =
-                                        Intent.createChooser(intent, getString(R.string.share_event))
-                                    startActivity(shareIntent)
-                                    viewModel.shareById(event.id)
-                                    true
+                    toolbar.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.shareEvent -> {
+                                val intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, event.content)
+                                    type = "text/plain"
                                 }
-
-                                else -> false
+                                val shareIntent =
+                                    Intent.createChooser(intent, getString(R.string.share_event))
+                                startActivity(shareIntent)
+                                viewModel.shareById(event.id)
+                                true
                             }
+
+                            else -> false
                         }
+                    }
 
-                        toolbar.setNavigationOnClickListener {
-                            findNavController().navigateUp()
+                    toolbar.setNavigationOnClickListener {
+                        findNavController().navigateUp()
+                    }
+
+                    lifecycleScope.launch {
+                        event.likeOwnerIds?.let { viewModel.getInvolvedUser(it, InvolvedUserType.LIKER) }
+                    }
+
+                    lifecycleScope.launch {
+                        event.speakerIds?.let { viewModel.getInvolvedUser(it, InvolvedUserType.SPEAKER) }
+                    }
+
+                    lifecycleScope.launch {
+                        event.participantsIds?.let { viewModel.getInvolvedUser(it, InvolvedUserType.PARTICIPANT) }
+                    }
+
+                    usersViewModel.data.observe(viewLifecycleOwner) {
+                        val likeOwnerIds = event.likeOwnerIds.orEmpty().toSet()
+                        val speakerOwnerIds = event.speakerIds.orEmpty().toSet()
+                        val participantOwnerIds = event.participantsIds.orEmpty().toSet()
+                        if (likeOwnerIds.isNotEmpty()) {
+                            likersTitle.visibility = View.VISIBLE
+                            likersListShort.visibility = View.VISIBLE
                         }
-
-                        likersListShort.adapter = usersFilterAdapter
-                        speakersList.adapter = usersFilterAdapter
-                        participantsListShort.adapter = usersFilterAdapter
-
-                        usersViewModel.data.observe(viewLifecycleOwner) {
-                            val likeOwnerIds = event.likeOwnerIds.orEmpty().toSet()
-                            if (likeOwnerIds.isNotEmpty()) {
-                                likeOwnerIds.forEach { likeOwnerId ->
-                                    val filterUsers =
-                                        it.users.filter { it.id == likeOwnerId.toLong() }
-                                    usersFilterAdapter.submitList(filterUsers)
-                                }
-                                if (event.likeOwnerIds?.size!! > 5) {
-                                    binding.cardEventDetails.likersMore.visibility = View.VISIBLE
-                                }
-                            }
+                        if (speakerOwnerIds.isNotEmpty()) {
+                            speakersTitle.visibility = View.VISIBLE
+                            speakersList.visibility = View.VISIBLE
                         }
-
-                        usersViewModel.data.observe(viewLifecycleOwner) {
-                            val speakerOwnerIds = event.speakerIds.orEmpty().toSet()
-                            if (speakerOwnerIds.isNotEmpty()) {
-                                speakerOwnerIds.forEach { speakerOwnerId ->
-                                    val filterUsers =
-                                        it.users.filter { it.id == speakerOwnerId.toLong() }
-                                    usersFilterAdapter.submitList(filterUsers)
-                                }
-                                if (event.speakerIds?.size!! > 5) {
-                                    binding.cardEventDetails.likersMore.visibility = View.VISIBLE
-                                }
-                            }
+                        if (participantOwnerIds.isNotEmpty()) {
+                            participantsTitle.visibility = View.VISIBLE
+                            participantsListShort.visibility = View.VISIBLE
                         }
+                    }
 
-                        usersViewModel.data.observe(viewLifecycleOwner) {
-                            val participantOwnerIds = event.participantsIds.orEmpty().toSet()
-                            if (participantOwnerIds.isNotEmpty()) {
-                                participantsListShort.visibility = View.VISIBLE
-                                participantOwnerIds.forEach { participantId ->
-                                    val filteredUsers =
-                                        it.users.filter { it.id == participantId.toLong() }
-                                    usersFilterAdapter.submitList(filteredUsers)
-                                }
-                            }
-                        }
+                    viewModel.involvedData.observe(viewLifecycleOwner) {
+                        likersAdapter.submitList(it.likers)
+                        speakersAdapter.submitList(it.speakers)
+                        participantsAdapter.submitList(it.participants)
+                    }
 
-                        likersMore.setOnClickListener {
-                            findNavController().navigate(
-                                R.id.action_eventDetailsFragment_to_eventLikersFragment,
-                                Bundle().apply {
-                                    putSerializable("eventKey", event)
-                                }
-                            )
-                        }
+//                        likersMore.setOnClickListener {
+//                            findNavController().navigate(
+//                                R.id.action_eventDetailsFragment_to_eventLikersFragment,
+//                                Bundle().apply {
+//                                    putSerializable("eventKey", event)
+//                                }
+//                            )
+//                        }
 
-                        if (event.coordinates == null) {
-                            mapView?.findViewById<MapView>(R.id.eventMapView)?.onStop()
-                            return@observe
-                        }
-                        mapView?.findViewById<MapView>(R.id.eventMapView)?.isVisible = true
+                    if (event.coordinates == null) {
+                        mapView?.findViewById<MapView>(R.id.eventMapView)?.onStop()
+                        return@observe
+                    }
+                    mapView?.findViewById<MapView>(R.id.eventMapView)?.isVisible = true
 
-                        MapKitFactory.initialize(requireContext())
+                    MapKitFactory.initialize(requireContext())
 
-                        val latitude = event.coordinates.latitude.toDouble()
-                        val longitude = event.coordinates.longitude.toDouble()
+                    val latitude = event.coordinates.latitude.toDouble()
+                    val longitude = event.coordinates.longitude.toDouble()
 
-                        val imageProvider = ImageProvider.fromResource(requireContext(), R.drawable.ic_location_pin)
-                        val placemark = mapView?.map?.mapObjects?.addPlacemark().apply {
-                            this?.geometry = Point(latitude, longitude)
-                            this?.setIcon(imageProvider)
-                        }
+                    val imageProvider = ImageProvider.fromResource(requireContext(), R.drawable.ic_location_pin)
+                    val placemark = mapView?.map?.mapObjects?.addPlacemark().apply {
+                        this?.geometry = Point(latitude, longitude)
+                        this?.setIcon(imageProvider)
+                    }
 
-                        val placemarkTapListener = MapObjectTapListener { _, _ ->
-                            Toast.makeText(context, getString(R.string.this_event_location), Toast.LENGTH_LONG).show()
-                            true
-                        }
+                    val placemarkTapListener = MapObjectTapListener { _, _ ->
+                        Toast.makeText(context, getString(R.string.this_event_location), Toast.LENGTH_LONG).show()
+                        true
+                    }
 
-                        placemark?.addTapListener(placemarkTapListener)
-                        placemark?.removeTapListener(placemarkTapListener)
+                    placemark?.addTapListener(placemarkTapListener)
+                    placemark?.removeTapListener(placemarkTapListener)
                 }
             }
         }
@@ -254,6 +263,7 @@ class EventDetailsFragment : Fragment() {
     override fun onStop() {
         mapView?.onStop()
         MapKitFactory.getInstance().onStop()
+        viewModel.clearInvolved()
         super.onStop()
     }
 

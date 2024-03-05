@@ -13,6 +13,8 @@ import com.yandex.mapkit.geometry.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -23,7 +25,10 @@ import ru.netology.nework.dto.Event
 import ru.netology.nework.entity.CoordinatesEventEmbeddable
 import ru.netology.nework.model.AttachmentModelEvent
 import ru.netology.nework.model.EventModel
+import ru.netology.nework.model.InvolvedUserType
+import ru.netology.nework.model.InvolvedUsersModel
 import ru.netology.nework.repository.EventsRepository
+import ru.netology.nework.repository.UsersRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
 import java.time.format.DateTimeFormatter
@@ -56,6 +61,7 @@ private val emptyEvent = Event(
 @ExperimentalCoroutinesApi
 class EventsViewModel @Inject constructor(
     private val repository: EventsRepository,
+    private val userRepository: UsersRepository,
     appAuth: AppAuth
 ) : ViewModel() {
 
@@ -74,7 +80,6 @@ class EventsViewModel @Inject constructor(
                 }
             }.flowOn(Dispatchers.Default)
         }
-
 
     private val _eventState = MutableLiveData<EventModelState>()
     val eventState: LiveData<EventModelState>
@@ -101,6 +106,8 @@ class EventsViewModel @Inject constructor(
     private val _dateTimeState = MutableLiveData<String>()
     val dateTimeState: LiveData<String>
         get() = _dateTimeState
+
+    val involvedData = MutableLiveData(InvolvedUsersModel())
 
     fun editType(type: String) {
         _eventTypesState.value = type
@@ -242,7 +249,35 @@ class EventsViewModel @Inject constructor(
         edited.value = edited.value?.copy(participantsIds = list)
     }
 
+    suspend fun getInvolvedUser(involved: List<Int>, involvedUserType: InvolvedUserType) {
+        val list = involved.let {
+            if (it.size > 4) it.take(5) else it
+        }.map {
+            viewModelScope.async { userRepository.getUser(it.toLong()) }
+        }.awaitAll()
 
+        synchronized(involvedData) {
+            when (involvedUserType) {
+                InvolvedUserType.LIKER -> {
+                    involvedData.value = involvedData.value?.copy(likers = list)
+                }
+
+                InvolvedUserType.SPEAKER -> {
+                    involvedData.value = involvedData.value?.copy(speakers = list)
+                }
+
+                InvolvedUserType.PARTICIPANT -> {
+                    involvedData.value = involvedData.value?.copy(participants = list)
+                }
+
+                else -> return
+            }
+        }
+    }
+
+    fun clearInvolved() {
+        involvedData.value = InvolvedUsersModel()
+    }
     fun clear() {
         edited.value = emptyEvent
     }
