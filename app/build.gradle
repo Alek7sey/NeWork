@@ -27,7 +27,7 @@ android {
         if (secrets.exists()) {
             properties.load(secrets.newDataInputStream())
         }
-        buildConfigField "String", "API_KEY", properties.getProperty("API_KEY", "")
+        buildConfigField "String", "API_KEY", "${properties.getProperty("API_KEY", "")}"//properties.getProperty("API_KEY", "")
         buildConfigField "String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY", "")
     }
 

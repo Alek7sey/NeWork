@@ -23,12 +23,13 @@ fcm.json
 
 ### Android Studio ###
 local.properties
-secrets.properties
+app/secrets.properties
 maps.properties
 captures/
 .externalNativeBuild
 .cxx
 google-services.json
+secrets.properties
 
 ### NetBeans ###
 /nbproject/private/
