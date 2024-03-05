@@ -1,5 +1,9 @@
 package ru.netology.nework.modules
 
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,27 +22,20 @@ import ru.netology.nework.api.PostApiService
 import ru.netology.nework.api.UserApiService
 import ru.netology.nework.api.UserWallApiService
 import ru.netology.nework.auth.AppAuth
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 class ApiModule {
 
-    @Provides
-    @Singleton
-    fun provideLogging(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-        if (BuildConfig.DEBUG) {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }
-
     @Singleton
     @Provides
     fun provideOkHttp(
-        logging: HttpLoggingInterceptor,
         appAuth: AppAuth,
     ): OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(logging)
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -50,26 +47,44 @@ class ApiModule {
             appAuth.authFlow.value.token?.let { token ->
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Authorization", token)
-                    .addHeader("Api-Key", API_KEY)
                     .build()
                 return@addInterceptor chain.proceed(newRequest)
             }
-
-            val request = chain.request().newBuilder()
-                .addHeader("Api-Key", API_KEY)
-                .build()
-            chain.proceed(request)
+            chain.proceed(chain.request())
+        }
+        .addInterceptor { chain ->
+            chain.proceed(
+                chain.request().newBuilder()
+                    .addHeader("Api-Key", API_KEY)
+                    .build()
+            )
         }
         .build()
+
 
     @Singleton
     @Provides
     fun provideRetrofit(okhttp: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(
+                GsonBuilder().registerTypeAdapter(
+                    OffsetDateTime::class.java,
+                    object : TypeAdapter<OffsetDateTime>() {
+                        override fun write(out: JsonWriter, value: OffsetDateTime) {
+                            out.value(value.toEpochSecond())
+                        }
+
+                        override fun read(jsonR: JsonReader): OffsetDateTime =
+                            OffsetDateTime.ofInstant(
+                                Instant.parse(jsonR.nextString()), ZoneId.systemDefault()
+                            )
+                    }
+                ).create()
+            ))
             .client(okhttp)
             .build()
+
 
     @Singleton
     @Provides

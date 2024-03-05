@@ -15,7 +15,7 @@ data class EventEntity(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorJob: String,
+    val authorJob: String? = null,
     val authorAvatar: String? = null,
     val content: String,
     val datetime: String,
@@ -32,6 +32,7 @@ data class EventEntity(
     val attachment: AttachmentEventEmbeddable? = null,
     val link: String? = null,
     val users: Map<Long, EventUserPreviewEmbeddable>,
+    val ownedByMe: Boolean = false
 ) {
     fun toDto() = Event(
         id,
@@ -52,6 +53,7 @@ data class EventEntity(
         attachment,
         link,
         users,
+        ownedByMe
     )
 
     companion object {
@@ -75,6 +77,7 @@ data class EventEntity(
                 event.attachment,
                 event.link,
                 event.users,
+                event.ownedByMe
             )
     }
 }

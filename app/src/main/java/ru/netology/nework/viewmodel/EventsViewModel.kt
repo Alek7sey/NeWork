@@ -1,5 +1,6 @@
 package ru.netology.nework.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,8 +26,6 @@ import ru.netology.nework.model.EventModel
 import ru.netology.nework.repository.EventsRepository
 import ru.netology.nework.state.EventModelState
 import ru.netology.nework.utils.SingleLiveEvent
-import java.time.OffsetDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
@@ -39,7 +38,7 @@ private val emptyEvent = Event(
     authorAvatar = null,
     content = "",
     datetime = "",
-    published = OffsetDateTime.now().toString(),
+    published = "",//OffsetDateTime.now().toString(),
     coordinates = null,
     type = "",
     likeOwnerIds = null,
@@ -184,21 +183,22 @@ class EventsViewModel @Inject constructor(
         edited.value = event
     }
 
-    private val serverDate = DateTimeFormatter.ISO_INSTANT
+    private val serverDate = DateTimeFormatter.ISO_DATE_TIME
     private val localDateFormat: DateTimeFormatter = DateTimeFormatter
-        .ofPattern("dd.MM.yyyy HH:mm") //:ss.SSS
-        .withLocale(Locale.getDefault())
-        .withZone(ZoneId.systemDefault())
+        .ofPattern("dd.MM.yyyy HH:mm", Locale.US) //:ss.SSS
+//        .withLocale(Locale.getDefault())
+//        .withZone(ZoneId.systemDefault())
 
     fun changeContent(content: String, datetime: String, eventType: String) {
         if (edited.value?.content != content.trim()) {
-            val localDateTime = localDateFormat.parse(datetime.trim() ) //+ ":00.000"
+            val localDateTime = localDateFormat.parse(datetime.trim()) //+ ":00.000"
             edited.value =
                 edited.value?.copy(
                     content = content.trim(),
                     datetime = serverDate.format(localDateTime),
                     type = eventType.trim()
                 )
+            Log.d("Logging", "DateTime: ${edited.value?.datetime}")
         }
     }
 

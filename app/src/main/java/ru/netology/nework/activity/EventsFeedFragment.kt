@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import ru.netology.nework.R
 import ru.netology.nework.adapter.EventsAdapter
 import ru.netology.nework.adapter.EventsOnInteractionListener
-import ru.netology.nework.adapter.PostLoadingStateAdapter
 import ru.netology.nework.auth.AppAuth
 import ru.netology.nework.databinding.FragmentFeedEventsBinding
 import ru.netology.nework.dto.Event
@@ -150,6 +149,8 @@ class EventsFeedFragment : Fragment() {
             }
         }
 
+        binding.eventsList.adapter = adapter
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.data.collectLatest(adapter::submitData)
@@ -176,11 +177,6 @@ class EventsFeedFragment : Fragment() {
                 }
             }
         }
-
-        binding.eventsList.adapter = adapter.withLoadStateHeaderAndFooter(
-            header = PostLoadingStateAdapter { adapter.retry() },
-            footer = PostLoadingStateAdapter { adapter.retry() },
-        )
 
         binding.retryBtnEmpty.setOnClickListener {
             viewModel.loadEvents()

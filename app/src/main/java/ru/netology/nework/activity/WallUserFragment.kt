@@ -65,7 +65,7 @@ class WallUserFragment : Fragment() {
             }
         })
 
-        binding.userList.adapter = adapter
+        binding.postsUserList.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

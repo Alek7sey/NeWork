@@ -92,10 +92,12 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun save(event: Event) {
         try {
             val response = apiService.saveEvent(event)
+//            Log.d("Logging", "This is response: ${response.isSuccessful}")
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
             val body = response.body() ?: throw ApiError(response.message())
+//            Log.d("Logging", "This is response body${response.body()}")
             eventDao.insert(EventEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError

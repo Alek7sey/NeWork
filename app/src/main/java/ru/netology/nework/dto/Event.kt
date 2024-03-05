@@ -10,7 +10,7 @@ data class Event(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorJob: String,
+    val authorJob: String? = null,
     val authorAvatar: String? = null,
     val content: String,
     val datetime: String,

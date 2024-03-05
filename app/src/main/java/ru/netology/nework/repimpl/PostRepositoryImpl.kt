@@ -1,5 +1,6 @@
 package ru.netology.nework.repimpl
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -103,7 +104,9 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun saveWithAttachment(post: Post, attachmentModel: AttachmentModelPost) {
         try {
             val media = upload(attachmentModel.file)
+            Log.d("Logging", "post media:${media.id}")
             val postWithAttachment = post.copy(attachment = AttachmentEmbeddable(url = media.id, type = attachmentModel.attachmentTypePost))
+            Log.d("Logging", "post PostRepositoryIMpl:${postWithAttachment.content}")
             save(postWithAttachment)
         } catch (e: AppError) {
             throw e
@@ -141,10 +144,12 @@ class PostRepositoryImpl @Inject constructor(
             val media = MultipartBody.Part.createFormData(
                 "file", file.name, file.asRequestBody()
             )
+            Log.d("Logging", "upload:${media.headers}")
             val response = apiService.saveMedia(media)
             if (!response.isSuccessful) {
                 throw ApiError(response.message())
             }
+            Log.d("Logging", "upload:${response.body()?.id}")
             return response.body() ?: throw ApiError(response.message())
         } catch (e: IOException) {
             throw NetworkError
